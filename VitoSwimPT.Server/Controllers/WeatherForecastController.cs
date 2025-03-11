@@ -8,7 +8,7 @@ namespace VitoSwimPT.Server.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Delfino", "Dorso", "Rana", "Stile"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
@@ -19,13 +19,15 @@ namespace VitoSwimPT.Server.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<Allenamenti> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Enumerable.Range(1, 5).Select(index => new Allenamenti
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                //Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                ripetizioni = Random.Shared.Next(1,10),
+                distanza = 200,
+                recupero = 30,
+                stile = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
         }

@@ -1,13 +1,15 @@
 namespace VitoSwimPT.Server
 {
-    public class WeatherForecast
+    public class Allenamenti
     {
-        public DateOnly Date { get; set; }
+        public int ripetizioni { get; set; }
 
-        public int TemperatureC { get; set; }
+        public int distanza { get; set; }
 
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public int recupero { get; set; }
 
-        public string? Summary { get; set; }
+        //public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+
+        public string? stile { get; set; }
     }
 }

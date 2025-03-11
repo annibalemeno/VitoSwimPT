@@ -29,17 +29,17 @@ describe('AppComponent', () => {
   });
 
   it('should retrieve weather forecasts from the server', () => {
-    const mockForecasts = [
-      { date: '2021-10-01', temperatureC: 20, temperatureF: 68, summary: 'Mild' },
-      { date: '2021-10-02', temperatureC: 25, temperatureF: 77, summary: 'Warm' }
+    const mockAllenamenti = [
+      { ripetizioni: '4', distanza: 200, recupero: 60, stile: 'dorso' },
+      { ripetizioni: '8', distanza: 100, recupero: 30, stile: 'rana' }
     ];
 
     component.ngOnInit();
 
     const req = httpMock.expectOne('/weatherforecast');
     expect(req.request.method).toEqual('GET');
-    req.flush(mockForecasts);
+    req.flush(mockAllenamenti);
 
-    expect(component.forecasts).toEqual(mockForecasts);
+    expect(component.allenamenti).toEqual(mockAllenamenti);
   });
 });
