@@ -1,0 +1,6 @@
+@VitoSwimPT.Server_HostAddress = http://localhost:5194
+
+GET {{VitoSwimPT.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
