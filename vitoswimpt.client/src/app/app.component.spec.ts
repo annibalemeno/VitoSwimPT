@@ -28,7 +28,7 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should retrieve weather forecasts from the server', () => {
+  it('should retrieve training data from the server', () => {
     const mockAllenamenti = [
       { ripetizioni: '4', distanza: 200, recupero: 60, stile: 'dorso' },
       { ripetizioni: '8', distanza: 100, recupero: 30, stile: 'rana' }
@@ -36,7 +36,7 @@ describe('AppComponent', () => {
 
     component.ngOnInit();
 
-    const req = httpMock.expectOne('/weatherforecast');
+    const req = httpMock.expectOne('/allenamenti');
     expect(req.request.method).toEqual('GET');
     req.flush(mockAllenamenti);
 
