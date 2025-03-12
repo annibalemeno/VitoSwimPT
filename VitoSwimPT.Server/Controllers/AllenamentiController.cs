@@ -4,21 +4,21 @@ namespace VitoSwimPT.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class AllenamentiController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Delfino", "Dorso", "Rana", "Stile"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<AllenamentiController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public AllenamentiController(ILogger<AllenamentiController> logger)
         {
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet(Name = "GetAllenamenti")]
         public IEnumerable<Allenamenti> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new Allenamenti

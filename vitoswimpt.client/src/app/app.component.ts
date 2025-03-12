@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   }
 
   getAllenamenti() {
-    this.http.get<Allenamenti[]>('/weatherforecast').subscribe(
+    this.http.get<Allenamenti[]>('/allenamenti').subscribe(
       (result) => {
         this.allenamenti = result;
       },
