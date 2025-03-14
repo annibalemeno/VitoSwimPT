@@ -48,11 +48,11 @@ using (var context = new SwimContext())
     //save data to the database tables
     //context.SaveChanges();
 
-    retrieve all the students from the database
-    //foreach (var a in context.Allenamenti)
-    //{
-    //    Console.WriteLine($"Ripetizioni: {a.Ripetizioni}, Distanza: {a.Distanza}, Recupero: {a.Recupero}, Stile: {a.Stile}");
-    //}
+    //retrieve all the students from the database
+    foreach (var a in context.Allenamenti)
+    {
+        Console.WriteLine($"Ripetizioni: {a.Ripetizioni}, Distanza: {a.Distanza}, Recupero: {a.Recupero}, Stile: {a.Stile}");
+    }
 }
 
 app.Run();
