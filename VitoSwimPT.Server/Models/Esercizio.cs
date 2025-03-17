@@ -1,8 +1,8 @@
 ﻿namespace VitoSwimPT.Server.Models
 {
-    public partial class Allenamento
+    public partial class Esercizio
     {
-        public int AllenamentoId { get; set; }
+        public int EsercizioId { get; set; }
         public int Ripetizioni { get; set; }
 
         public int Distanza { get; set; }

@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IAllenamentoRepository, AllenamentiRepository>();
+builder.Services.AddScoped<IEsercizioRepository, EserciziRepository>();
 
 //builder.Services.AddDbContext<SwimContext>(options => options.UseSqlServer("Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;"));
 builder.Services.AddDbContext<SwimContext>();
@@ -40,27 +40,27 @@ app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
-//using (var context = new SwimContext())
-//{
-//    //creates db if not exists 
-//    context.Database.EnsureCreated();
+using (var context = new SwimContext())
+{
+    //creates db if not exists 
+    context.Database.EnsureCreated();
 
-//    //create entity objects
-//    //var train1 = new Allenamento() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = "Libero" };
-//    //var train2 = new Allenamento() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = "Libero" };
+    //create entity objects
+    //var train1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = "Libero" };
+    //var train2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = "Libero" };
 
-//    //add entitiy to the context
-//    //context.Allenamenti.Add(train1);
-//    //context.Allenamenti.Add(train2);
+    ////add entitiy to the context
+    //context.Esercizi.Add(train1);
+    //context.Esercizi.Add(train2);
 
-//    //save data to the database tables
-//    //context.SaveChanges();
+    ////save data to the database tables
+    //context.SaveChanges();
 
-//    //retrieve all the students from the database
-//    foreach (var a in context.Allenamenti)
-//    {
-//        Console.WriteLine($"Ripetizioni: {a.Ripetizioni}, Distanza: {a.Distanza}, Recupero: {a.Recupero}, Stile: {a.Stile}");
-//    }
-//}
+    ////retrieve all the students from the database
+    //foreach (var a in context.Esercizi)
+    //{
+    //    Console.WriteLine($"Ripetizioni: {a.Ripetizioni}, Distanza: {a.Distanza}, Recupero: {a.Recupero}, Stile: {a.Stile}");
+    //}
+}
 
 app.Run();

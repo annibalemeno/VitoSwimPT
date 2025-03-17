@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
-interface Allenamenti {
+interface Esercizi {
   ripetizioni: string;
   distanza: number;
   recupero: number;
@@ -15,7 +15,7 @@ interface Allenamenti {
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  public allenamenti: Allenamenti[] = [];
+  public esercizi: Esercizi[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -24,9 +24,9 @@ export class AppComponent implements OnInit {
   }
 
   getAllenamenti() {
-    this.http.get<Allenamenti[]>('/allenamenti').subscribe(
+    this.http.get<Esercizi[]>('/esercizi').subscribe(
       (result) => {
-        this.allenamenti = result;
+        this.esercizi = result;
       },
       (error) => {
         console.error(error);

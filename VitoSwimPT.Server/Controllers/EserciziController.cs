@@ -1,25 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 
 namespace VitoSwimPT.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AllenamentiController : ControllerBase
+    public class EserciziController : ControllerBase
     {
-        private readonly IAllenamentoRepository _allenamento;
+        private readonly IEsercizioRepository _esercizio;
 
         private static readonly string[] Summaries = new[]
         {
             "Delfino", "Dorso", "Rana", "Stile"
         };
 
-        private readonly ILogger<AllenamentiController> _logger;
+        private readonly ILogger<EserciziController> _logger;
 
-        public AllenamentiController(ILogger<AllenamentiController> logger, IAllenamentoRepository allenamento)
+        public EserciziController(ILogger<EserciziController> logger, IEsercizioRepository esercizio)
         {
-            _allenamento = allenamento ?? throw new ArgumentNullException(nameof(allenamento));
+            _esercizio = esercizio ?? throw new ArgumentNullException(nameof(esercizio));
             _logger = logger;
         }
 
@@ -37,10 +38,10 @@ namespace VitoSwimPT.Server.Controllers
         //    .ToArray();
         //}
 
-        [HttpGet(Name = "GetAllenamenti")]
+        [HttpGet(Name = "GetEsercizi")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _allenamento.GetAllenamenti());
+            return Ok(await _esercizio.GetEsercizi());
         }
 
     }

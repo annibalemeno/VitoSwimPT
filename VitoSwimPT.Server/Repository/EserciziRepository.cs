@@ -3,9 +3,9 @@ using VitoSwimPT.Server.Models;
 
 namespace VitoSwimPT.Server.Repository
 {
-    public interface IAllenamentoRepository
+    public interface IEsercizioRepository
     {
-        Task<IEnumerable<Allenamento>> GetAllenamenti();
+        Task<IEnumerable<Esercizio>> GetEsercizi();
         //Task<Customer> InsertCustomer(Customer objDepartment);
         //Task<Customer> UpdateCustomer(Customer objDepartment);
         //bool DeleteCustomer(int ID);
@@ -14,18 +14,18 @@ namespace VitoSwimPT.Server.Repository
         // Task<Customer> GetCustomerByName(string Name);
     }
 
-    public class AllenamentiRepository : IAllenamentoRepository
+    public class EserciziRepository : IEsercizioRepository
     {
         private readonly SwimContext _swimDBContext;
 
-        public AllenamentiRepository(SwimContext context)
+        public EserciziRepository(SwimContext context)
         {
             _swimDBContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Allenamento>> GetAllenamenti()
+        public async Task<IEnumerable<Esercizio>> GetEsercizi()
         {
-            return await _swimDBContext.Allenamenti.ToListAsync();
+            return await _swimDBContext.Esercizi.ToListAsync();
         }
     }
 }

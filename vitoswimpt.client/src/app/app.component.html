@@ -1,10 +1,10 @@
-<h1 id="tableLabel">Allenamenti Nuoto</h1>
+<h1 id="tableLabel">Esercizi Nuoto</h1>
 
-<p>Elenco Allenamenti Registrati</p>
+<p>Elenco Esercizi Registrati</p>
 
-<p *ngIf="!allenamenti"><em>In caricamento... Ricarica la pagina dopo che il backend ASP.NET  è partito. Vedere <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> per ulteriori dettagli.</em></p>
+<p *ngIf="!esercizi"><em>In caricamento... Ricarica la pagina dopo che il backend ASP.NET  è partito. Vedere <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> per ulteriori dettagli.</em></p>
 
-<table *ngIf="allenamenti">
+<table *ngIf="esercizi">
     <thead>
         <tr>
             <th>Ripetizioni</th>
@@ -14,11 +14,11 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let allenamento of allenamenti">
-          <td>{{ allenamento.ripetizioni }}x</td>
-          <td>{{ allenamento.distanza }}</td>
-          <td>{{ allenamento.recupero }}</td>
-          <td>{{ allenamento.stile }}</td>
+        <tr *ngFor="let esercizio of esercizi">
+          <td>{{ esercizio.ripetizioni }}x</td>
+          <td>{{ esercizio.distanza }}</td>
+          <td>{{ esercizio.recupero }}</td>
+          <td>{{ esercizio.stile }}</td>
         </tr>
     </tbody>
 </table>
