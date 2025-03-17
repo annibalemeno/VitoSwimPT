@@ -14,11 +14,11 @@ namespace VitoSwimPT.Server.Repository
         // Task<Customer> GetCustomerByName(string Name);
     }
 
-    public class AllenamentoRepository : IAllenamentoRepository
+    public class AllenamentiRepository : IAllenamentoRepository
     {
         private readonly SwimContext _swimDBContext;
 
-        public AllenamentoRepository(SwimContext context)
+        public AllenamentiRepository(SwimContext context)
         {
             _swimDBContext = context ?? throw new ArgumentNullException(nameof(context));
         }
