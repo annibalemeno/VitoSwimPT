@@ -29,7 +29,7 @@ describe('AppComponent', () => {
   });
 
   it('should retrieve training data from the server', () => {
-    const mockAllenamenti = [
+    const mockEsercizi = [
       { ripetizioni: '4', distanza: 200, recupero: 60, stile: 'dorso' },
       { ripetizioni: '8', distanza: 100, recupero: 30, stile: 'rana' }
     ];
@@ -38,8 +38,8 @@ describe('AppComponent', () => {
 
     const req = httpMock.expectOne('/allenamenti');
     expect(req.request.method).toEqual('GET');
-    req.flush(mockAllenamenti);
+    req.flush(mockEsercizi);
 
-    expect(component.allenamenti).toEqual(mockAllenamenti);
+    expect(component.esercizi).toEqual(mockEsercizi);
   });
 });
