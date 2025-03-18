@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 //builder.Services.AddDbContext<SwimContext>();
-
+//builder.Services.AddDbContext<ConfigurationContext>(options => {
+//    options.UseSqlServer(Configuration.GetConnectionString("MyConnection"));
+//});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -40,9 +42,14 @@ app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
-using (var context = new SwimContext())
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .Build();
+
+using (var context = new SwimContext(configuration))
 {
-    //creates db if not exists 
+   // creates db if not exists
     context.Database.EnsureCreated();
 
     //create entity objects
