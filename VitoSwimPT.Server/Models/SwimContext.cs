@@ -18,6 +18,7 @@ namespace VitoSwimPT.Server.Models
 
         //entities
         public DbSet<Esercizio> Esercizi { get; set; }
+        public DbSet<Allenamento> Allenamenti { get; set; }
 
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
