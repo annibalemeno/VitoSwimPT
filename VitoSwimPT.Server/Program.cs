@@ -23,7 +23,6 @@ builder.Services.AddScoped<IEsercizioRepository, EserciziRepository>();
 //builder.Services.AddDbContext<SwimContext>(options => options.UseSqlServer("Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;"));
 builder.Services.AddDbContext<SwimContext>();
 
-
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -47,10 +46,10 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .Build();
 
-using (var context = new SwimContext(configuration))
-{
+//using (var context = new SwimContext(configuration))
+//{
    // creates db if not exists
-    context.Database.EnsureCreated();
+   // context.Database.EnsureCreated();
 
     //create entity objects
     //var train1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = "Libero" };
@@ -68,6 +67,6 @@ using (var context = new SwimContext(configuration))
     //{
     //    Console.WriteLine($"Ripetizioni: {a.Ripetizioni}, Distanza: {a.Distanza}, Recupero: {a.Recupero}, Stile: {a.Stile}");
     //}
-}
+//}
 
 app.Run();
