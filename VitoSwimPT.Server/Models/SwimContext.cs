@@ -20,6 +20,8 @@ namespace VitoSwimPT.Server.Models
         public DbSet<Esercizio> Esercizi { get; set; }
         public DbSet<Allenamento> Allenamenti { get; set; }
 
+        public DbSet<EsercizioAllenamento> EserciziAllenamenti { get; set; }
+
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
@@ -77,5 +79,10 @@ namespace VitoSwimPT.Server.Models
                 context.SaveChangesAsync();
             }
         });
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EsercizioAllenamento>().HasKey(ea => new { ea.EsercizioId, ea.AllenamentoId });
+        }
     }
 }
