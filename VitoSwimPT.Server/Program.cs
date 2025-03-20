@@ -51,25 +51,6 @@ using (var context = new SwimContext(configuration))
     //creates db if not exists
     context.Database.EnsureCreated();
 
-    //create entity objects
-    //var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = "Libero" };
-    //var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = "Libero" };
-
-    ////add entitiy to the context
-    //context.Esercizi.Add(eserc1);
-    //context.Esercizi.Add(eserc2);
-
-    //var train1 = new Allenamento() { NomeAllenamento = "Aerobico 1", Note = "Brucia 400 Calorie"};
-    var train2 = new Allenamento() { NomeAllenamento = "Aerobico 2", Note = "Brucia 300 Calorie" };
-
-
-    //add entitiy to the context
-   //context.Allenamenti.Add(train1);
-    context.Allenamenti.Add(train2);
-     
-    //save data to the database tables
-    context.SaveChanges();
-
     //retrieve all the students from the database
     //foreach (var a in context.Esercizi)
     //{
