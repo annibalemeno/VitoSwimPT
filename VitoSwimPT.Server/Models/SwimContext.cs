@@ -19,6 +19,7 @@ namespace VitoSwimPT.Server.Models
         //entities
         public DbSet<Esercizio> Esercizi { get; set; }
         public DbSet<Allenamento> Allenamenti { get; set; }
+        public DbSet<Piano> Piani { get; set; }
 
         public DbSet<EsercizioAllenamento> EserciziAllenamenti { get; set; }
 
@@ -85,6 +86,15 @@ namespace VitoSwimPT.Server.Models
                 var train2 = new Allenamento() { NomeAllenamento = "Aerobico 2", Note = "Brucia 300 Calorie" };
 
                 context.Set<Allenamento>().AddRange(train1, train2);
+                context.SaveChangesAsync();
+            }
+
+            var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefaultAsync(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
+            if (esercizioAllenamentoTest == null)
+            {
+                var es_all1 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                var es_all2 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault() };
+                context.AddRange(es_all1, es_all2);
                 context.SaveChangesAsync();
             }
         });
