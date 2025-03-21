@@ -1,24 +1,24 @@
-﻿<h1 id="tableLabel">Weather forecast</h1>
+<h1 id="tableLabel">Esercizi Nuoto</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
+<p>Elenco Esercizi Registrati</p>
 
-<p *ngIf="!forecasts"><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> for more details.</em></p>
+<p *ngIf="!esercizi"><em>In caricamento... Ricarica la pagina dopo che il backend ASP.NET  è partito. Vedere <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> per ulteriori dettagli.</em></p>
 
-<table *ngIf="forecasts">
+<table *ngIf="esercizi">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
+            <th>Ripetizioni</th>
+            <th>Distanza</th>
+            <th>Pausa</th>
+            <th>Stile</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let forecast of forecasts">
-            <td>{{ forecast.date }}</td>
-            <td>{{ forecast.temperatureC }}</td>
-            <td>{{ forecast.temperatureF }}</td>
-            <td>{{ forecast.summary }}</td>
+        <tr *ngFor="let esercizio of esercizi">
+          <td>{{ esercizio.ripetizioni }}x</td>
+          <td>{{ esercizio.distanza }}</td>
+          <td>{{ esercizio.recupero }}</td>
+          <td>{{ esercizio.stile }}</td>
         </tr>
     </tbody>
 </table>
