@@ -56,6 +56,16 @@ namespace VitoSwimPT.Server.Models
                 context.SaveChanges();
             }
 
+            var pianoTest = context.Set<Piano>().FirstOrDefault(e => e.NomePiano == "Aerobico");
+            if (pianoTest == null)
+            {
+                var piano1 = new Piano() { NomePiano = "Aerobico", Descrizione = "Dimagrisci subito", Note = "Nota Bene 1" };
+                var piano2 = new Piano() { NomePiano = "Anaerobic", Descrizione = "Gonfiati un minimo", Note = "Nota Bene 2" };
+
+                context.Set<Piano>().AddRange(piano1, piano2);
+                context.SaveChanges();
+            }
+
             var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
             if (esercizioAllenamentoTest == null)
             {
