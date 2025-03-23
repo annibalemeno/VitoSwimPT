@@ -23,6 +23,8 @@ namespace VitoSwimPT.Server.Models
 
         public DbSet<EsercizioAllenamento> EserciziAllenamenti { get; set; }
 
+        public DbSet<PianoAllenamento> PianiAllenamento { get; set; }
+
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
@@ -60,7 +62,7 @@ namespace VitoSwimPT.Server.Models
             if (pianoTest == null)
             {
                 var piano1 = new Piano() { NomePiano = "Aerobico", Descrizione = "Dimagrisci subito", Note = "Nota Bene 1" };
-                var piano2 = new Piano() { NomePiano = "Anaerobic", Descrizione = "Gonfiati un minimo", Note = "Nota Bene 2" };
+                var piano2 = new Piano() { NomePiano = "Anaerobico", Descrizione = "Indurisciti", Note = "Nota Bene 2" };
 
                 context.Set<Piano>().AddRange(piano1, piano2);
                 context.SaveChanges();
@@ -72,6 +74,14 @@ namespace VitoSwimPT.Server.Models
                 var es_all1 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x=>x.Stile =="Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x=>x.NomeAllenamento == "Aerobico 1" ).FirstOrDefault() };
                 var es_all2 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault() };
                 context.AddRange(es_all1, es_all2);
+                context.SaveChanges();
+            }
+
+            var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
+            if (pianiAllenamentoTest == null)
+            {
+                var piano_all1 = new PianoAllenamento() { Piano = Piani.Where(p=>p.NomePiano == "Aerobico").FirstOrDefault(), Allenamento = Allenamenti.Where(a=>a.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                context.Add(piano_all1);
                 context.SaveChanges();
             }
         })
@@ -112,6 +122,7 @@ namespace VitoSwimPT.Server.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EsercizioAllenamento>().HasKey(ea => new { ea.EsercizioId, ea.AllenamentoId });
+            modelBuilder.Entity<PianoAllenamento>().HasKey(pa => new { pa.PianoId, pa.AllenamentoId});
         }
     }
 }
