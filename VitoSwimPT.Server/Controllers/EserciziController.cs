@@ -9,7 +9,7 @@ namespace VitoSwimPT.Server.Controllers
     [Route("[controller]")]
     public class EserciziController : ControllerBase
     {
-        private readonly IEsercizioRepository _esercizio;
+        private readonly IEsercizioRepository _eserciziRepo;
 
         private static readonly string[] Summaries = new[]
         {
@@ -18,9 +18,9 @@ namespace VitoSwimPT.Server.Controllers
 
         private readonly ILogger<EserciziController> _logger;
 
-        public EserciziController(ILogger<EserciziController> logger, IEsercizioRepository esercizio)
+        public EserciziController(ILogger<EserciziController> logger, IEsercizioRepository repo)
         {
-            _esercizio = esercizio ?? throw new ArgumentNullException(nameof(esercizio));
+            _eserciziRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _logger = logger;
         }
 
@@ -41,7 +41,7 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetEsercizi")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _esercizio.GetEsercizi());
+            return Ok(await _eserciziRepo.GetEsercizi());
         }
 
     }
