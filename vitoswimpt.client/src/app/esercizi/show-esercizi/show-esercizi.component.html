@@ -1,10 +1,10 @@
-<h1 id="tableLabel">Esercizi Nuoto</h1>
+<!--<h1 id="tableLabel">Esercizi Nuoto</h1>
 
 <p>Elenco Esercizi Registrati</p>
 
-<p *ngIf="!esercizi"><em>In caricamento... Ricarica la pagina dopo che il backend ASP.NET  è partito. Vedere <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> per ulteriori dettagli.</em></p>
+<p *ngIf="!EserciziList"><em>In caricamento... Ricarica la pagina dopo che il backend ASP.NET  è partito. Vedere <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> per ulteriori dettagli.</em></p>
 
-<table *ngIf="esercizi">
+<table *ngIf="EserciziList">
   <thead>
     <tr>
       <th>Ripetizioni</th>
@@ -14,11 +14,27 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let esercizio of esercizi">
+    <tr *ngFor="let esercizio of EserciziList">
       <td>{{ esercizio.ripetizioni }}x</td>
       <td>{{ esercizio.distanza }}</td>
       <td>{{ esercizio.recupero }}</td>
       <td>{{ esercizio.stile }}</td>
     </tr>
   </tbody>
+</table>-->
+
+<table class="table table-striped">
+
+  <thead>
+    <tr>
+      <th>Esercizio Id</th>
+      <th>Ripetizioni</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let esercizio of EserciziList">
+      <td>{{ esercizio.esercizioId }}</td>
+      <td>{{ esercizio.ripetizioni }}x</td>
+</tbody>
 </table>
