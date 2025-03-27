@@ -29,6 +29,9 @@
     <tr>
       <th>Esercizio Id</th>
       <th>Ripetizioni</th>
+      <th>Distanza</th>
+      <th>Recupero</th>
+      <th>Stile</th>
     </tr>
   </thead>
 
@@ -36,5 +39,8 @@
     <tr *ngFor="let esercizio of EserciziList">
       <td>{{ esercizio.esercizioId }}</td>
       <td>{{ esercizio.ripetizioni }}x</td>
+      <td>{{ esercizio.distanza }}x</td>
+      <td>{{ esercizio.recupero }}</td>
+      <td>{{ esercizio.stile }}</td>
 </tbody>
 </table>

@@ -1,13 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Esercizi} from  '../../../interfaces/esercizi'
 
-interface Esercizi {
-  esercizioId: number;
-  ripetizioni: string;
-  distanza: number;
-  recupero: number;
-  stile: string;
-}
 
 @Component({
   selector: 'app-show-esercizi',

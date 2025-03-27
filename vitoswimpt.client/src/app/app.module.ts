@@ -4,9 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EserciziComponent } from './esercizi/esercizi.component';
-import { ShowEserciziComponent } from './esercizi/show-esercizi/show-esercizi.component';
-import { AddEditEserciziComponent } from './esercizi/add-edit-esercizi/add-edit-esercizi.component';
+import { EserciziComponent } from './components/esercizi/esercizi.component';
+import { ShowEserciziComponent } from './components/esercizi/show-esercizi/show-esercizi.component';
+import { AddEditEserciziComponent } from './components/esercizi/add-edit-esercizi/add-edit-esercizi.component';
 
 @NgModule({
   declarations: [
