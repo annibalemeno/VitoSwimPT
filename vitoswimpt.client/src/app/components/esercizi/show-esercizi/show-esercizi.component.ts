@@ -19,8 +19,11 @@ export class ShowEserciziComponent implements OnInit {
   ActivateAddEditEsercComp: boolean = false;
   eserc: any;
 
-  Esercizi_Id_Filter = "";
-  Eercizi_Ripetizioni_Filter = "";
+  EserciziIdFilter = "";
+  EerciziRipetizioniFilter = "";
+  EerciziDistanzaFilter = "";
+  EerciziRecuperoFilter = "";
+  EerciziStileFilter = "";
   EserciziListWithoutFilter: any = [];
 
   ngOnInit(): void {
@@ -79,12 +82,24 @@ export class ShowEserciziComponent implements OnInit {
 
   FilterFn() {
     debugger;
-    var DepartmentIdFilter = this.Esercizi_Id_Filter;
-    var DepartmentNameFilter = this.Eercizi_Ripetizioni_Filter;
+    var EserciziIdFilter = this.EserciziIdFilter;
+    var RipetizioniFilter = this.EerciziRipetizioniFilter;
+    var DistanzaFilter = this.EerciziDistanzaFilter;
+    var RecuperoFilter = this.EerciziRecuperoFilter;
+    var StileFilter = this.EerciziStileFilter;
 
     this.EserciziList = this.EserciziListWithoutFilter.filter(
       function (el: any) {
-        return el
+        return el.esercizioId.toString().toLowerCase().includes(
+          EserciziIdFilter.toString().trim().toLowerCase()
+        ) && el.ripetizioni.toString().toLowerCase().includes(
+          RipetizioniFilter.toString().trim().toLowerCase())
+          && el.distanza.toString().toLowerCase().includes(
+            DistanzaFilter.toString().trim().toLowerCase())
+          && el.recupero.toString().toLowerCase().includes(
+            RecuperoFilter.toString().trim().toLowerCase())
+          && el.stile.toString().toLowerCase().includes(
+            StileFilter.toString().trim().toLowerCase())
       }
     );
   }
@@ -101,3 +116,9 @@ export class ShowEserciziComponent implements OnInit {
   //  );
   //}
 }
+
+//esercizioId: number;
+//ripetizioni: string;
+//distanza: number;
+//recupero: number;
+//stile: string;
