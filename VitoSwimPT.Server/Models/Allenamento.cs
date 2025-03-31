@@ -7,5 +7,7 @@
         public string? Note { get; set; }
 
         public IList<EsercizioAllenamento> EserciziAllenamenti { get; set; }
+
+        public IList<PianoAllenamento> PianiAllenamento { get; set; }
     }
 }

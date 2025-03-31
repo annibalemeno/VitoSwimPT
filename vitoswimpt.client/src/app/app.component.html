@@ -1,24 +1,13 @@
-<h1 id="tableLabel">Esercizi Nuoto</h1>
+<div class="container">
+  <h3 class="d-flex justify-content-center">VitoSwim PT</h3>
+  <nav class="navbar navbar-expand-sm bg-light navbar-dark">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <button routerLink="esercizi" class="m-1 btn btn-light btn-outline-primary" Button>Esercizi</button>
+      </li>
+    </ul>
+  </nav>
 
-<p>Elenco Esercizi Registrati</p>
-
-<p *ngIf="!esercizi"><em>In caricamento... Ricarica la pagina dopo che il backend ASP.NET  è partito. Vedere <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> per ulteriori dettagli.</em></p>
-
-<table *ngIf="esercizi">
-    <thead>
-        <tr>
-            <th>Ripetizioni</th>
-            <th>Distanza</th>
-            <th>Pausa</th>
-            <th>Stile</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let esercizio of esercizi">
-          <td>{{ esercizio.ripetizioni }}x</td>
-          <td>{{ esercizio.distanza }}</td>
-          <td>{{ esercizio.recupero }}</td>
-          <td>{{ esercizio.stile }}</td>
-        </tr>
-    </tbody>
-</table>
+  <router-outlet>
+  </router-outlet>
+</div>
