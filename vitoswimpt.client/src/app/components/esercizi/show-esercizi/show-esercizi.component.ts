@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Esercizi} from  '../../../interfaces/esercizi'
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -32,10 +33,14 @@ export class ShowEserciziComponent implements OnInit {
   }
 
   addClick() {
-    //this.eserc = {
-    //  DepartmentId: "0",
-    //  DepartmentName: ""
-    //}
+    this.eserc = {
+      esercizioId: "0",
+      ripetizioni: "",
+      distanza: "",
+      recupero: "",
+      stile: ""
+      }
+    
     this.ModalTitle = "Add Esercizio";
     this.ActivateAddEditEsercComp = true;
   }
@@ -48,11 +53,16 @@ export class ShowEserciziComponent implements OnInit {
 
   deleteClick(item: any) {
     if (confirm('Are you sure??')) {
-      //this.service.deleteDepartment(item.DepartmentId).subscribe(data => {
-      //  alert(data.toString());
-      //  this.refreshEserciziList();
-      //})
-      alert('ToDo');
+      const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
+      item.esercizioId
+
+      let headers = new HttpHeaders();
+      headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+      this.http.delete<number[]>('/esercizi/DeleteEsercizi/' + item.esercizioId, { headers }).subscribe(data => {
+        alert('delete ok');
+        this.refreshEserciziList();
+      });
     }
   }
 

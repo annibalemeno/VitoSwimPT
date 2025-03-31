@@ -1,1 +1,29 @@
-<p>add-edit-esercizi works!</p>
+<div class="d-flex flex-row bd-highlight mb-9">
+  <div class="p-2 w-100 bd-highlight">
+    <div class="input-group mb-12">
+      <span class="input-group-text">Numero Ripetizioni</span>
+      <input type="text" class="form-control" [(ngModel)]="Ripetizioni">
+    </div>
+    <div class="input-group mb-12">
+      <span class="input-group-text">Distanza</span>
+      <input type="text" class="form-control" [(ngModel)]="Distanza">
+    </div>
+    <div class="input-group mb-12">
+      <span class="input-group-text">Tempo Recupero</span>
+      <input type="text" class="form-control" [(ngModel)]="Recupero">
+    </div>
+    <div class="input-group mb-12">
+      <span class="input-group-text">Stile</span>
+      <input type="text" class="form-control" [(ngModel)]="Stile">
+    </div>
+    </div>
+</div>
+
+
+  <button (click)="addEsercizio()" *ngIf="eserc.esercizioId == '0'" class="btn btn-primary">
+    Add
+  </button>
+
+  <button (click)="updateEsercizio()" *ngIf="eserc.esercizioId !='0'" class="btn btn-primary">
+    Update
+  </button>
