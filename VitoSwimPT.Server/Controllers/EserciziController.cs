@@ -66,5 +66,13 @@ namespace VitoSwimPT.Server.Controllers
             _eserciziRepo.DeleteEsercizio(id);
             return new JsonResult("Deleted Successfully");
         }
+
+        [HttpPut]
+        [Route("UpdateEsercizi")]
+        public async Task<IActionResult> Put(Esercizio es)
+        {
+            await _eserciziRepo.UpdateEsercizio(es);
+            return new JsonResult("Updated Successfully");
+        }
     }
 }

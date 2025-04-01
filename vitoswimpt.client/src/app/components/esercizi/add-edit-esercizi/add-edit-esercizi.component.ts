@@ -43,6 +43,23 @@ export class AddEditEserciziComponent implements OnInit {
       alert(data.toString());
     });
   };
-  updateEsercizio() { console.log("updateEserczio"); };
+  updateEsercizio() {
+    console.log("updateEserczio");
+    var esercizio = {
+      esercizioId: this.EsercizioId,
+      ripetizioni: this.Ripetizioni,
+      distanza: this.Distanza,
+      recupero: this.Recupero,
+      stile: this.Stile
+    };
+
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+
+    this.http.put<Esercizi[]>('/esercizi/UpdateEsercizi/', esercizio,{ headers }).subscribe(data => {
+      //alert('update ok');
+      alert(data.toString());
+    });
+  };
 
 }

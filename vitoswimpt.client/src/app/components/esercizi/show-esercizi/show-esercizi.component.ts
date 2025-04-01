@@ -55,8 +55,6 @@ export class ShowEserciziComponent implements OnInit {
     if (confirm('Are you sure??')) {
       const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
-      item.esercizioId
-
       let headers = new HttpHeaders();
       headers = headers.set('Content-Type', 'application/json; charset=utf-8');
       this.http.delete<number[]>('/esercizi/DeleteEsercizi/' + item.esercizioId, { headers }).subscribe(data => {

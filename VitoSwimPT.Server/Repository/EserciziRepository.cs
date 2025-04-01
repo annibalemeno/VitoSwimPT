@@ -10,6 +10,8 @@ namespace VitoSwimPT.Server.Repository
 
         bool DeleteEsercizio(int Id);
 
+        Task<Esercizio> UpdateEsercizio(Esercizio esercizio);
+
         //Task<Customer> UpdateCustomer(Customer objDepartment);
         //bool DeleteCustomer(int ID);
 
@@ -53,6 +55,13 @@ namespace VitoSwimPT.Server.Repository
                 result = false;
             }
             return result;
+        }
+
+        public async Task <Esercizio> UpdateEsercizio(Esercizio esercizio)
+        {
+            _swimDBContext.Entry(esercizio).State = EntityState.Modified;
+            await _swimDBContext.SaveChangesAsync();
+            return esercizio;
         }
     }
 }
