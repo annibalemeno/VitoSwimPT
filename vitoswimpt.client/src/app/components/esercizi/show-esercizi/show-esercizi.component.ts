@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Esercizi} from  '../../../interfaces/esercizi'
+import { Esercizi } from '../../../interfaces/esercizi';
+import { ApiserviceService } from '../../../apiservice.service';
 import { Observable } from 'rxjs';
 
 
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class ShowEserciziComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor(private service: ApiserviceService) { }
 
   public EserciziList: Esercizi[] = [];
   // EserciziList: any = [];
@@ -53,16 +53,14 @@ export class ShowEserciziComponent implements OnInit {
 
   deleteClick(item: any) {
     if (confirm('Are you sure??')) {
-      const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
-      let headers = new HttpHeaders();
-      headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-      this.http.delete<number[]>('/esercizi/DeleteEsercizi/' + item.esercizioId, { headers }).subscribe(data => {
+      this.service.deleteEsercizio(item.esercizioId).subscribe(data => {
         alert('delete ok');
         this.refreshEserciziList();
       });
     }
   }
+
 
   closeClick() {
     this.ActivateAddEditEsercComp = false;
@@ -71,12 +69,12 @@ export class ShowEserciziComponent implements OnInit {
 
 
   refreshEserciziList() {
-    this.http.get<Esercizi[]>('/esercizi').subscribe(data => {
+    this.service.getEserciziList().subscribe(data => {
       this.EserciziList = data;
       this.EserciziListWithoutFilter = data;
     });
   }
-
+ 
   sortResult(prop: any, asc: any) {
     this.EserciziList = this.EserciziListWithoutFilter.sort(function (a: any, b: any) {
       if (asc) {
@@ -111,18 +109,6 @@ export class ShowEserciziComponent implements OnInit {
       }
     );
   }
-
-
-  //getAllenamenti() {
-  //  this.http.get<Esercizi[]>('/esercizi').subscribe(
-  //    (result) => {
-  //      this.esercizi = result;
-  //    },
-  //    (error) => {
-  //      console.error(error);
-  //    }
-  //  );
-  //}
 }
 
 //esercizioId: number;

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
 import { Esercizi } from '../../../interfaces/esercizi';
+import { ApiserviceService } from '../../../apiservice.service';
 
 @Component({
   selector: 'app-add-edit-esercizi',
@@ -9,7 +10,7 @@ import { Esercizi } from '../../../interfaces/esercizi';
   styleUrl: './add-edit-esercizi.component.css'
 })
 export class AddEditEserciziComponent implements OnInit {
-  constructor(private http: HttpClient) { }
+  constructor(private service: ApiserviceService, private http: HttpClient) { }
 
   @Input() eserc: any;
   EsercizioId = "";
@@ -27,8 +28,7 @@ export class AddEditEserciziComponent implements OnInit {
   }
 
   addEsercizio() {
-    debugger;
-    console.log("addEsercizio");
+   // console.log("addEsercizio");
     var esercizio = {
       ripetizioni: this.Ripetizioni,
       distanza: this.Distanza,
@@ -36,15 +36,13 @@ export class AddEditEserciziComponent implements OnInit {
       stile: this.Stile
     };
 
-    //'responseType': 'text'  'application/json'
-    let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-    this.http.post<Esercizi[]>('/esercizi', esercizio, { headers }).subscribe(data => {
+    this.service.addEsercizio(esercizio).subscribe(data => {
       alert(data.toString());
     });
   };
+
   updateEsercizio() {
-    console.log("updateEserczio");
+    //console.log("updateEserczio");
     var esercizio = {
       esercizioId: this.EsercizioId,
       ripetizioni: this.Ripetizioni,
@@ -53,11 +51,7 @@ export class AddEditEserciziComponent implements OnInit {
       stile: this.Stile
     };
 
-    let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-
-    this.http.put<Esercizi[]>('/esercizi/UpdateEsercizi/', esercizio,{ headers }).subscribe(data => {
-      //alert('update ok');
+    this.service.updateEsercizio(esercizio).subscribe(data => {
       alert(data.toString());
     });
   };
