@@ -14,7 +14,7 @@ export class ApiserviceService {
     return this.http.get<Esercizi[]>('/esercizi');
   }
 
-  addEsercizio(esercizio: any): Observable<any> {
+  addEsercizio(esercizio: Esercizi): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.http.post<Esercizi[]>('/esercizi', esercizio, { headers });
@@ -26,7 +26,7 @@ export class ApiserviceService {
     return this.http.delete<number>('/esercizi/DeleteEsercizi/' + esercizioId, { headers });
   }
 
-  updateEsercizio(esercizio: any): Observable<any> {
+  updateEsercizio(esercizio: Esercizi): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
 

@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
 import { Esercizi } from '../../../interfaces/esercizi';
 import { ApiserviceService } from '../../../apiservice.service';
 
@@ -10,13 +9,13 @@ import { ApiserviceService } from '../../../apiservice.service';
   styleUrl: './add-edit-esercizi.component.css'
 })
 export class AddEditEserciziComponent implements OnInit {
-  constructor(private service: ApiserviceService, private http: HttpClient) { }
+  constructor(private service: ApiserviceService) { }
 
   @Input() eserc: any;
-  EsercizioId = "";
-  Ripetizioni = "";
-  Distanza = "";
-  Recupero = "";
+  EsercizioId = 0;
+  Ripetizioni = 0;
+  Distanza = 0;
+  Recupero = 0;
   Stile = "";
 
   ngOnInit(): void {
@@ -28,8 +27,10 @@ export class AddEditEserciziComponent implements OnInit {
   }
 
   addEsercizio() {
-   // console.log("addEsercizio");
-    var esercizio = {
+    // console.log("addEsercizio");
+    var esercizio: Esercizi;
+    esercizio = {
+      esercizioId: this.EsercizioId,
       ripetizioni: this.Ripetizioni,
       distanza: this.Distanza,
       recupero: this.Recupero,
@@ -43,7 +44,9 @@ export class AddEditEserciziComponent implements OnInit {
 
   updateEsercizio() {
     //console.log("updateEserczio");
-    var esercizio = {
+    var esercizio: Esercizi;
+
+     esercizio = {
       esercizioId: this.EsercizioId,
       ripetizioni: this.Ripetizioni,
       distanza: this.Distanza,
