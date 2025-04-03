@@ -11,7 +11,7 @@ namespace VitoSwimPT.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Allenamento",
+                name: "Allenamenti",
                 columns: table => new
                 {
                     AllenamentoId = table.Column<int>(type: "int", nullable: false)
@@ -29,7 +29,7 @@ namespace VitoSwimPT.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Allenamento");
+                name: "Allenamenti");
         }
     }
 }

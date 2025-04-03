@@ -34,8 +34,8 @@ namespace VitoSwimPT.Server.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     => optionsBuilder
         .UseSqlServer(appConfig.GetConnectionString("SwimLocalDB"))
-        .UseSeeding((context, _) =>
-        {
+            .UseSeeding((context, _) =>
+            {
             var esercizioTest = context.Set<Esercizio>().FirstOrDefault(b => b.Ripetizioni == 2);
             if (esercizioTest == null)
             {
@@ -71,7 +71,7 @@ namespace VitoSwimPT.Server.Models
             var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
             if (esercizioAllenamentoTest == null)
             {
-                var es_all1 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x=>x.Stile =="Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x=>x.NomeAllenamento == "Aerobico 1" ).FirstOrDefault() };
+                var es_all1 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
                 var es_all2 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault() };
                 context.AddRange(es_all1, es_all2);
                 context.SaveChanges();
@@ -80,7 +80,7 @@ namespace VitoSwimPT.Server.Models
             var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
             if (pianiAllenamentoTest == null)
             {
-                var piano_all1 = new PianoAllenamento() { Piano = Piani.Where(p=>p.NomePiano == "Aerobico").FirstOrDefault(), Allenamento = Allenamenti.Where(a=>a.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                var piano_all1 = new PianoAllenamento() { Piano = Piani.Where(p => p.NomePiano == "Aerobico").FirstOrDefault(), Allenamento = Allenamenti.Where(a => a.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
                 context.Add(piano_all1);
                 context.SaveChanges();
             }
@@ -122,7 +122,7 @@ namespace VitoSwimPT.Server.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EsercizioAllenamento>().HasKey(ea => new { ea.EsercizioId, ea.AllenamentoId });
-            modelBuilder.Entity<PianoAllenamento>().HasKey(pa => new { pa.PianoId, pa.AllenamentoId});
+            modelBuilder.Entity<PianoAllenamento>().HasKey(pa => new { pa.PianoId, pa.AllenamentoId });
         }
     }
 }
