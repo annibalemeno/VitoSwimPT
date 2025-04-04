@@ -16,14 +16,14 @@ export class AddEditEserciziComponent implements OnInit {
   Ripetizioni = 0;
   Distanza = 0;
   Recupero = 0;
-  Stile = "";
+/*  Stile = "";*/
 
   ngOnInit(): void {
     this.EsercizioId = this.eserc.esercizioId;
     this.Ripetizioni = this.eserc.ripetizioni;
     this.Distanza = this.eserc.distanza;
     this.Recupero = this.eserc.recupero;
-    this.Stile = this.eserc.stile;
+/*    this.Stile = this.eserc.stile;*/
   }
 
   addEsercizio() {
@@ -34,7 +34,7 @@ export class AddEditEserciziComponent implements OnInit {
       ripetizioni: this.Ripetizioni,
       distanza: this.Distanza,
       recupero: this.Recupero,
-      stile: this.Stile
+/*      stile: this.Stile*/
     };
 
     this.service.addEsercizio(esercizio).subscribe(data => {
@@ -51,7 +51,7 @@ export class AddEditEserciziComponent implements OnInit {
       ripetizioni: this.Ripetizioni,
       distanza: this.Distanza,
       recupero: this.Recupero,
-      stile: this.Stile
+/*      stile: this.Stile*/
     };
 
     this.service.updateEsercizio(esercizio).subscribe(data => {

@@ -40,8 +40,12 @@ namespace VitoSwimPT.Server.Models
             if (esercizioTest == null)
             {
                 //create entity objects
-                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = "Libero" };
-                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = "Libero" };
+                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, 
+                    //Stile = "Libero" 
+                };
+                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, 
+                    //Stile = "Libero" 
+                };
 
                 context.Set<Esercizio>().AddRange(eserc1, eserc2);
                 context.SaveChanges();
@@ -71,8 +75,12 @@ namespace VitoSwimPT.Server.Models
             var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
             if (esercizioAllenamentoTest == null)
             {
-                var es_all1 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
-                var es_all2 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault() };
+                var es_all1 = new EsercizioAllenamento() {
+                    Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
+                    Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                var es_all2 = new EsercizioAllenamento() { 
+                    Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
+                    Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault() };
                 context.AddRange(es_all1, es_all2);
                 context.SaveChanges();
             }
@@ -91,8 +99,12 @@ namespace VitoSwimPT.Server.Models
             if (esercizioTest == null)
             {
                 //create entity objects
-                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = "Libero" };
-                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = "Libero" };
+                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30
+                   // ,Stile = "Libero" 
+                };
+                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20
+                    //,Stile = "Libero" 
+                };
 
                 context.Set<Esercizio>().AddRange(eserc1, eserc2);
                 context.SaveChangesAsync();
@@ -112,8 +124,12 @@ namespace VitoSwimPT.Server.Models
             var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefaultAsync(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
             if (esercizioAllenamentoTest == null)
             {
-                var es_all1 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
-                var es_all2 = new EsercizioAllenamento() { Esercizio = Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault() };
+                var es_all1 = new EsercizioAllenamento() { 
+                    Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
+                    Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                var es_all2 = new EsercizioAllenamento() { 
+                    Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(), //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
+                    Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault() };
                 context.AddRange(es_all1, es_all2);
                 context.SaveChangesAsync();
             }

@@ -3,5 +3,5 @@ export interface Esercizi {
   ripetizioni: number;
   distanza: number;
   recupero: number;
-  stile: string;
+/*  stile: string;*/
 }
