@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
+using System.Xml;
 
 namespace VitoSwimPT.Server.Models
 {
@@ -17,6 +18,7 @@ namespace VitoSwimPT.Server.Models
         }
 
         //entities
+       public DbSet<Stile> Stili {  get; set; }
         public DbSet<Esercizio> Esercizi { get; set; }
         public DbSet<Allenamento> Allenamenti { get; set; }
         public DbSet<Piano> Piani { get; set; }
@@ -36,15 +38,29 @@ namespace VitoSwimPT.Server.Models
         .UseSqlServer(appConfig.GetConnectionString("SwimLocalDB"))
             .UseSeeding((context, _) =>
             {
+            var stiliTest = context.Set<Stile>().FirstOrDefault(s => s.Sigla == "SL");
+            if (stiliTest == null)
+            {
+                    //create entity objects
+                 var sl = new Stile() { Nome = "Libero", Sigla = "SL" };
+                 var dx = new Stile() { Nome = "Dorso", Sigla = "DX" };
+                 var rn = new Stile() { Nome = "Rana", Sigla = "RN" };
+                 var df = new Stile() { Nome = "Delfino", Sigla = "DF" };
+                 var fa = new Stile() { Nome = "Farfalla", Sigla = "FA" };
+                 var mx = new Stile() { Nome = "Misti", Sigla = "MX" };
+
+                context.Set<Stile>().AddRange(sl,dx,rn, df, fa, mx);
+                context.SaveChanges();
+            }
+
+
             var esercizioTest = context.Set<Esercizio>().FirstOrDefault(b => b.Ripetizioni == 2);
             if (esercizioTest == null)
             {
                 //create entity objects
-                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, 
-                    //Stile = "Libero" 
+                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = Stili.Where(s=>s.Sigla == "SL").FirstOrDefault()
                 };
-                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, 
-                    //Stile = "Libero" 
+                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = Stili.Where(s => s.Sigla == "DX").FirstOrDefault()
                 };
 
                 context.Set<Esercizio>().AddRange(eserc1, eserc2);
@@ -99,11 +115,9 @@ namespace VitoSwimPT.Server.Models
             if (esercizioTest == null)
             {
                 //create entity objects
-                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30
-                   // ,Stile = "Libero" 
+                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = Stili.Where(s => s.Sigla == "SL").FirstOrDefault()
                 };
-                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20
-                    //,Stile = "Libero" 
+                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = Stili.Where(s => s.Sigla == "DX").FirstOrDefault()
                 };
 
                 context.Set<Esercizio>().AddRange(eserc1, eserc2);
@@ -139,6 +153,7 @@ namespace VitoSwimPT.Server.Models
         {
             modelBuilder.Entity<EsercizioAllenamento>().HasKey(ea => new { ea.EsercizioId, ea.AllenamentoId });
             modelBuilder.Entity<PianoAllenamento>().HasKey(pa => new { pa.PianoId, pa.AllenamentoId });
+            modelBuilder.Entity<Stile>().Property(x => x.Sigla).HasMaxLength(2);
         }
     }
 }
