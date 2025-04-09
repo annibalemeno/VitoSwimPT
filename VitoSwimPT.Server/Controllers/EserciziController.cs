@@ -1,6 +1,5 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Net;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 
@@ -8,6 +7,7 @@ namespace VitoSwimPT.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    //[EnableCors("AllowLocal")]
     public class EserciziController : ControllerBase
     {
         private readonly IEsercizioRepository _eserciziRepo;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 
@@ -6,6 +7,8 @@ namespace VitoSwimPT.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    //[EnableCors("AllowAllHeaders")]
+    //[EnableCors("AllowLocal")] 
     public class AllenamentiController : ControllerBase
     {
 

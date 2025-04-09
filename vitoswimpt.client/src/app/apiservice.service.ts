@@ -7,6 +7,8 @@ import { Esercizi } from './interfaces/esercizi';
   providedIn: 'root'
 })
 export class ApiserviceService {
+  readonly apiUrl = 'http://localhost:5194';
+
 
   constructor(private http: HttpClient) { }
 
@@ -32,4 +34,12 @@ export class ApiserviceService {
 
     return this.http.put<Esercizi[]>('/esercizi/UpdateEsercizi/', esercizio, { headers });
   }
+
+  getStili(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl+'/stili');
+  }
 }
+
+
+//let headers = new HttpHeaders();
+//headers = headers.set('Access-Control-Allow-Origin', '*');

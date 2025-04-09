@@ -38,7 +38,7 @@ export class ShowEserciziComponent implements OnInit {
       ripetizioni: "",
       distanza: "",
       recupero: ""
-/*      stile: ""*/
+/*      ,stile: ""*/
       }
     
     this.ModalTitle = "Add Esercizio";

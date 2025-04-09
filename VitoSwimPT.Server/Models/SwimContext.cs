@@ -58,9 +58,11 @@ namespace VitoSwimPT.Server.Models
             if (esercizioTest == null)
             {
                 //create entity objects
-                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = Stili.Where(s=>s.Sigla == "SL").FirstOrDefault()
+                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30
+              //      , Stile = Stili.Where(s=>s.Sigla == "SL").FirstOrDefault()
                 };
-                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = Stili.Where(s => s.Sigla == "DX").FirstOrDefault()
+                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20
+              //     , Stile = Stili.Where(s => s.Sigla == "DX").FirstOrDefault()
                 };
 
                 context.Set<Esercizio>().AddRange(eserc1, eserc2);
@@ -115,9 +117,11 @@ namespace VitoSwimPT.Server.Models
             if (esercizioTest == null)
             {
                 //create entity objects
-                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30, Stile = Stili.Where(s => s.Sigla == "SL").FirstOrDefault()
+                var eserc1 = new Esercizio() { Ripetizioni = 2, Distanza = 200, Recupero = 30
+                  //  , Stile = Stili.Where(s => s.Sigla == "SL").FirstOrdefault()
                 };
-                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = Stili.Where(s => s.Sigla == "DX").FirstOrDefault()
+                var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20
+                  //  , Stile = Stili.Where(s => s.Sigla == "DX").FirstOrDefault()
                 };
 
                 context.Set<Esercizio>().AddRange(eserc1, eserc2);

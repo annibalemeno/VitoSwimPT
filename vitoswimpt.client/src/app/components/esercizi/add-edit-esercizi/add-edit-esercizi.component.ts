@@ -16,14 +16,26 @@ export class AddEditEserciziComponent implements OnInit {
   Ripetizioni = 0;
   Distanza = 0;
   Recupero = 0;
-/*  Stile = "";*/
+  /*  Stile = "";*/
+  StiliList: any = [];
 
   ngOnInit(): void {
-    this.EsercizioId = this.eserc.esercizioId;
-    this.Ripetizioni = this.eserc.ripetizioni;
-    this.Distanza = this.eserc.distanza;
-    this.Recupero = this.eserc.recupero;
-/*    this.Stile = this.eserc.stile;*/
+    this.getEserciziList();
+  }
+
+  getEserciziList() {
+    this.service.getStili().subscribe((data: any) => {
+      //this.StiliList = data;*/
+      //debugger;
+      var stili = data;
+      console.log(data);
+
+      this.EsercizioId = this.eserc.esercizioId;
+      this.Ripetizioni = this.eserc.ripetizioni;
+      this.Distanza = this.eserc.distanza;
+      this.Recupero = this.eserc.recupero;
+      /*    this.Stile = this.eserc.stile;*/
+    });
   }
 
   addEsercizio() {
