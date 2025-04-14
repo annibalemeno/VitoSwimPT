@@ -87,9 +87,19 @@ namespace VitoSwimPT.Server.Controllers
 
         [HttpPut]
         [Route("UpdateEsercizi")]
-        public async Task<IActionResult> Put(Esercizio es)
+        public async Task<IActionResult> Put(EserciziVM es)
         {
-            await _eserciziRepo.UpdateEsercizio(es);
+
+
+            //get esercizio by id
+            Esercizio esToUpdate = await _eserciziRepo.GetEsercizioByID(es.EsercizioId);
+            //gestisco modifiche
+            esToUpdate.Ripetizioni = es.Ripetizioni;
+            esToUpdate.Distanza = es.Distanza;
+            esToUpdate.Recupero = es.Recupero;
+            esToUpdate.StileId = 7;     //TODO
+
+            await _eserciziRepo.UpdateEsercizio(esToUpdate);
             return new JsonResult("Updated Successfully");
         }
     }
