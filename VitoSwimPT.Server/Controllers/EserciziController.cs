@@ -55,9 +55,18 @@ namespace VitoSwimPT.Server.Controllers
         }
 
         [HttpPost(Name = "AddEsercizi")]
-        public async Task<IActionResult> Post(Esercizio es)
+        public async Task<IActionResult> Post(EserciziVM es)
         {
-            var result = await _eserciziRepo.InsertEsercizio(es);
+            Esercizio esToInsert = new Esercizio()
+            {
+                Ripetizioni = es.Ripetizioni,
+                Distanza = es.Distanza,
+                Recupero = es.Recupero,
+                StileId = 7                             //TODO
+            };
+
+
+            var result = await _eserciziRepo.InsertEsercizio(esToInsert);
             if (result.EsercizioId == 0)
             {
                 //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");

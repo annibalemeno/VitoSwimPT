@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Esercizi } from './interfaces/esercizi';
+import { Stili } from './interfaces/stili';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,8 @@ export class ApiserviceService {
     return this.http.put<Esercizi[]>('/esercizi/UpdateEsercizi/', esercizio, { headers });
   }
 
-  getStili(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl+'/stili');
+  getStili(): Observable<Stili[]> {
+    return this.http.get<Stili[]>(this.apiUrl+'/stili');
   }
 }
 

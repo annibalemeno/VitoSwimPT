@@ -2,13 +2,13 @@
 {
     public class EserciziVM
     {
-        public EserciziVM(int esercizioId, int ripetizioni, int distanza, int recupero, string nome)
+        public EserciziVM(int esercizioId, int ripetizioni, int distanza, int recupero, string stile)
         {
             EsercizioId = esercizioId;
             Ripetizioni = ripetizioni;
             Distanza = distanza;
             Recupero = recupero;
-            Stile = nome;
+            Stile = stile;
         }
 
         public int EsercizioId { get; set; }

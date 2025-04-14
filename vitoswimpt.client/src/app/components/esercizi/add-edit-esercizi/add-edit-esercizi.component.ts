@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Esercizi } from '../../../interfaces/esercizi';
 import { ApiserviceService } from '../../../apiservice.service';
+import { Esercizi } from '../../../interfaces/esercizi';
+import { Stili } from '../../../interfaces/stili';
 
 @Component({
   selector: 'app-add-edit-esercizi',
@@ -17,18 +18,17 @@ export class AddEditEserciziComponent implements OnInit {
   Distanza = 0;
   Recupero = 0;
   Stile = "";
-  StiliList: any = [];
+  StiliList: Stili[] = [];
 
   ngOnInit(): void {
     this.getEserciziList();
   }
 
   getEserciziList() {
-    this.service.getStili().subscribe((data: any) => {
-      //this.StiliList = data;*/
-      //debugger;
-      var stili = data;
-      console.log(data);
+    this.service.getStili().subscribe(data => {
+
+      this.StiliList = data;
+      console.log(this.StiliList);
 
       this.EsercizioId = this.eserc.esercizioId;
       this.Ripetizioni = this.eserc.ripetizioni;

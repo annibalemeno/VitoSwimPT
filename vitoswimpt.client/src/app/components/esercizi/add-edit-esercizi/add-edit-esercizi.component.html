@@ -14,11 +14,17 @@
       <span class="input-group-text">Tempo Recupero</span>
       <input type="text" class="form-control" [(ngModel)]="Recupero">
     </div>
-    <!--<div class="input-group mb-12">
+    <div class="input-group mb-12">
       <span class="input-group-text">Stile</span>
-      <input type="text" class="form-control" [(ngModel)]="Stile">
+      <!--<input type="text" class="form-control" [(ngModel)]="Stile">-->
+      <select class="form-select" [(ngModel)]="Stile">
+        <option>--Select--</option>
+        <option *ngFor="let stile of StiliList">
+          {{stile.nome}}
+        </option>
+      </select>
     </div>
-  </div>-->
+  </div>
 </div>
 
 
