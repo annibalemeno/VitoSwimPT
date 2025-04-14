@@ -24,7 +24,7 @@ export class ShowEserciziComponent implements OnInit {
   EerciziRipetizioniFilter = "";
   EerciziDistanzaFilter = "";
   EerciziRecuperoFilter = "";
-/*  EerciziStileFilter = "";*/
+  EerciziStileFilter = "";
   EserciziListWithoutFilter: any = [];
 
   ngOnInit(): void {
@@ -92,7 +92,7 @@ export class ShowEserciziComponent implements OnInit {
     var RipetizioniFilter = this.EerciziRipetizioniFilter;
     var DistanzaFilter = this.EerciziDistanzaFilter;
     var RecuperoFilter = this.EerciziRecuperoFilter;
-/*    var StileFilter = this.EerciziStileFilter;*/
+    var StileFilter = this.EerciziStileFilter;
 
     this.EserciziList = this.EserciziListWithoutFilter.filter(
       function (el: any) {
@@ -104,8 +104,8 @@ export class ShowEserciziComponent implements OnInit {
             DistanzaFilter.toString().trim().toLowerCase())
           && el.recupero.toString().toLowerCase().includes(
             RecuperoFilter.toString().trim().toLowerCase())
-          //&& el.stile.toString().toLowerCase().includes(
-          //  StileFilter.toString().trim().toLowerCase())
+          && el.stile.toString().toLowerCase().includes(
+            StileFilter.toString().trim().toLowerCase())
       }
     );
   }

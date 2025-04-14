@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
+using VitoSwimPT.Server.ViewModels;
 
 namespace VitoSwimPT.Server.Controllers
 {
@@ -42,7 +43,15 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetEsercizi")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _eserciziRepo.GetEsercizi());
+            var esercizi = await _eserciziRepo.GetEsercizi();
+            //Task<IEnumerable<EserciziVM>>
+            var eserciziList = new List<EserciziVM>();
+            foreach (var item in esercizi)
+            {
+                eserciziList.Add(ModelMap.toViewModel(item));
+            }
+            return Ok(eserciziList);
+            //return Ok(await _eserciziRepo.GetEsercizi());
         }
 
         [HttpPost(Name = "AddEsercizi")]
