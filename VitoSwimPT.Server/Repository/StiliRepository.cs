@@ -6,6 +6,7 @@ namespace VitoSwimPT.Server.Repository
     public interface IStiliRepository
     {
         Task<IEnumerable<Stile>> GetStile();
+        Task<Stile> GetStileByName(string name);
     }
 
     public class StiliRepository : IStiliRepository
@@ -20,6 +21,11 @@ namespace VitoSwimPT.Server.Repository
         {
             return await _swimDBContext.Stili.ToListAsync();
         }
+        public async Task<Stile> GetStileByName(string name)
+        {
+            return await _swimDBContext.Stili.Where(x => x.Nome.EndsWith(name)).FirstOrDefaultAsync();
+        }
+
 
     }
 }

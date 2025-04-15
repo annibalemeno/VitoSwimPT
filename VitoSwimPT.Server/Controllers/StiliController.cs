@@ -22,10 +22,8 @@ namespace VitoSwimPT.Server.Controllers
         {
             return Ok(await _stiliRepo.GetStile());
         }
+
     }
-
-
-
 
 
 }

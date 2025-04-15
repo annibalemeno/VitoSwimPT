@@ -12,6 +12,7 @@ namespace VitoSwimPT.Server.Controllers
     public class EserciziController : ControllerBase
     {
         private readonly IEsercizioRepository _eserciziRepo;
+        private readonly IStiliRepository _stiliRepo;
 
         private static readonly string[] Summaries = new[]
         {
@@ -20,9 +21,10 @@ namespace VitoSwimPT.Server.Controllers
 
         private readonly ILogger<EserciziController> _logger;
 
-        public EserciziController(ILogger<EserciziController> logger, IEsercizioRepository repo)
+        public EserciziController(ILogger<EserciziController> logger, IEsercizioRepository repo, IStiliRepository slrepo)
         {
             _eserciziRepo = repo ?? throw new ArgumentNullException(nameof(repo));
+            _stiliRepo = slrepo ?? throw new ArgumentNullException(nameof(slrepo));
             _logger = logger;
         }
 
@@ -54,16 +56,30 @@ namespace VitoSwimPT.Server.Controllers
             //return Ok(await _eserciziRepo.GetEsercizi());
         }
 
+        [HttpGet("{id:int}")]
+        //[HttpDelete("{id}")]
+        //[Route("DeleteEsercizi/{Id}")]
+        //[Route("/{Id}")]
+        public JsonResult Get(int id)
+        {
+            var esercizio =  _eserciziRepo.GetEsercizioByID(id);
+            return new JsonResult(esercizio);
+        }
+
         [HttpPost(Name = "AddEsercizi")]
         public async Task<IActionResult> Post(EserciziVM es)
         {
+            //get stile
+            var stile = await _stiliRepo.GetStileByName(es.Stile);
+            int stileId = stile.StileId;                //TODO robustezza eccezioni
+
             Esercizio esToInsert = new Esercizio()
             {
                 Ripetizioni = es.Ripetizioni,
                 Distanza = es.Distanza,
                 Recupero = es.Recupero,
-                StileId = 7                             //TODO
-            };
+                StileId = stileId
+            };                  
 
 
             var result = await _eserciziRepo.InsertEsercizio(esToInsert);
@@ -93,11 +109,14 @@ namespace VitoSwimPT.Server.Controllers
 
             //get esercizio by id
             Esercizio esToUpdate = await _eserciziRepo.GetEsercizioByID(es.EsercizioId);
+            //get stile
+            var stile = await _stiliRepo.GetStileByName(es.Stile);
+            int stileId = stile.StileId;                //TODO robustezza eccezioni
             //gestisco modifiche
             esToUpdate.Ripetizioni = es.Ripetizioni;
             esToUpdate.Distanza = es.Distanza;
             esToUpdate.Recupero = es.Recupero;
-            esToUpdate.StileId = 7;     //TODO
+            esToUpdate.StileId = stileId;   
 
             await _eserciziRepo.UpdateEsercizio(esToUpdate);
             return new JsonResult("Updated Successfully");

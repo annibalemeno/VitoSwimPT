@@ -25,16 +25,16 @@ export class AddEditEserciziComponent implements OnInit {
   }
 
   getEserciziList() {
+    console.log("GetEserciziList");
     this.service.getStili().subscribe(data => {
 
       this.StiliList = data;
-      console.log(this.StiliList);
-
+   
       this.EsercizioId = this.eserc.esercizioId;
       this.Ripetizioni = this.eserc.ripetizioni;
       this.Distanza = this.eserc.distanza;
       this.Recupero = this.eserc.recupero;
-      /*    this.Stile = this.eserc.stile;*/
+      this.Stile = this.eserc.stile;
     });
   }
 
