@@ -13,6 +13,7 @@ namespace VitoSwimPT.Server.Controllers
     {
         private readonly IEsercizioRepository _eserciziRepo;
         private readonly IStiliRepository _stiliRepo;
+        private ModelMap _mapper;
 
         private static readonly string[] Summaries = new[]
         {
@@ -21,11 +22,12 @@ namespace VitoSwimPT.Server.Controllers
 
         private readonly ILogger<EserciziController> _logger;
 
-        public EserciziController(ILogger<EserciziController> logger, IEsercizioRepository repo, IStiliRepository slrepo)
+        public EserciziController(ILogger<EserciziController> logger, IEsercizioRepository repo, IStiliRepository slrepo, ModelMap mapper)
         {
             _eserciziRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _stiliRepo = slrepo ?? throw new ArgumentNullException(nameof(slrepo));
             _logger = logger;
+            _mapper = mapper;
         }
 
         //[HttpGet(Name = "GetAllenamenti")]
@@ -50,7 +52,11 @@ namespace VitoSwimPT.Server.Controllers
             var eserciziList = new List<EserciziVM>();
             foreach (var item in esercizi)
             {
-                eserciziList.Add(ModelMap.toViewModel(item));
+                var stile = await _stiliRepo.GetStileById(item.StileId);
+                var esercizio = _mapper.toViewModel(item);
+                esercizio.Stile = stile.Nome;
+                //eserciziList.Add(_mapper.toViewModel(item));
+                eserciziList.Add(esercizio);
             }
             return Ok(eserciziList);
             //return Ok(await _eserciziRepo.GetEsercizi());

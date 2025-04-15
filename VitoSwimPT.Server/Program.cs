@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
+using VitoSwimPT.Server.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEsercizioRepository, EserciziRepository>();
 builder.Services.AddScoped<IAllenamentoRepository, AllenamentiRepository>();
 builder.Services.AddScoped<IStiliRepository, StiliRepository>();
+builder.Services.AddScoped<ModelMap>();
 
 //builder.Services.AddDbContext<SwimContext>(options => options.UseSqlServer("Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;"));
 builder.Services.AddDbContext<SwimContext>();
