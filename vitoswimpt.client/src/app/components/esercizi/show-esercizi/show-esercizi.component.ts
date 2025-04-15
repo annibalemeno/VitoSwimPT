@@ -18,7 +18,8 @@ export class ShowEserciziComponent implements OnInit {
   // EserciziList: any = [];
   ModalTitle = "";
   ActivateAddEditEsercComp: boolean = false;
-  eserc: Esercizi = {
+  eserc: Esercizi 
+    = {
     esercizioId: 0,
     ripetizioni: 0,
     distanza: 0,
@@ -39,28 +40,28 @@ export class ShowEserciziComponent implements OnInit {
   }
 
   addClick() {
-    //this.eserc = {
-    //  esercizioId:0,
-    //  ripetizioni: 0,
-    //  distanza: 0,
-    //  recupero:0,
-    //  stile: "Libero"
-    //  }
+    this.eserc = {
+      esercizioId: 0,
+      ripetizioni: 0,
+      distanza: 0,
+      recupero: 0,
+      stile: "Libero"
+    };
     
     this.ModalTitle = "Add Esercizio";
     this.ActivateAddEditEsercComp = true;
   }
 
   editClick(item: any) {
-    //this.eserc = item;
+    this.eserc = item;
 
-    this.eserc = {
-      esercizioId: 2008,
-      ripetizioni: 12,
-      distanza: 120,
-      recupero: 21,
-      stile: "Dorso"
-    }
+    //this.eserc = {
+    //  esercizioId: item.esercizioId,
+    //  ripetizioni: item.ripetizioni,
+    //  distanza: item.distanza,
+    //  recupero: item.recupero,
+    //  stile: item.stile
+    //};
 
     this.ModalTitle = "Edit Esercizio";
     this.ActivateAddEditEsercComp = true;

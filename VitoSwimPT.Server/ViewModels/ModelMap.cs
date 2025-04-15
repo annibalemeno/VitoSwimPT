@@ -11,8 +11,7 @@ namespace VitoSwimPT.Server.ViewModels
                      esercizio.EsercizioId,
                      esercizio.Ripetizioni,
                      esercizio.Distanza,
-                     esercizio.Recupero,
-                     "Libero"                           //Aggiungi chiamata a repository di esercizio  TODO
+                     esercizio.Recupero
                 );
         }
     }
