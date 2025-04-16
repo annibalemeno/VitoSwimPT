@@ -14,7 +14,7 @@ namespace VitoSwimPT.Server.ViewModels
                      esercizio.Ripetizioni,
                      esercizio.Distanza,
                      esercizio.Recupero,
-                     String.Empty
+                     "Libero"
                 );
 
             //TO DO
