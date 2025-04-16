@@ -25,5 +25,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             return Ok(await _allenamentiRepo.GetAllenamenti());
         }
+
+
     }
 }

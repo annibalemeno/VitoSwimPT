@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Esercizi } from './interfaces/esercizi';
 import { Stili } from './interfaces/stili';
+import { Allenamenti } from './interfaces/allenamenti';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,13 @@ export class ApiserviceService {
   getStili(): Observable<Stili[]> {
     return this.http.get<Stili[]>(this.apiUrl+'/stili');
   }
+
+  getAllenamentiList(): Observable<Allenamenti[]> {
+    return this.http.get<Allenamenti[]>(this.apiUrl + '/allenamenti');
+  }
 }
+
+
 
 
 //let headers = new HttpHeaders();

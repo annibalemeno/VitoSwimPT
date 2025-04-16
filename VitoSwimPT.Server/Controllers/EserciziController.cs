@@ -15,7 +15,7 @@ namespace VitoSwimPT.Server.Controllers
         private readonly IStiliRepository _stiliRepo;
         private ModelMap _mapper;
 
-        private static readonly string[] Summaries = new[]
+        private static readonly string[] Stiles = new[]
         {
             "Delfino", "Dorso", "Rana", "Stile"
         };
