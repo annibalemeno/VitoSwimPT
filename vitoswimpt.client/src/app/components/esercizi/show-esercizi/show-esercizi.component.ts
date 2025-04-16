@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Esercizi} from  '../../../interfaces/esercizi'
+import { Esercizi } from '../../../interfaces/esercizi';
+import { ApiserviceService } from '../../../apiservice.service';
 import { Observable } from 'rxjs';
 
 
@@ -12,13 +12,20 @@ import { Observable } from 'rxjs';
 })
 export class ShowEserciziComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor(private service: ApiserviceService) { }
 
   public EserciziList: Esercizi[] = [];
   // EserciziList: any = [];
   ModalTitle = "";
   ActivateAddEditEsercComp: boolean = false;
-  eserc: any;
+  eserc: Esercizi 
+    = {
+    esercizioId: 0,
+    ripetizioni: 0,
+    distanza: 0,
+    recupero: 0,
+    stile: "Libero"
+  };
 
   EserciziIdFilter = "";
   EerciziRipetizioniFilter = "";
@@ -34,12 +41,12 @@ export class ShowEserciziComponent implements OnInit {
 
   addClick() {
     this.eserc = {
-      esercizioId: "0",
-      ripetizioni: "",
-      distanza: "",
-      recupero: "",
-      stile: ""
-      }
+      esercizioId: 0,
+      ripetizioni: 0,
+      distanza: 0,
+      recupero: 0,
+      stile: "Libero"
+    };
     
     this.ModalTitle = "Add Esercizio";
     this.ActivateAddEditEsercComp = true;
@@ -47,24 +54,29 @@ export class ShowEserciziComponent implements OnInit {
 
   editClick(item: any) {
     this.eserc = item;
+
+    //this.eserc = {
+    //  esercizioId: item.esercizioId,
+    //  ripetizioni: item.ripetizioni,
+    //  distanza: item.distanza,
+    //  recupero: item.recupero,
+    //  stile: item.stile
+    //};
+
     this.ModalTitle = "Edit Esercizio";
     this.ActivateAddEditEsercComp = true;
   }
 
   deleteClick(item: any) {
     if (confirm('Are you sure??')) {
-      const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
-      item.esercizioId
-
-      let headers = new HttpHeaders();
-      headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-      this.http.delete<number[]>('/esercizi/DeleteEsercizi/' + item.esercizioId, { headers }).subscribe(data => {
+      this.service.deleteEsercizio(item.esercizioId).subscribe(data => {
         alert('delete ok');
         this.refreshEserciziList();
       });
     }
   }
+
 
   closeClick() {
     this.ActivateAddEditEsercComp = false;
@@ -73,12 +85,12 @@ export class ShowEserciziComponent implements OnInit {
 
 
   refreshEserciziList() {
-    this.http.get<Esercizi[]>('/esercizi').subscribe(data => {
+    this.service.getEserciziList().subscribe(data => {
       this.EserciziList = data;
       this.EserciziListWithoutFilter = data;
     });
   }
-
+ 
   sortResult(prop: any, asc: any) {
     this.EserciziList = this.EserciziListWithoutFilter.sort(function (a: any, b: any) {
       if (asc) {
@@ -113,18 +125,6 @@ export class ShowEserciziComponent implements OnInit {
       }
     );
   }
-
-
-  //getAllenamenti() {
-  //  this.http.get<Esercizi[]>('/esercizi').subscribe(
-  //    (result) => {
-  //      this.esercizi = result;
-  //    },
-  //    (error) => {
-  //      console.error(error);
-  //    }
-  //  );
-  //}
 }
 
 //esercizioId: number;

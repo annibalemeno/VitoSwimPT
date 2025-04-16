@@ -1,6 +1,6 @@
 export interface Esercizi {
   esercizioId: number;
-  ripetizioni: string;
+  ripetizioni: number;
   distanza: number;
   recupero: number;
   stile: string;

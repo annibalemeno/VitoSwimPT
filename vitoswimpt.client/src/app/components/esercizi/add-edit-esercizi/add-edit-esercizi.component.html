@@ -1,22 +1,30 @@
 <div class="d-flex flex-row bd-highlight mb-9">
   <div class="p-2 w-100 bd-highlight">
-    <div class="input-group mb-12">
+    <div class="input-group mb-12" style="margin-right: 45px; margin-bottom: 20px">
       <span class="input-group-text">Numero Ripetizioni</span>
       <input type="text" class="form-control" [(ngModel)]="Ripetizioni">
     </div>
-    <div class="input-group mb-12">
+    <div class="input-group mb-12" style="margin-right:45px">
       <span class="input-group-text">Distanza</span>
       <input type="text" class="form-control" [(ngModel)]="Distanza">
     </div>
-    <div class="input-group mb-12">
+  </div>
+  <div class="p-2 w-100 bd-highlight">
+    <div class="input-group mb-12" style="margin-bottom: 20px">
       <span class="input-group-text">Tempo Recupero</span>
       <input type="text" class="form-control" [(ngModel)]="Recupero">
     </div>
     <div class="input-group mb-12">
       <span class="input-group-text">Stile</span>
-      <input type="text" class="form-control" [(ngModel)]="Stile">
+      <!--<input type="text" class="form-control" [(ngModel)]="Stile">-->
+      <select class="form-select" [(ngModel)]="Stile">
+        <option>--Select--</option>
+        <option *ngFor="let stile of StiliList">
+          {{stile.nome}}
+        </option>
+      </select>
     </div>
-    </div>
+  </div>
 </div>
 
 

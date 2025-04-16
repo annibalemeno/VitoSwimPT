@@ -4,3 +4,14 @@ GET {{VitoSwimPT.Server_HostAddress}}/esercizi/
 Accept: application/json
 
 ###
+
+
+GET h{{VitoSwimPT.Server_HostAddress}}/allenamenti
+Accept: application/json
+
+###
+
+GET {{VitoSwimPT.Server_HostAddress}}/stili
+Accept: application/json
+
+###

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VitoSwimPT.Server.Models;
 
@@ -10,9 +11,11 @@ using VitoSwimPT.Server.Models;
 namespace VitoSwimPT.Server.Migrations
 {
     [DbContext(typeof(SwimContext))]
-    partial class SwimContextModelSnapshot : ModelSnapshot
+    [Migration("20250403210912_StileStringRemoved")]
+    partial class StileStringRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,12 +60,7 @@ namespace VitoSwimPT.Server.Migrations
                     b.Property<int>("Ripetizioni")
                         .HasColumnType("int");
 
-                    b.Property<int>("StileId")
-                        .HasColumnType("int");
-
                     b.HasKey("EsercizioId");
-
-                    b.HasIndex("StileId");
 
                     b.ToTable("Esercizi");
                 });
@@ -117,39 +115,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.HasIndex("AllenamentoId");
 
                     b.ToTable("PianiAllenamento");
-                });
-
-            modelBuilder.Entity("VitoSwimPT.Server.Models.Stile", b =>
-                {
-                    b.Property<int>("StileId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StileId"));
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sigla")
-                        .IsRequired()
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
-
-                    b.HasKey("StileId");
-
-                    b.ToTable("Stili");
-                });
-
-            modelBuilder.Entity("VitoSwimPT.Server.Models.Esercizio", b =>
-                {
-                    b.HasOne("VitoSwimPT.Server.Models.Stile", "Stile")
-                        .WithMany()
-                        .HasForeignKey("StileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Stile");
                 });
 
             modelBuilder.Entity("VitoSwimPT.Server.Models.EsercizioAllenamento", b =>

@@ -11,7 +11,11 @@
 
         public int Recupero { get; set; }
 
-        public string? Stile { get; set; }
+        public int StileId { get; set; }
+
+        //public Stile Stile { get; set; }
+
+        //public string? Stile { get; set; }
 
         //public IList<EsercizioAllenamento> EserciziAllenamenti { get; set; }
     }
