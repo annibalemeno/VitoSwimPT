@@ -14,7 +14,11 @@ export class ShowAllenamentiComponent implements OnInit {
 
 
   public allenamentiList: Allenamenti[] = [];
+  AllenamentiiListWithoutFilter: any = [];
 
+  AllenamentiIdFilter = "";
+  NomeAllenamentiFilter = "";
+  NoteAllenamentiFilter = "";
 
   ngOnInit(): void {
 
@@ -29,7 +33,36 @@ export class ShowAllenamentiComponent implements OnInit {
   refreshAllenamentiList() {
     this.service.getAllenamentiList().subscribe(data => {
       this.allenamentiList = data;
-      //this.EserciziListWithoutFilter = data;
+      this.AllenamentiiListWithoutFilter = data;
+    });
+  }
+
+  FilterFn() {
+    var AllenamentiIdFilter = this.AllenamentiIdFilter;
+    var NomeAllenamentiFilter = this.NomeAllenamentiFilter;
+    var NoteAllenamentiFilter = this.NoteAllenamentiFilter;
+
+
+    this.allenamentiList = this.AllenamentiiListWithoutFilter.filter(
+      function (al: any) {
+        return al.allenamentoId.toString().toLowerCase().includes(
+          AllenamentiIdFilter.toString().trim().toLowerCase()
+        ) && al.nomeAllenamento.toString().toLowerCase().includes(
+          NomeAllenamentiFilter.toString().trim().toLowerCase())
+          && al.note.toString().toLowerCase().includes(
+            NoteAllenamentiFilter.toString().trim().toLowerCase())
+      }
+    );
+  }
+
+  sortResult(prop: any, asc: any) {
+    this.allenamentiList = this.AllenamentiiListWithoutFilter.sort(function (a: any, b: any) {
+      if (asc) {
+        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+      }
+      else {
+        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+      }
     });
   }
 }

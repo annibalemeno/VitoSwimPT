@@ -1,5 +1,5 @@
 export interface Allenamenti {
   allenamentoId: number;
-  nomeallenamento: string;
+  nomeAllenamento: string;
   note: string;
 }
