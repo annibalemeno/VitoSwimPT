@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
+using VitoSwimPT.Server.ViewModels;
 
 namespace VitoSwimPT.Server.Controllers
 {
@@ -25,6 +26,20 @@ namespace VitoSwimPT.Server.Controllers
         {
             return Ok(await _allenamentiRepo.GetAllenamenti());
         }
+
+        [HttpPost(Name = "AddAllenamenti")]
+        public async Task<IActionResult> Post(Allenamento train)
+        {
+            var result = await _allenamentiRepo.InsertAllenamento(train);
+            if (result.AllenamentoId == 0)
+            {
+                //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
+                return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+            }
+            //return Ok("Ok");
+            return new JsonResult("Added Successfully");
+        }
+
 
 
     }

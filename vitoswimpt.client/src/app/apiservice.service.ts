@@ -44,6 +44,12 @@ export class ApiserviceService {
   getAllenamentiList(): Observable<Allenamenti[]> {
     return this.http.get<Allenamenti[]>(this.apiUrl + '/allenamenti');
   }
+
+  addAllenamento(train: Allenamenti): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.post<Allenamenti[]>('/Allenamenti', train, { headers });
+  }
 }
 
 

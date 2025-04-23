@@ -14,6 +14,9 @@ export class ShowAllenamentiComponent implements OnInit {
 
 
   public allenamentiList: Allenamenti[] = [];
+  ModalTitle = "";
+  ActivateAddEditAllenamComp: boolean = false;
+
   AllenamentiiListWithoutFilter: any = [];
 
   AllenamentiIdFilter = "";
@@ -29,6 +32,18 @@ export class ShowAllenamentiComponent implements OnInit {
 
     this.refreshAllenamentiList();
   }
+
+  addClick() {
+    //initialize
+
+    this.ModalTitle = "Add Allenamento";
+    this.ActivateAddEditAllenamComp = true;
+  }
+  closeClick() {
+    this.ActivateAddEditAllenamComp = false;
+    this.refreshAllenamentiList();
+  }
+
 
   refreshAllenamentiList() {
     this.service.getAllenamentiList().subscribe(data => {

@@ -1,3 +1,27 @@
+<button type="button" class="btn btn-primary m-2 float-end" data-bs-toggle="modal" data-bs-target="#allenamentiModal"
+        (click)="addClick()">
+  Add Allenamento
+</button>
+
+<div class="modal fade" id="allenamentiModal" tabindex="-1" role="dialog" aria-labelledby="allenamentiModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="allenamentiModalLabel">{{ModalTitle}}</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" (click)="closeClick()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-add-edit-allenamenti  *ngIf="ActivateAddEditAllenamComp">
+        </app-add-edit-allenamenti>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -64,7 +88,7 @@
       <td>{{ allenamento.allenamentoId }}</td>
       <td>{{ allenamento.nomeAllenamento }}</td>
       <td>{{ allenamento.note }}</td>
-      </tr>
+    </tr>
   </tbody>
 
 </table>
