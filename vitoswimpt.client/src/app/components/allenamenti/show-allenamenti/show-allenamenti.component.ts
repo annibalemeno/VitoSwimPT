@@ -16,6 +16,13 @@ export class ShowAllenamentiComponent implements OnInit {
   public allenamentiList: Allenamenti[] = [];
   ModalTitle = "";
   ActivateAddEditAllenamComp: boolean = false;
+  training: Allenamenti
+    = {
+      allenamentoId: 0,
+      nomeAllenamento: "",
+      note: ""
+    };
+
 
   AllenamentiiListWithoutFilter: any = [];
 
@@ -24,17 +31,16 @@ export class ShowAllenamentiComponent implements OnInit {
   NoteAllenamentiFilter = "";
 
   ngOnInit(): void {
-
-    //this.allenamentiList = [
-    //  { allenamentoId: 11, nomeallenamento: 'Nome Mocked 11', note: 'Note Mocked 11' },
-    //  { allenamentoId: 12, nomeallenamento: 'Nome Mocked 12', note: 'Note Mocked 12' }
-    //];
-
     this.refreshAllenamentiList();
   }
 
   addClick() {
     //initialize
+    this.training = {
+      allenamentoId: 0,
+      nomeAllenamento: "",
+      note: ""
+    };
 
     this.ModalTitle = "Add Allenamento";
     this.ActivateAddEditAllenamComp = true;

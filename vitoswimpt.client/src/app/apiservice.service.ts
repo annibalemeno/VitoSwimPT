@@ -45,10 +45,10 @@ export class ApiserviceService {
     return this.http.get<Allenamenti[]>(this.apiUrl + '/allenamenti');
   }
 
-  addAllenamento(train: Allenamenti): Observable<any> {
+  addAllenamento(training: Allenamenti): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-    return this.http.post<Allenamenti[]>('/Allenamenti', train, { headers });
+    return this.http.post<Allenamenti[]>(this.apiUrl + '/allenamenti', training, { headers });
   }
 }
 
