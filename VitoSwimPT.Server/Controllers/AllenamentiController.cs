@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
@@ -40,6 +41,39 @@ namespace VitoSwimPT.Server.Controllers
             return new JsonResult("Added Successfully");
         }
 
+        //[HttpDelete]
+        //[Route("DeleteAllenamenti/{Id}")]
+        [HttpDelete("{id}")]
+       
+        public JsonResult Delete(int id)
+        {
+           bool res =  _allenamentiRepo.DeleteAllenamento(id);
+            if (res)
+            {
+               return new JsonResult("Deleted Successfully");
+            }
+            else
+            {
+                return new JsonResult("Allenamento not found or deleting error");
+            }
+        }
+
+        [HttpPut]
+        [Route("UpdateAllenamenti")]
+        public async Task<IActionResult> Put(Allenamento training)
+        {
+
+
+            //get training by id
+            Allenamento trainToUpd = await _allenamentiRepo.GetAllenamentoById(training.AllenamentoId);
+
+            //gestisco modifiche
+            trainToUpd.NomeAllenamento = training.NomeAllenamento;
+            trainToUpd.Note = training.Note;
+
+            await _allenamentiRepo.UpdateAllenamento(trainToUpd);
+            return new JsonResult("Updated Successfully");
+        }
 
 
     }

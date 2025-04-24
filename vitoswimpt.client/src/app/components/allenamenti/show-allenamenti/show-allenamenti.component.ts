@@ -45,9 +45,34 @@ export class ShowAllenamentiComponent implements OnInit {
     this.ModalTitle = "Add Allenamento";
     this.ActivateAddEditAllenamComp = true;
   }
+
+  editClick(item: any) {
+    this.training = item;
+
+    //this.eserc = {
+    //  esercizioId: item.esercizioId,
+    //  ripetizioni: item.ripetizioni,
+    //  distanza: item.distanza,
+    //  recupero: item.recupero,
+    //  stile: item.stile
+    //};
+
+    this.ModalTitle = "Edit Allenamento";
+    this.ActivateAddEditAllenamComp = true;
+  }
+
   closeClick() {
     this.ActivateAddEditAllenamComp = false;
     this.refreshAllenamentiList();
+  }
+
+  deleteClick(item:any) {
+    if (confirm('Are you sure??')) {
+      this.service.deleteAllenamento(item.allenamentoId).subscribe(data => {
+        alert('delete ok');
+        this.refreshAllenamentiList();
+      });
+    }
   }
 
 

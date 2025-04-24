@@ -20,3 +20,7 @@
 <button (click)="addAllenamento()" *ngIf="training.allenamentoId == '0'" class="btn btn-primary">
   Add
 </button>
+
+<button (click)="updateAllenamento()" *ngIf="training.allenamentoId !='0'" class="btn btn-primary">
+  Update
+</button>

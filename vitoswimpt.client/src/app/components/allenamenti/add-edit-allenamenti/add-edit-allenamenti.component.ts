@@ -8,15 +8,15 @@ import { Allenamenti } from '../../../interfaces/allenamenti';
   templateUrl: './add-edit-allenamenti.component.html',
   styleUrl: './add-edit-allenamenti.component.css'
 })
-export class AddEditAllenamentiComponent implements OnInit{
+export class AddEditAllenamentiComponent implements OnInit {
   constructor(private service: ApiserviceService) { }
   @Input() training: any;
   allenamentoId = 0;
   nomeAllenamento = "";
   note = "";
 
-    ngOnInit(): void {
-      this.getAllenamentiList(); //initialize
+  ngOnInit(): void {
+    this.getAllenamentiList(); //initialize
   }
 
   getAllenamentiList() {
@@ -40,4 +40,17 @@ export class AddEditAllenamentiComponent implements OnInit{
     });
   }
 
+  updateAllenamento() {
+    var training: Allenamenti;
+
+    training = {
+      allenamentoId: this.allenamentoId,
+      nomeAllenamento: this.nomeAllenamento,
+      note: this.note
+    };
+
+    this.service.updateAllenamento(training).subscribe(data => {
+      alert(data.toString());
+    });
+  };
 }
