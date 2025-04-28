@@ -10,6 +10,7 @@ import { AddEditEserciziComponent } from './components/esercizi/add-edit-eserciz
 import { AllenamentiComponent } from './components/allenamenti/allenamenti.component';
 import { ShowAllenamentiComponent } from './components/allenamenti/show-allenamenti/show-allenamenti.component';
 import { AddEditAllenamentiComponent } from './components/allenamenti/add-edit-allenamenti/add-edit-allenamenti.component';
+import { DetailAllenamentiComponent } from './components/allenamenti/detail-allenamenti/detail-allenamenti.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { AddEditAllenamentiComponent } from './components/allenamenti/add-edit-a
     AddEditEserciziComponent,
     ShowAllenamentiComponent,
     AllenamentiComponent,
-    AddEditAllenamentiComponent
+    AddEditAllenamentiComponent,
+    DetailAllenamentiComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

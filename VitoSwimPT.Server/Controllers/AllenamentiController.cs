@@ -62,8 +62,6 @@ namespace VitoSwimPT.Server.Controllers
         [Route("UpdateAllenamenti")]
         public async Task<IActionResult> Put(Allenamento training)
         {
-
-
             //get training by id
             Allenamento trainToUpd = await _allenamentiRepo.GetAllenamentoById(training.AllenamentoId);
 
