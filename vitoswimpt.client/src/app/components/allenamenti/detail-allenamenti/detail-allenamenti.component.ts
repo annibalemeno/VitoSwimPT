@@ -1,0 +1,19 @@
+import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-detail-allenamenti',
+  standalone: false,
+  templateUrl: './detail-allenamenti.component.html',
+  styleUrl: './detail-allenamenti.component.css'
+})
+export class DetailAllenamentiComponent {
+  id = 0;
+  constructor(private router: Router,
+    public route: ActivatedRoute) {
+
+    this.id = Number(this.route.snapshot.paramMap.get('id')); //get id parameter
+    console.log('Id chiamante = ' + this.id);
+  }
+
+}
