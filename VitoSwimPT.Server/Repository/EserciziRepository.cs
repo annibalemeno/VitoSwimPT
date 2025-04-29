@@ -37,7 +37,7 @@ namespace VitoSwimPT.Server.Repository
 
         public async Task<Esercizio> GetEsercizioByID(int ID)
         {
-            return await _swimDBContext.Esercizi.FindAsync(ID);     //TODO Robustezza
+            return await _swimDBContext.Esercizi.FindAsync(ID);     
         }
 
         public async Task<Esercizio> InsertEsercizio(Esercizio esercizio)

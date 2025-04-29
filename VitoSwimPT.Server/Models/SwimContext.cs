@@ -98,22 +98,22 @@ namespace VitoSwimPT.Server.Models
                     context.SaveChanges();
                 }
 
-                var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
-                if (esercizioAllenamentoTest == null)
-                {
-                    var es_all1 = new EsercizioAllenamento()
-                    {
-                        Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
-                        Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault()
-                    };
-                    var es_all2 = new EsercizioAllenamento()
-                    {
-                        Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
-                        Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault()
-                    };
-                    context.AddRange(es_all1, es_all2);
-                    context.SaveChanges();
-                }
+                //var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
+                //if (esercizioAllenamentoTest == null)
+                //{
+                //    var es_all1 = new EsercizioAllenamento()
+                //    {
+                //        Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
+                //        Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault()
+                //    };
+                //    var es_all2 = new EsercizioAllenamento()
+                //    {
+                //        Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
+                //        Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault()
+                //    };
+                //    context.AddRange(es_all1, es_all2);
+                //    context.SaveChanges();
+                //}
 
                 var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
                 if (pianiAllenamentoTest == null)

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Esercizi } from './interfaces/esercizi';
 import { Stili } from './interfaces/stili';
 import { Allenamenti } from './interfaces/allenamenti';
+import { EserciziAllenamento } from './interfaces/eserciziallenamento';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,12 @@ export class ApiserviceService {
   }
 
   // #endregion
+
+  // #region EserciziAllenamento
+  getEserciziAllenamentoList(): Observable<EserciziAllenamento[]> {
+    return this.http.get<EserciziAllenamento[]>(this.apiUrl + '/eserciziallenamenti');
+  }
+  //#endregion
 }
 
 
