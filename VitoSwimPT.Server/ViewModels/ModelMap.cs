@@ -5,8 +5,9 @@ namespace VitoSwimPT.Server.ViewModels
 {
     public  class ModelMap
     {
+        //TO DO
 
-        public   EserciziVM toViewModel( Esercizio esercizio)
+        public EserciziVM toViewModel( Esercizio esercizio)
         {
 
             return new EserciziVM(
@@ -16,8 +17,15 @@ namespace VitoSwimPT.Server.ViewModels
                      esercizio.Recupero,
                      "Libero"
                 );
+        }
 
-            //TO DO
+        public EserciziAllenamentiVM toViewModel(EsercizioAllenamento ea)
+        {
+            return new EserciziAllenamentiVM(
+                ea.AllenamentoId,
+                "Fakename",
+                "FakeNotes"
+                );
         }
     }
 }

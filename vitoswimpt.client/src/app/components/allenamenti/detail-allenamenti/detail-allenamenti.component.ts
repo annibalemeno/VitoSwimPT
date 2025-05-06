@@ -10,6 +10,13 @@ import { ApiserviceService } from '../../../apiservice.service';
 })
 export class DetailAllenamentiComponent implements OnInit {
   id = 0;
+
+  allenamentoId = 0;    //duplicato
+  nomeAllenamento = "";
+  note = "";
+
+  public eserciziAllenamento: any;  //eserciziAllenamento
+
   constructor(private router: Router,
     public route: ActivatedRoute, private service: ApiserviceService) {
 
@@ -18,6 +25,14 @@ export class DetailAllenamentiComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getEsercizioAllenamentoData(this.id);
+  }
+
+  getEsercizioAllenamentoData(id:number) {
+    this.service.getEsercizioAllenamento(id).subscribe(data => {
+      this.eserciziAllenamento = data;
+      console.log("EserciziAllenamento = ", data);
+    });
   }
 
 }

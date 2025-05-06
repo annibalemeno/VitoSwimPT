@@ -20,7 +20,7 @@ export class AddEditAllenamentiComponent implements OnInit {
   }
 
   getAllenamentiList() {
-    console.log("getAllenamentiList");
+    //console.log("getAllenamentiList");
     this.allenamentoId = this.training.allenamentoId;
     this.nomeAllenamento = this.training.nomeAllenamento;
     this.note = this.training.note;

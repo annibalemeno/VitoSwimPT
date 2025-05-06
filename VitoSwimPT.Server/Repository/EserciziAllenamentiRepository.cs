@@ -5,8 +5,8 @@ namespace VitoSwimPT.Server.Repository
 {
     public interface IEserciziAllenamentiRepository
     {
-        Task<IEnumerable<EsercizioAllenamento>> GetEserciziAllenamento();
-        Task<EsercizioAllenamento> GetEsercizioAllenamentoByID(int ID);
+        Task<IEnumerable<EsercizioAllenamento>> GetEserciziAllenamento();       //review
+        Task<IEnumerable<EsercizioAllenamento>> GetEserciziAllenamentoByID(int ID);
     }
 
     public class EserciziAllenamentiRepository : IEserciziAllenamentiRepository
@@ -23,9 +23,12 @@ namespace VitoSwimPT.Server.Repository
             return await _swimDBContext.EserciziAllenamenti.ToListAsync();
         }
 
-        public async Task<EsercizioAllenamento> GetEsercizioAllenamentoByID(int ID)
+        public async Task<IEnumerable<EsercizioAllenamento>> GetEserciziAllenamentoByID(int ID)
         {
-            return await _swimDBContext.EserciziAllenamenti.FindAsync(ID);
+
+            //var query = db.Categories.Where(c => c.Category_ID == cat_id).SelectMany(c => Articles);
+            return await _swimDBContext.EserciziAllenamenti.Where(ea => ea.AllenamentoId == ID).ToListAsync();
+            // return await _swimDBContext.EserciziAllenamenti.FindAsync(ID);
         }
     }
 }

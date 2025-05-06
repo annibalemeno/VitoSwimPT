@@ -1,4 +1,9 @@
+import { Esercizi } from "./esercizi";
+
 export interface EserciziAllenamento {
-  esercizioId: number;
   allenamentoId: number;
+  nomeAllenamento: string;
+  note: string;
+
+  //EserciziAssociati: Esercizi[];
 }

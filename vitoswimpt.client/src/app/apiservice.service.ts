@@ -74,9 +74,15 @@ export class ApiserviceService {
   // #endregion
 
   // #region EserciziAllenamento
-  getEserciziAllenamentoList(): Observable<EserciziAllenamento[]> {
-    return this.http.get<EserciziAllenamento[]>(this.apiUrl + '/eserciziallenamenti');
+  getEsercizioAllenamento(esercizioAllenamentoId: number): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.get<EserciziAllenamento>(this.apiUrl + '/eserciziallenamenti/' + esercizioAllenamentoId, { headers });
   }
+
+  //getEserciziAllenamentoList(): Observable<EserciziAllenamento[]> {
+  //  return this.http.get<EserciziAllenamento[]>(this.apiUrl + '/eserciziallenamenti');
+  //}
   //#endregion
 }
 
