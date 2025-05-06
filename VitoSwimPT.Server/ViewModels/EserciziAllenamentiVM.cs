@@ -17,7 +17,7 @@ namespace VitoSwimPT.Server.ViewModels
 
         public String note { get; set; }
 
-        //public EserciziVM[] EserciziAssociati { get; set; } //EserciziAssociati: Esercizi[];
+        public List <EserciziVM>EserciziAssociati { get; set; } 
 
 
 

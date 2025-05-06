@@ -44,8 +44,8 @@ namespace VitoSwimPT.Server.Controllers
 
             //var training = _trainingRepo.GetEsercizioAllenamentoByID(id);
             //return new JsonResult(training);
-            var training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
-            var trainVM = _mapper.toViewModel(training.FirstOrDefault());       //robustezza
+            IEnumerable<Models.EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
+            var trainVM = _mapper.toViewModel(training);       //robustezza
             //trainVM.nomeAllenamento = ;
             //trainVM.note = ;
 

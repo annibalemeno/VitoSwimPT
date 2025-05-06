@@ -19,13 +19,25 @@ namespace VitoSwimPT.Server.ViewModels
                 );
         }
 
-        public EserciziAllenamentiVM toViewModel(EsercizioAllenamento ea)
+        public EserciziAllenamentiVM toViewModel(IEnumerable<EsercizioAllenamento> ea)
         {
-            return new EserciziAllenamentiVM(
-                ea.AllenamentoId,
+            //qui appiattisco
+
+            var testata = ea.FirstOrDefault();
+
+            EserciziAllenamentiVM dettaglio = new EserciziAllenamentiVM(
+                testata.AllenamentoId,
                 "Fakename",
                 "FakeNotes"
                 );
+
+            List<EserciziVM> es = new List<EserciziVM>();
+            es.Add (new EserciziVM( 1, 50, 4,100, "Trugeo"));
+            es.Add(new EserciziVM(2, 55, 6, 200, "Rana"));
+            es.Add(new EserciziVM(3, 60, 7, 210, "Delfino"));
+            dettaglio.EserciziAssociati = es;
+
+            return dettaglio;
         }
     }
 }

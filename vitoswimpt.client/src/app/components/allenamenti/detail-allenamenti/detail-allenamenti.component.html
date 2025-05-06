@@ -1,1 +1,22 @@
-<p>detail-allenamenti works!</p>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>
+        Id Allenamento
+      </th>
+      <th>
+        Nome Allenamento
+      </th>
+      <th>
+        Note
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngIf="eserciziAllenamento">
+      <td>{{ eserciziAllenamento.allenamentoId }}</td>
+      <td>{{ eserciziAllenamento.nomeAllenamento }}</td>
+      <td>{{ eserciziAllenamento.note }}</td>
+    </tr>
+  </tbody>
+</table>
