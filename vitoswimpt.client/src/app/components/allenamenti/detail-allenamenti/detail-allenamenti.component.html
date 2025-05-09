@@ -20,3 +20,25 @@
     </tr>
   </tbody>
 </table>
+
+<h4>Esercizi Associati</h4>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Id Esercizio</th>
+      <th>Ripetizioni</th>
+      <th>Distanza</th>
+      <th>Recupero</th>
+      <th>Stile</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let esercizio of eserciziAllenamento.eserciziAssociati">
+      <td>{{ esercizio.esercizioId }}</td>
+      <td>{{ esercizio.ripetizioni }}</td>
+      <td>{{ esercizio.distanza }}</td>
+      <td>{{ esercizio.recupero }}</td>
+      <td>{{ esercizio.stile }}</td>
+    </tr>
+  </tbody>
+</table>
