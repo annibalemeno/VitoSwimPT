@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using VitoSwimPT.Server.Models;
+using VitoSwimPT.Server.ViewModels;
 
 namespace VitoSwimPT.Server.Repository
 {
@@ -9,6 +11,11 @@ namespace VitoSwimPT.Server.Repository
         Task<IEnumerable<EsercizioAllenamento>> GetEserciziAllenamentoByID(int ID);
 
         Task<IEnumerable<Esercizio>> GetAllEserciziAllenamento(int IdAllenamento);
+
+        Task<IEnumerable<Esercizio>> GetEserciziAssociabiliAllenamento(int idAllenamento);
+        bool DisassociaEsercizioAllenamento(int allenamentoId, int esercizioId);
+
+        Task<EsercizioAllenamento> AssociaEsercizioAllenamento(int allenamentoId, int esercizioId);
     }
 
     public class EserciziAllenamentiRepository : IEserciziAllenamentiRepository
@@ -33,17 +40,54 @@ namespace VitoSwimPT.Server.Repository
             // return await _swimDBContext.EserciziAllenamenti.FindAsync(ID);
         }
 
-        async Task<IEnumerable<Esercizio>> IEserciziAllenamentiRepository.GetAllEserciziAllenamento(int IdAllenamento)
+        public async Task<IEnumerable<Esercizio>> GetAllEserciziAllenamento(int IdAllenamento)
         {
-            List<Esercizio> esList = new List<Esercizio>();
+            var idEserciziAssociati = _swimDBContext.EserciziAllenamenti.Where(ea => ea.AllenamentoId == IdAllenamento).Select(x => x.EsercizioId);
+            var esercizi = await _swimDBContext.Esercizi.Where(es => idEserciziAssociati.Contains(es.EsercizioId)).ToListAsync();
+            return esercizi;
 
-            var idEsercizi = await _swimDBContext.EserciziAllenamenti.Where(ea => ea.AllenamentoId == IdAllenamento).Select(x=>x.EsercizioId).ToListAsync();
-            foreach(int idEsercizio in idEsercizi)
+            //List<Esercizio> esList = new List<Esercizio>();
+
+            //var idEsercizi = await _swimDBContext.EserciziAllenamenti.Where(ea => ea.AllenamentoId == IdAllenamento).Select(x => x.EsercizioId).ToListAsync();
+            //foreach (int idEsercizio in idEsercizi)
+            //{
+            //    var esercizio = await _swimDBContext.Esercizi.Where(es => es.EsercizioId == idEsercizio).FirstOrDefaultAsync();
+            //    esList.Add(esercizio);
+            //}
+            //return esList;
+        }
+
+        public async Task<IEnumerable<Esercizio>> GetEserciziAssociabiliAllenamento(int idAllenamento)
+        {
+            var idEserciziAssociati =  _swimDBContext.EserciziAllenamenti.Where(ea => ea.AllenamentoId == idAllenamento).Select(x => x.EsercizioId);
+            var eserciziAssociabili = await _swimDBContext.Esercizi.Where(es => !idEserciziAssociati.Contains(es.EsercizioId)).ToListAsync();
+
+           return eserciziAssociabili;
+        }
+
+        public bool DisassociaEsercizioAllenamento(int allenamentoId, int esercizioId)
+        {
+            bool result = false;
+            var es_all = _swimDBContext.EserciziAllenamenti.Find(esercizioId, allenamentoId);
+            if (es_all != null)
             {
-                var esercizio = await _swimDBContext.Esercizi.Where(es => es.EsercizioId == idEsercizio).FirstOrDefaultAsync();
-                esList.Add(esercizio);
+                _swimDBContext.Entry(es_all).State = EntityState.Deleted;
+                _swimDBContext.SaveChanges();
+                result = true;
             }
-            return esList;
+            else
+            {
+                result = false;
+            }
+            return result;
+        }
+
+        public async Task<EsercizioAllenamento> AssociaEsercizioAllenamento(int allenamentoId, int esercizioId)
+        {
+            EsercizioAllenamento esallToAdd = new EsercizioAllenamento() { AllenamentoId = allenamentoId, EsercizioId = esercizioId };
+            _swimDBContext.EserciziAllenamenti.Add(esallToAdd);
+            await _swimDBContext.SaveChangesAsync();
+            return esallToAdd;
         }
     }
 }

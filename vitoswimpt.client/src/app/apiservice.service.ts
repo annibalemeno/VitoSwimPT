@@ -80,9 +80,30 @@ export class ApiserviceService {
     return this.http.get<EserciziAllenamento>(this.apiUrl + '/eserciziallenamenti/' + esercizioAllenamentoId, { headers });
   }
 
+  getEserciziAssociabiliAllenamento(allenamentoId: number): Observable<any[]> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.get<Esercizi[]>(this.apiUrl + '/eserciziallenamenti/Associabili/' + allenamentoId, { headers });
+  }
+
+  disassociaEsercizioAllenamento(allenamentoId: number, esercizioId:number): Observable<number> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.delete<number>(this.apiUrl + '/eserciziallenamenti/' + allenamentoId+'/'+esercizioId, { headers });
+  }
+
+  associaEsercizioAllenamento(allenamentoId: number, esercizioId: number): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    var urlchiamata = this.apiUrl + '/eserciziallenamenti/' + allenamentoId + '/' + esercizioId;
+    console.log('Urlchiamata = ', urlchiamata);
+    return this.http.post<Allenamenti[]>(this.apiUrl + '/eserciziallenamenti/' + allenamentoId + '/' + esercizioId, { headers });
+  }
+
   //getEserciziAllenamentoList(): Observable<EserciziAllenamento[]> {
   //  return this.http.get<EserciziAllenamento[]>(this.apiUrl + '/eserciziallenamenti');
   //}
+
   //#endregion
 }
 
