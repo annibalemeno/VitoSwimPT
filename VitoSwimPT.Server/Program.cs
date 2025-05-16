@@ -45,7 +45,8 @@ builder.Services.AddScoped<IAllenamentoRepository, AllenamentiRepository>();
 builder.Services.AddScoped<IStiliRepository, StiliRepository>();
 builder.Services.AddScoped<IEserciziAllenamentiRepository, EserciziAllenamentiRepository>();
 builder.Services.AddScoped<IPianiRepository, PianiRepository>();
-builder.Services.AddScoped<IPianiAllenamentoRepository, PianiAllenamentoRepository>();
+builder.Services.AddScoped<IPianiAllenamentoRepository, PianiAllenamentoRepository
+    >();
 builder.Services.AddScoped<ModelMap>();
 
 //builder.Services.AddDbContext<SwimContext>(options => options.UseSqlServer("Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;"));
