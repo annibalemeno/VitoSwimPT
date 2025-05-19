@@ -103,7 +103,6 @@ export class ShowEserciziComponent implements OnInit {
   }
 
   FilterFn() {
-    debugger;
     var EserciziIdFilter = this.EserciziIdFilter;
     var RipetizioniFilter = this.EerciziRipetizioniFilter;
     var DistanzaFilter = this.EerciziDistanzaFilter;
@@ -126,9 +125,3 @@ export class ShowEserciziComponent implements OnInit {
     );
   }
 }
-
-//esercizioId: number;
-//ripetizioni: string;
-//distanza: number;
-//recupero: number;
-//stile: string;

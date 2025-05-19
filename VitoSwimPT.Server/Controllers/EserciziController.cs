@@ -15,7 +15,7 @@ namespace VitoSwimPT.Server.Controllers
         private readonly IStiliRepository _stiliRepo;
         private ModelMap _mapper;
 
-        private static readonly string[] Summaries = new[]
+        private static readonly string[] Stiles = new[]
         {
             "Delfino", "Dorso", "Rana", "Stile"
         };
@@ -97,14 +97,21 @@ namespace VitoSwimPT.Server.Controllers
             //return Ok("Ok");
             return new JsonResult("Added Successfully");
         }
-
-        [HttpDelete]
-        //[HttpDelete("{id}")]
-        [Route("DeleteEsercizi/{Id}")]
+      
+        //[HttpDelete]
+        //[Route("DeleteEsercizi/{Id}")]
+        [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            _eserciziRepo.DeleteEsercizio(id);
-            return new JsonResult("Deleted Successfully");
+            bool res = _eserciziRepo.DeleteEsercizio(id);
+            if (res)
+            {
+                return new JsonResult("Deleted Successfully");
+            }
+            else
+            {
+                return new JsonResult("Esercizio not found or deleting error");
+            }
         }
 
         [HttpPut]

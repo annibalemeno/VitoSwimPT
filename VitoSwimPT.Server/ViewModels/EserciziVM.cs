@@ -4,11 +4,11 @@
     {
         public EserciziVM(int esercizioId, int ripetizioni, int distanza, int recupero, string stile)
         {
-            EsercizioId = esercizioId;
-            Ripetizioni = ripetizioni;
-            Distanza = distanza;
-            Recupero = recupero;
-            Stile = stile;
+            this.EsercizioId = esercizioId;
+            this.Ripetizioni = ripetizioni;
+            this.Distanza = distanza;
+            this.Recupero = recupero;
+            this.Stile = stile;
         }
 
         public int EsercizioId { get; set; }

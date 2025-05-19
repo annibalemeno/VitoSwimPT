@@ -6,8 +6,8 @@
         public string? NomeAllenamento { get; set; }
         public string? Note { get; set; }
 
-        public IList<EsercizioAllenamento> EserciziAllenamenti { get; set; }
+        //public IList<EsercizioAllenamento> EserciziAllenamenti { get; set; }      //TODO
 
-        public IList<PianoAllenamento> PianiAllenamento { get; set; }
+        //public IList<PianoAllenamento> PianiAllenamento { get; set; }             //TODO 
     }
 }

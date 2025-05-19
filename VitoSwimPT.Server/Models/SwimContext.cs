@@ -98,27 +98,31 @@ namespace VitoSwimPT.Server.Models
                     context.SaveChanges();
                 }
 
-                var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
-                if (esercizioAllenamentoTest == null)
-                {
-                    var es_all1 = new EsercizioAllenamento()
-                    {
-                        Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
-                        Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault()
-                    };
-                    var es_all2 = new EsercizioAllenamento()
-                    {
-                        Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
-                        Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault()
-                    };
-                    context.AddRange(es_all1, es_all2);
-                    context.SaveChanges();
-                }
+                //var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
+                //if (esercizioAllenamentoTest == null)
+                //{
+                //    var es_all1 = new EsercizioAllenamento()
+                //    {
+                //        Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
+                //        Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 1").FirstOrDefault()
+                //    };
+                //    var es_all2 = new EsercizioAllenamento()
+                //    {
+                //        Esercizio = Esercizi.Where(x => x.Ripetizioni == 2).FirstOrDefault(),   //Esercizi.Where(x => x.Stile == "Libero").FirstOrDefault(), 
+                //        Allenamento = Allenamenti.Where(x => x.NomeAllenamento == "Aerobico 2").FirstOrDefault()
+                //    };
+                //    context.AddRange(es_all1, es_all2);
+                //    context.SaveChanges();
+                //}
 
-                var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
+                //var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
+                var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault();
                 if (pianiAllenamentoTest == null)
                 {
-                    var piano_all1 = new PianoAllenamento() { Piano = Piani.Where(p => p.NomePiano == "Aerobico").FirstOrDefault(), Allenamento = Allenamenti.Where(a => a.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                    //var piano_all1 = new PianoAllenamento() { Piano = Piani.Where(p => p.NomePiano == "Aerobico").FirstOrDefault(), Allenamento = Allenamenti.Where(a => a.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                    int piano = Piani.FirstOrDefault().PianoId;
+                    int allenamento = Allenamenti.FirstOrDefault().AllenamentoId;
+                    var piano_all1 = new PianoAllenamento() { PianoId = piano, AllenamentoId = allenamento  };
                     context.Add(piano_all1);
                     context.SaveChanges();
                 }
