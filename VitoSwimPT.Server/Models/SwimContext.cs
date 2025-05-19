@@ -115,10 +115,14 @@ namespace VitoSwimPT.Server.Models
                 //    context.SaveChanges();
                 //}
 
-                var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
+                //var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
+                var pianiAllenamentoTest = context.Set<PianoAllenamento>().FirstOrDefault();
                 if (pianiAllenamentoTest == null)
                 {
-                    var piano_all1 = new PianoAllenamento() { Piano = Piani.Where(p => p.NomePiano == "Aerobico").FirstOrDefault(), Allenamento = Allenamenti.Where(a => a.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                    //var piano_all1 = new PianoAllenamento() { Piano = Piani.Where(p => p.NomePiano == "Aerobico").FirstOrDefault(), Allenamento = Allenamenti.Where(a => a.NomeAllenamento == "Aerobico 1").FirstOrDefault() };
+                    int piano = Piani.FirstOrDefault().PianoId;
+                    int allenamento = Allenamenti.FirstOrDefault().AllenamentoId;
+                    var piano_all1 = new PianoAllenamento() { PianoId = piano, AllenamentoId = allenamento  };
                     context.Add(piano_all1);
                     context.SaveChanges();
                 }

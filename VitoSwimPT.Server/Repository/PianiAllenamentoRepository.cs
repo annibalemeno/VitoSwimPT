@@ -7,9 +7,9 @@ namespace VitoSwimPT.Server.Repository
     {
         Task<IEnumerable<PianoAllenamento>> GetPianiAllenamento();
 
-        Task<PianoAllenamento> AssociaAllenamentoPiano(int idPiano, int idAllenamento);
+        Task<PianoAllenamento> AssociaAllenamentoPiano(int pianoId, int allenamentoId);
 
-        bool DisassociaAllenamentoPiano(int idPiano, int idAllenamento);
+        bool DisassociaAllenamentoPiano(int pianoId, int allenamentoId);
 
         Task<IEnumerable<Allenamento>> getAllenamentiAssociabiliPiano(int piano);
 	
@@ -27,18 +27,18 @@ namespace VitoSwimPT.Server.Repository
             return await _dbContext.PianiAllenamento.ToListAsync();
         }
 
-        public async Task<PianoAllenamento> AssociaAllenamentoPiano(int idPiano, int idAllenamento)
+        public async Task<PianoAllenamento> AssociaAllenamentoPiano(int pianoId, int allenamentoId)
         {
-            PianoAllenamento planToAdd = new PianoAllenamento() { PianoId = idPiano, AllenamentoId = idAllenamento };
+            PianoAllenamento planToAdd = new PianoAllenamento() { PianoId = pianoId, AllenamentoId = allenamentoId };
             _dbContext.PianiAllenamento.Add(planToAdd);
             await _dbContext.SaveChangesAsync();
             return planToAdd;
         }
 
-        public bool DisassociaAllenamentoPiano(int idPiano, int idAllenamento)
+        public bool DisassociaAllenamentoPiano(int pianoId, int allenamentoId)
         {
             bool result = false;
-            PianoAllenamento planToRemove = _dbContext.PianiAllenamento.Find(idPiano, idAllenamento);
+            PianoAllenamento planToRemove = _dbContext.PianiAllenamento.Find(pianoId, allenamentoId);
             if ((planToRemove != null))
             {
                 result = true;
@@ -55,7 +55,7 @@ namespace VitoSwimPT.Server.Repository
 
         public async Task<IEnumerable<Allenamento>> getAllenamentiAssociabiliPiano(int piano)
         {
-           var idAllenamentiAssociati = _dbContext.PianiAllenamento.Where(x=>x.PianoId == piano).Select(a=>a.AllenamentoId).ToList();
+           var idAllenamentiAssociati = _dbContext.PianiAllenamento.Where(x=>x.PianoId == piano).Select(a=>a.AllenamentoId);
             var allenamentiAssociabili = await _dbContext.Allenamenti.Where(a => !idAllenamentiAssociati.Contains(a.AllenamentoId)).ToListAsync();
             return allenamentiAssociabili; 
         }

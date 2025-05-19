@@ -7,6 +7,8 @@ namespace VitoSwimPT.Server.Repository
     {
         Task<IEnumerable<Piano>> GetAllPiani();
 
+        Task<Piano> GetPianoById(int pianoId);
+
         bool DeletePiano(int Id);
 
         Task<Piano> UpdatePiano(Piano plan);
@@ -58,6 +60,11 @@ namespace VitoSwimPT.Server.Repository
             _swimDBContext.Piani.Add(plan);
             await _swimDBContext.SaveChangesAsync();
             return plan;
+        }
+
+        public async Task<Piano> GetPianoById(int pianoId)
+        {
+            return await _swimDBContext.Piani.FindAsync(pianoId);
         }
     }
 }
