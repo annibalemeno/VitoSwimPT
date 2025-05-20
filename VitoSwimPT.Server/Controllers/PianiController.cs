@@ -5,7 +5,7 @@ using VitoSwimPT.Server.Repository;
 
 namespace VitoSwimPT.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class PianiController : ControllerBase
     {

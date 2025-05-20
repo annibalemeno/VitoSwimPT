@@ -5,6 +5,7 @@ import { Esercizi } from './interfaces/esercizi';
 import { Stili } from './interfaces/stili';
 import { Allenamenti } from './interfaces/allenamenti';
 import { EserciziAllenamento } from './interfaces/eserciziallenamento';
+import { Piani } from './interfaces/piani';
 
 @Injectable({
   providedIn: 'root'
@@ -105,6 +106,18 @@ export class ApiserviceService {
   //}
 
   //#endregion
+
+  //#region Piani
+  getPianiList(): Observable<Piani[]> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.get<Piani[]>(this.apiUrl + '/piani', { headers });
+  }
+  //#endregion Piani
+
+  //#region PianiAllenamento
+
+  //#endregion PianiAllenamento
 }
 
 

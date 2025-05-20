@@ -85,10 +85,7 @@ export class ShowEserciziComponent implements OnInit {
 
 
   refreshEserciziList() {
-    this.service.getEserciziList().subscribe(data => {
-      this.EserciziList = data;
-      this.EserciziListWithoutFilter = data;
-    });
+ 
   }
  
   sortResult(prop: any, asc: any) {
