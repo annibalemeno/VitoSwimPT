@@ -18,7 +18,17 @@ export class ShowPianiComponent implements OnInit{
   DescrizioneFilter = "";
   NoteFilter = "";
 
-  PianiListWithoutFilter:any = [];
+  PianiListWithoutFilter: any = [];
+
+  ModalTitle = "";
+  ActivateAddEditPianiComp: boolean = false;
+  plan: Piani = {
+    pianoId: 0,
+    nomePiano: "",
+    descrizione: "",
+    note: ""
+  };
+
 
     ngOnInit(): void {
       this.refreshPianiList();
@@ -63,11 +73,46 @@ export class ShowPianiComponent implements OnInit{
     );
   }
 
+  addClick() {
+    this.plan = {
+      pianoId: 0,
+      nomePiano: "",
+      descrizione: "",
+      note: ""
+    };
+
+    this.ModalTitle = "Add Piano";
+    this.ActivateAddEditPianiComp = true;
+  }
+
+  closeClick() {
+    this.ActivateAddEditPianiComp = false;
+    this.refreshPianiList();
+  }
+
+  editClick(item: any) {
+    this.plan = {
+      pianoId: item.pianoId,
+      nomePiano: item.nomePiano,
+      descrizione: item.descrizione,
+      note: item.note
+    };
+
+/*    this.plan = item;*/
+
+    this.ModalTitle = "Edit Piano";
+    this.ActivateAddEditPianiComp = true;
+  }
+
+  deleteClick(item: any) {
+    if (confirm('Are you sure??')) {
+
+      this.service.deletePiano(item.pianoId).subscribe(data => {
+        alert('delete ok');
+        this.refreshPianiList();
+      });
+    }
+  }
+
 }
 
-
-
-//pianoId: number;
-//nomePiano: string;
-//descrizione: string;
-//note: string;

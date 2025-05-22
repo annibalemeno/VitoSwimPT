@@ -113,6 +113,27 @@ export class ApiserviceService {
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.http.get<Piani[]>(this.apiUrl + '/piani', { headers });
   }
+
+  addPiano(piano: Piani): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.post<Piani[]>(this.apiUrl + '/piani', piano, { headers });
+  }
+
+  updatePiano(piano: Piani): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+
+    return this.http.put<Piani[]>(this.apiUrl + '/piani/UpdatePiano/', piano, { headers });
+  }
+
+  deletePiano(pianoId: number): Observable<number> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.delete<number>(this.apiUrl + '/piani/' + pianoId, { headers });
+  }
+
+
   //#endregion Piani
 
   //#region PianiAllenamento
