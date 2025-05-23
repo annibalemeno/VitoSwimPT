@@ -14,6 +14,7 @@ import { DetailAllenamentiComponent } from './components/allenamenti/detail-alle
 import { PianiComponent } from './components/piani/piani.component';
 import { ShowPianiComponent } from './components/piani/show-piani/show-piani.component';
 import { AddEditPianiComponent } from './components/piani/add-edit-piani/add-edit-piani.component';
+import { DetailPianiComponent } from './components/piani/detail-piani/detail-piani.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { AddEditPianiComponent } from './components/piani/add-edit-piani/add-edi
     DetailAllenamentiComponent,
     PianiComponent,
     ShowPianiComponent,
-    AddEditPianiComponent
+    AddEditPianiComponent,
+    DetailPianiComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
