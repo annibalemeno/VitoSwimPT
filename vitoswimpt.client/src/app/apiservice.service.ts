@@ -6,6 +6,7 @@ import { Stili } from './interfaces/stili';
 import { Allenamenti } from './interfaces/allenamenti';
 import { EserciziAllenamento } from './interfaces/eserciziallenamento';
 import { Piani } from './interfaces/piani';
+import { PianiAllenamento } from './interfaces/pianiallenamento';
 
 @Injectable({
   providedIn: 'root'
@@ -134,9 +135,35 @@ export class ApiserviceService {
   }
 
 
-  //#endregion Piani
+  //#endregion Piano
 
   //#region PianiAllenamento
+  getPianoAllenamento(pianoId: number): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.get<PianiAllenamento>(this.apiUrl + '/pianiallenamento/' + pianoId, { headers });
+  }
+
+  associaPianoAllenamento(pianoId: number, allenamentoId: number): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    var urlchiamata = this.apiUrl + '/eserciziallenamenti/' + pianoId + '/' + allenamentoId;
+    console.log('Urlchiamata = ', urlchiamata);
+    return this.http.post<Allenamenti[]>(this.apiUrl + '/pianiallenamento/' + pianoId + '/' + allenamentoId, { headers });
+  }
+
+  disassociaAllenamentoPiano(pianoId: number, allenamentoId: number): Observable<number> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.delete<number>(this.apiUrl + '/pianiallenamento/' + pianoId + '/' + allenamentoId, { headers });
+  }
+
+  getAllenamentiAssociabiliPiano(pianoId: number): Observable<any[]> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.get<Allenamenti[]>(this.apiUrl + '/pianiallenamento/Associabili/' + pianoId, { headers });
+  }
+   
 
   //#endregion PianiAllenamento
 }

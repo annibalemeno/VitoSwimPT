@@ -8,14 +8,18 @@ namespace VitoSwimPT.Server.ViewModels
         private readonly IAllenamentoRepository _allenamentoRepo;
         private readonly IEserciziAllenamentiRepository _esAllenamentoRepo;
         private readonly IStiliRepository _stiliRepo;
+        private readonly IPianiRepository _pianiRepo;
+        private readonly IPianiAllenamentoRepository _allenapianiRepo;
 
 
 
-        public ModelMap(IAllenamentoRepository repo, IEserciziAllenamentiRepository esAllenamentoRepo, IStiliRepository stiliRepo)
+        public ModelMap(IAllenamentoRepository repo, IEserciziAllenamentiRepository esAllenamentoRepo, IStiliRepository stiliRepo, IPianiRepository pianiRepo, IPianiAllenamentoRepository allenapianirepo)
         {
             _allenamentoRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _esAllenamentoRepo = esAllenamentoRepo ?? throw new ArgumentNullException(nameof(esAllenamentoRepo)); 
             _stiliRepo = stiliRepo ?? throw new ArgumentNullException(nameof(stiliRepo));
+            _pianiRepo = pianiRepo ?? throw new ArgumentNullException(nameof(pianiRepo));
+            _allenapianiRepo = allenapianirepo ?? throw new ArgumentNullException(nameof(allenapianirepo));
         }
 
         public EserciziVM toViewModel( Esercizio esercizio)
@@ -30,6 +34,16 @@ namespace VitoSwimPT.Server.ViewModels
                      esercizio.Recupero,
                      nomeStile
                 );
+        }
+
+        public PianiAllenamentoVM toViewModel(Piano plan)
+        {
+            //var testata = pa.FirstOrDefault();
+            //Task<Piano> plan = _pianiRepo.GetPianoById(testata.PianoId);
+            PianiAllenamentoVM planview = new PianiAllenamentoVM();
+            planview.piano = plan;
+            planview.allenamenti = _allenapianiRepo.GetAllenamentiPiano(plan.PianoId).ToList();
+            return planview;
         }
 
         public EserciziAllenamentiVM toViewModel(IEnumerable<EsercizioAllenamento> ea)

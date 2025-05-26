@@ -9,6 +9,8 @@ namespace VitoSwimPT.Server.Repository
 
         Task<PianoAllenamento> AssociaAllenamentoPiano(int pianoId, int allenamentoId);
 
+        IEnumerable<Allenamento> GetAllenamentiPiano(int pianoId);
+
         bool DisassociaAllenamentoPiano(int pianoId, int allenamentoId);
 
         Task<IEnumerable<Allenamento>> getAllenamentiAssociabiliPiano(int piano);
@@ -58,6 +60,13 @@ namespace VitoSwimPT.Server.Repository
            var idAllenamentiAssociati = _dbContext.PianiAllenamento.Where(x=>x.PianoId == piano).Select(a=>a.AllenamentoId);
             var allenamentiAssociabili = await _dbContext.Allenamenti.Where(a => !idAllenamentiAssociati.Contains(a.AllenamentoId)).ToListAsync();
             return allenamentiAssociabili; 
+        }
+
+        public IEnumerable<Allenamento> GetAllenamentiPiano(int pianoId)
+        {
+            var idAllenamentiAssociati = _dbContext.PianiAllenamento.Where(x => x.PianoId == pianoId).Select(a => a.AllenamentoId);
+            var allenamentiAssociati =  _dbContext.Allenamenti.Where(a => idAllenamentiAssociati.Contains(a.AllenamentoId)).ToList();
+            return allenamentiAssociati;
         }
     }
 }
