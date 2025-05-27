@@ -20,33 +20,55 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetPiani")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _planRepo.GetAllPiani());
+            try
+            {
+                return Ok(await _planRepo.GetAllPiani());
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost(Name = "AddPiano")]
         public async Task<IActionResult> Post(Piano plan)
         {
-            var result = await _planRepo.InsertPiano(plan);
-            if (result.PianoId == 0)
+            try
             {
-                //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
-                return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                var result = await _planRepo.InsertPiano(plan);
+                if (result.PianoId == 0)
+                {
+                    return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                }
+                return new JsonResult("Added Successfully");
             }
-            //return Ok("Ok");
-            return new JsonResult("Added Successfully");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            bool res = _planRepo.DeletePiano(id);
-            if (res)
+            try
             {
-                return new JsonResult("Deleted Successfully");
+                bool res = _planRepo.DeletePiano(id);
+                if (res)
+                {
+                    return new JsonResult("Deleted Successfully");
+                }
+                else
+                {
+                    return new JsonResult("Piano not found or deleting error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new JsonResult("Piano not found or deleting error");
+
+                throw new Exception(ex.Message);
             }
         }
 
@@ -54,16 +76,24 @@ namespace VitoSwimPT.Server.Controllers
         [Route("UpdatePiano")]
         public async Task<IActionResult> Put(Piano plan)
         {
-            //get plan by id
-            Piano planToUpdate = await _planRepo.GetPianoById(plan.PianoId);
+            try
+            {
+                //get plan by id
+                Piano planToUpdate = await _planRepo.GetPianoById(plan.PianoId);
 
-            //gestisco modifiche
-            planToUpdate.NomePiano = plan.NomePiano;
-            planToUpdate.Descrizione = plan.Descrizione;
-            planToUpdate.Note = plan.Note;
+                //gestisco modifiche
+                planToUpdate.NomePiano = plan.NomePiano;
+                planToUpdate.Descrizione = plan.Descrizione;
+                planToUpdate.Note = plan.Note;
 
-            await _planRepo.UpdatePiano(planToUpdate);
-            return new JsonResult("Updated Successfully");
+                await _planRepo.UpdatePiano(planToUpdate);
+                return new JsonResult("Updated Successfully");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

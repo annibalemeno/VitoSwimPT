@@ -25,20 +25,34 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetAllenamenti")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _allenamentiRepo.GetAllenamenti());
+            try
+            {
+                return Ok(await _allenamentiRepo.GetAllenamenti());
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost(Name = "AddAllenamenti")]
         public async Task<IActionResult> Post(Allenamento train)
         {
-            var result = await _allenamentiRepo.InsertAllenamento(train);
-            if (result.AllenamentoId == 0)
+            try
             {
-                //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
-                return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                var result = await _allenamentiRepo.InsertAllenamento(train);
+                if (result.AllenamentoId == 0)
+                {
+                    return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                }
+                return new JsonResult("Added Successfully");
             }
-            //return Ok("Ok");
-            return new JsonResult("Added Successfully");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         //[HttpDelete]
@@ -62,15 +76,23 @@ namespace VitoSwimPT.Server.Controllers
         [Route("UpdateAllenamenti")]
         public async Task<IActionResult> Put(Allenamento training)
         {
-            //get training by id
-            Allenamento trainToUpd = await _allenamentiRepo.GetAllenamentoById(training.AllenamentoId);
+            try
+            {
+                //get training by id
+                Allenamento trainToUpd = await _allenamentiRepo.GetAllenamentoById(training.AllenamentoId);
 
-            //gestisco modifiche
-            trainToUpd.NomeAllenamento = training.NomeAllenamento;
-            trainToUpd.Note = training.Note;
+                //gestisco modifiche
+                trainToUpd.NomeAllenamento = training.NomeAllenamento;
+                trainToUpd.Note = training.Note;
 
-            await _allenamentiRepo.UpdateAllenamento(trainToUpd);
-            return new JsonResult("Updated Successfully");
+                await _allenamentiRepo.UpdateAllenamento(trainToUpd);
+                return new JsonResult("Updated Successfully");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
 

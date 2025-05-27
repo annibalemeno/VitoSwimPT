@@ -47,19 +47,26 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetEsercizi")]
         public async Task<IActionResult> Get()
         {
-            var esercizi = await _eserciziRepo.GetEsercizi();
-            //Task<IEnumerable<EserciziVM>>
-            var eserciziList = new List<EserciziVM>();
-            foreach (var item in esercizi)
+            try
             {
-                var stile = await _stiliRepo.GetStileById(item.StileId);
-                var esercizio = _mapper.toViewModel(item);
-                esercizio.Stile = stile.Nome;
-                //eserciziList.Add(_mapper.toViewModel(item));
-                eserciziList.Add(esercizio);
+                var esercizi = await _eserciziRepo.GetEsercizi();
+                //Task<IEnumerable<EserciziVM>>
+                var eserciziList = new List<EserciziVM>();
+                foreach (var item in esercizi)
+                {
+                    var stile = await _stiliRepo.GetStileById(item.StileId);
+                    var esercizio = _mapper.toViewModel(item);
+                    esercizio.Stile = stile.Nome;
+                    //eserciziList.Add(_mapper.toViewModel(item));
+                    eserciziList.Add(esercizio);
+                }
+                return Ok(eserciziList);
+                //return Ok(await _eserciziRepo.GetEsercizi());
             }
-            return Ok(eserciziList);
-            //return Ok(await _eserciziRepo.GetEsercizi());
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet("{id:int}")]
@@ -68,34 +75,48 @@ namespace VitoSwimPT.Server.Controllers
         //[Route("/{Id}")]
         public JsonResult Get(int id)
         {
-            var esercizio =  _eserciziRepo.GetEsercizioByID(id);
-            return new JsonResult(esercizio);
+            try
+            {
+                var esercizio = _eserciziRepo.GetEsercizioByID(id);
+                return new JsonResult(esercizio);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost(Name = "AddEsercizi")]
         public async Task<IActionResult> Post(EserciziVM es)
         {
-            //get stile
-            var stile = await _stiliRepo.GetStileByName(es.Stile);
-            int stileId = stile.StileId;                //TODO robustezza eccezioni
-
-            Esercizio esToInsert = new Esercizio()
+            try
             {
-                Ripetizioni = es.Ripetizioni,
-                Distanza = es.Distanza,
-                Recupero = es.Recupero,
-                StileId = stileId
-            };                  
+                //get stile
+                var stile = await _stiliRepo.GetStileByName(es.Stile);
+                int stileId = stile.StileId;                //TODO robustezza eccezioni
+
+                Esercizio esToInsert = new Esercizio()
+                {
+                    Ripetizioni = es.Ripetizioni,
+                    Distanza = es.Distanza,
+                    Recupero = es.Recupero,
+                    StileId = stileId
+                };
 
 
-            var result = await _eserciziRepo.InsertEsercizio(esToInsert);
-            if (result.EsercizioId == 0)
-            {
-                //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
-                return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                var result = await _eserciziRepo.InsertEsercizio(esToInsert);
+                if (result.EsercizioId == 0)
+                {
+                    return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                }
+                return new JsonResult("Added Successfully");
             }
-            //return Ok("Ok");
-            return new JsonResult("Added Successfully");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
       
         //[HttpDelete]
@@ -103,14 +124,22 @@ namespace VitoSwimPT.Server.Controllers
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            bool res = _eserciziRepo.DeleteEsercizio(id);
-            if (res)
+            try
             {
-                return new JsonResult("Deleted Successfully");
+                bool res = _eserciziRepo.DeleteEsercizio(id);
+                if (res)
+                {
+                    return new JsonResult("Deleted Successfully");
+                }
+                else
+                {
+                    return new JsonResult("Esercizio not found or deleting error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new JsonResult("Esercizio not found or deleting error");
+
+                throw new Exception(ex.Message);
             }
         }
 
@@ -118,21 +147,27 @@ namespace VitoSwimPT.Server.Controllers
         [Route("UpdateEsercizi")]
         public async Task<IActionResult> Put(EserciziVM es)
         {
+            try
+            {
+                //get esercizio by id
+                Esercizio esToUpdate = await _eserciziRepo.GetEsercizioByID(es.EsercizioId);
+                //get stile
+                var stile = await _stiliRepo.GetStileByName(es.Stile);
+                int stileId = stile.StileId;                //TODO robustezza eccezioni
+                                                            //gestisco modifiche
+                esToUpdate.Ripetizioni = es.Ripetizioni;
+                esToUpdate.Distanza = es.Distanza;
+                esToUpdate.Recupero = es.Recupero;
+                esToUpdate.StileId = stileId;
 
+                await _eserciziRepo.UpdateEsercizio(esToUpdate);
+                return new JsonResult("Updated Successfully");
+            }
+            catch (Exception ex)
+            {
 
-            //get esercizio by id
-            Esercizio esToUpdate = await _eserciziRepo.GetEsercizioByID(es.EsercizioId);
-            //get stile
-            var stile = await _stiliRepo.GetStileByName(es.Stile);
-            int stileId = stile.StileId;                //TODO robustezza eccezioni
-            //gestisco modifiche
-            esToUpdate.Ripetizioni = es.Ripetizioni;
-            esToUpdate.Distanza = es.Distanza;
-            esToUpdate.Recupero = es.Recupero;
-            esToUpdate.StileId = stileId;   
-
-            await _eserciziRepo.UpdateEsercizio(esToUpdate);
-            return new JsonResult("Updated Successfully");
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
+using VitoSwimPT.Server.Infrastructure;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
@@ -37,6 +38,8 @@ builder.Services.AddCors(c =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+// Register the global exception handler
+builder.Services.AddExceptionHandler<SwimExceptionHandler>();
 builder.Services.AddSwaggerGen();
 
 
@@ -67,6 +70,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+// Use the global exception handler
+app.UseExceptionHandler(_ => { });
 app.UseAuthorization();
 
 app.MapControllers();

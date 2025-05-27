@@ -27,50 +27,88 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetPianiAllenamento")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _plantrainRepo.GetPianiAllenamento());
+            try
+            {
+                return Ok(await _plantrainRepo.GetPianiAllenamento());
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            Piano plan = await _planRepo.GetPianoById(id); // await
-            PianiAllenamentoVM trainVM = _mapper.toViewModel(plan);      //robustezza
+            try
+            {
+                Piano plan = await _planRepo.GetPianoById(id); // await
+                PianiAllenamentoVM trainVM = _mapper.toViewModel(plan);      //robustezza
 
-            return Ok(trainVM);
+                return Ok(trainVM);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet("Associabili/{pianoId:int}")]
         public async Task<IActionResult> GetAllenamentiAssociabiliPiano(int pianoId)
         {
-            return Ok(await _plantrainRepo.getAllenamentiAssociabiliPiano(pianoId));
+            try
+            {
+                return Ok(await _plantrainRepo.getAllenamentiAssociabiliPiano(pianoId));
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
 
         [HttpPost("{pianoId}/{allenamentoId}")]
         public async Task<IActionResult> Post(int pianoId, int allenamentoId)
         {
-            var result = await _plantrainRepo.AssociaAllenamentoPiano(pianoId, allenamentoId);
-            if (result.AllenamentoId == 0)
+            try
             {
-                //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
-                return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                var result = await _plantrainRepo.AssociaAllenamentoPiano(pianoId, allenamentoId);
+                if (result.AllenamentoId == 0)
+                {
+                    return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                }
+                return new JsonResult("Added Successfully");
             }
-            //return Ok("Ok");
-            return new JsonResult("Added Successfully");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         //multiple parameter
         [HttpDelete("{pianoId}/{allenamentoId}")]
         public JsonResult Delete(int pianoId, int allenamentoId)
         {
-            bool res = _plantrainRepo.DisassociaAllenamentoPiano(pianoId, allenamentoId);
-            if (res)
+            try
             {
-                return new JsonResult("Deleted Successfully");
+                bool res = _plantrainRepo.DisassociaAllenamentoPiano(pianoId, allenamentoId);
+                if (res)
+                {
+                    return new JsonResult("Deleted Successfully");
+                }
+                else
+                {
+                    return new JsonResult("piano not found or deleting error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new JsonResult("piano not found or deleting error");
+
+                throw ex;
             }
         }
     }

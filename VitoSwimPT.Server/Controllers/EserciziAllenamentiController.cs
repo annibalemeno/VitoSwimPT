@@ -22,36 +22,66 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetEserciziAllenamento")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _trainingRepo.GetEserciziAllenamento());
+            try
+            {
+                return Ok(await _trainingRepo.GetEserciziAllenamento());
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet("{id:int}")]
         public  async Task<IActionResult> Get(int id)
         {
-            IEnumerable<EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
-            var trainVM = _mapper.toViewModel(training);       //robustezza
+            try
+            {
+                IEnumerable<EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
+                var trainVM = _mapper.toViewModel(training);       //robustezza
 
-            return Ok(trainVM);
+                return Ok(trainVM);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet("Associabili/{id:int}")]
         public async Task<IActionResult> GetAssociabili(int id)
         {
-            return Ok(await _trainingRepo.GetEserciziAssociabiliAllenamento(id));
+            try
+            {
+                return Ok(await _trainingRepo.GetEserciziAssociabiliAllenamento(id));
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         //multiple parameter
         [HttpPost("{allenamentoId}/{esercizioId}")]
         public async Task<IActionResult> Post(int allenamentoId, int esercizioId)
         {
-            var result = await _trainingRepo.AssociaEsercizioAllenamento(allenamentoId, esercizioId);
-            if (result.AllenamentoId == 0)
+            try
             {
-                //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
-                return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                var result = await _trainingRepo.AssociaEsercizioAllenamento(allenamentoId, esercizioId);
+                if (result.AllenamentoId == 0)
+                {
+                    return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                }
+                return new JsonResult("Added Successfully");
             }
-            //return Ok("Ok");
-            return new JsonResult("Added Successfully");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
 
@@ -59,14 +89,22 @@ namespace VitoSwimPT.Server.Controllers
         [HttpDelete("{allenamentoId}/{esercizioId}")]
         public JsonResult Delete(int allenamentoId, int esercizioId)
         {
-            bool res = _trainingRepo.DisassociaEsercizioAllenamento(allenamentoId, esercizioId);
-            if (res)
+            try
             {
-                return new JsonResult("Deleted Successfully");
+                bool res = _trainingRepo.DisassociaEsercizioAllenamento(allenamentoId, esercizioId);
+                if (res)
+                {
+                    return new JsonResult("Deleted Successfully");
+                }
+                else
+                {
+                    return new JsonResult("Allenamento not found or deleting error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new JsonResult("Allenamento not found or deleting error");
+
+                throw new Exception(ex.Message);
             }
         }
 
