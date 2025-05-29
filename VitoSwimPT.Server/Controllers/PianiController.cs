@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Numerics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 
@@ -9,9 +11,9 @@ namespace VitoSwimPT.Server.Controllers
     [ApiController]
     public class PianiController : ControllerBase
     {
-        private readonly ILogger<PianiController> _logger;
+        private readonly Serilog.ILogger _logger;
         private readonly IPianiRepository _planRepo;
-        public PianiController(ILogger<PianiController> logger, IPianiRepository repo)
+        public PianiController(Serilog.ILogger logger, IPianiRepository repo)
         {
             _planRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _logger = logger;
@@ -22,6 +24,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug("Controller Piani Get()");
                 return Ok(await _planRepo.GetAllPiani());
             }
             catch (Exception ex)
@@ -36,6 +39,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Piani Post(plan) with plan = {plan}");
                 var result = await _planRepo.InsertPiano(plan);
                 if (result.PianoId == 0)
                 {
@@ -55,6 +59,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Piani Delete(id) with id = {id}");
                 bool res = _planRepo.DeletePiano(id);
                 if (res)
                 {
@@ -78,6 +83,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Piani Put(plan) with plan = {plan} ");
                 //get plan by id
                 Piano planToUpdate = await _planRepo.GetPianoById(plan.PianoId);
 

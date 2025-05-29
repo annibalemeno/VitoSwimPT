@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
@@ -10,12 +11,12 @@ namespace VitoSwimPT.Server.Controllers
     [ApiController]
     public class PianiAllenamentoController : ControllerBase
     {
-        private readonly ILogger<PianiAllenamentoController> _logger;
+        private readonly Serilog.ILogger _logger;
         private readonly IPianiAllenamentoRepository _plantrainRepo;
         private readonly IPianiRepository _planRepo;
         private ModelMap _mapper;
 
-        public PianiAllenamentoController(ILogger<PianiAllenamentoController> logger, IPianiAllenamentoRepository planTrainRepo, IPianiRepository planRepo,
+        public PianiAllenamentoController(Serilog.ILogger logger, IPianiAllenamentoRepository planTrainRepo, IPianiRepository planRepo,
             ModelMap mapper)
         {
             _plantrainRepo = planTrainRepo ?? throw new ArgumentNullException(nameof(planTrainRepo));
@@ -29,6 +30,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug("Controller PianiAllenamento Get()");
                 return Ok(await _plantrainRepo.GetPianiAllenamento());
             }
             catch (Exception ex)
@@ -43,6 +45,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller PianiAllenamento Get(id) with id = {id} ");
                 Piano plan = await _planRepo.GetPianoById(id); // await
                 PianiAllenamentoVM trainVM = _mapper.toViewModel(plan);      //robustezza
 
@@ -60,6 +63,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller PianiAllenamento GetAllenamentiAssociabiliPiano(pianoId) with pianoId = {pianoId} ");
                 return Ok(await _plantrainRepo.getAllenamentiAssociabiliPiano(pianoId));
             }
             catch (Exception ex)
@@ -75,6 +79,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller PianiAllenamento Post(pianoId, allenamentoId) with pianoId = {pianoId} and allenamentoId = {allenamentoId}");
                 var result = await _plantrainRepo.AssociaAllenamentoPiano(pianoId, allenamentoId);
                 if (result.AllenamentoId == 0)
                 {
@@ -95,6 +100,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller PianiAllenamento Delete(pianoId, allenamentoId) with pianoId = {pianoId} and allenamentoId = {allenamentoId} ");
                 bool res = _plantrainRepo.DisassociaAllenamentoPiano(pianoId, allenamentoId);
                 if (res)
                 {

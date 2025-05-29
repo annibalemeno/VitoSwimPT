@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Reflection;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
@@ -11,6 +13,7 @@ namespace VitoSwimPT.Server.Controllers
     //[EnableCors("AllowLocal")]
     public class EserciziController : ControllerBase
     {
+        private readonly Serilog.ILogger _logger;
         private readonly IEsercizioRepository _eserciziRepo;
         private readonly IStiliRepository _stiliRepo;
         private ModelMap _mapper;
@@ -20,9 +23,9 @@ namespace VitoSwimPT.Server.Controllers
             "Delfino", "Dorso", "Rana", "Stile"
         };
 
-        private readonly ILogger<EserciziController> _logger;
+        //private readonly ILogger<EserciziController> _logger;
 
-        public EserciziController(ILogger<EserciziController> logger, IEsercizioRepository repo, IStiliRepository slrepo, ModelMap mapper)
+        public EserciziController(Serilog.ILogger logger, IEsercizioRepository repo, IStiliRepository slrepo, ModelMap mapper)
         {
             _eserciziRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _stiliRepo = slrepo ?? throw new ArgumentNullException(nameof(slrepo));
@@ -49,6 +52,8 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug("Controller Esercizi Get()");
+
                 var esercizi = await _eserciziRepo.GetEsercizi();
                 //Task<IEnumerable<EserciziVM>>
                 var eserciziList = new List<EserciziVM>();
@@ -77,6 +82,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Esercizi Get(id) with id = {id} ");
                 var esercizio = _eserciziRepo.GetEsercizioByID(id);
                 return new JsonResult(esercizio);
             }
@@ -92,6 +98,8 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Esercizi Post(es) with es = {es} ");
+
                 //get stile
                 var stile = await _stiliRepo.GetStileByName(es.Stile);
                 int stileId = stile.StileId;                //TODO robustezza eccezioni
@@ -126,6 +134,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Esercizi Delete(id) with id = {id} ");
                 bool res = _eserciziRepo.DeleteEsercizio(id);
                 if (res)
                 {
@@ -149,6 +158,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Esercizi Put(es) with es = {es}");
                 //get esercizio by id
                 Esercizio esToUpdate = await _eserciziRepo.GetEsercizioByID(es.EsercizioId);
                 //get stile

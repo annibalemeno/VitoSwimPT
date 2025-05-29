@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
@@ -9,10 +10,11 @@ namespace VitoSwimPT.Server.Controllers
     [Route("[controller]")]
     public class EserciziAllenamentiController:ControllerBase
     {
-        private readonly ILogger<EserciziAllenamentiController> _logger;
+        //private readonly ILogger<EserciziAllenamentiController> _logger;
+        private readonly Serilog.ILogger _logger;
         private readonly IEserciziAllenamentiRepository _trainingRepo;
         private ModelMap _mapper;
-        public EserciziAllenamentiController(ILogger<EserciziAllenamentiController> logger, IEserciziAllenamentiRepository trainingRepo, ModelMap mapper)
+        public EserciziAllenamentiController(Serilog.ILogger logger, IEserciziAllenamentiRepository trainingRepo, ModelMap mapper)
         {
             _trainingRepo = trainingRepo ?? throw new ArgumentNullException(nameof(trainingRepo));
             _logger = logger;
@@ -24,6 +26,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug("Controller EserciziAllenamenti Get");
                 return Ok(await _trainingRepo.GetEserciziAllenamento());
             }
             catch (Exception ex)
@@ -38,6 +41,9 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+
+                _logger.Debug($"Controller EserciziAllenamenti Get(id) with id = {id}");
+
                 IEnumerable<EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
                 var trainVM = _mapper.toViewModel(training);       //robustezza
 
@@ -55,6 +61,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller EserciziAllenamenti GetAssociabili(id) with id = {id}");
                 return Ok(await _trainingRepo.GetEserciziAssociabiliAllenamento(id));
             }
             catch (Exception ex)
@@ -70,6 +77,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller EserciziAllenamenti Post(allenamentoId, esercizioID) with allenamentoId = {allenamentoId}, esercizioId = {esercizioId}");
                 var result = await _trainingRepo.AssociaEsercizioAllenamento(allenamentoId, esercizioId);
                 if (result.AllenamentoId == 0)
                 {
@@ -91,6 +99,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller EserciziAllenamenti Delete(allenamentoId, esercizioID) with allenamentoId = {allenamentoId}, esercizioId = {esercizioId}");
                 bool res = _trainingRepo.DisassociaEsercizioAllenamento(allenamentoId, esercizioId);
                 if (res)
                 {

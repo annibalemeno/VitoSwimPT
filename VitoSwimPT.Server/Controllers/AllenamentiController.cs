@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VitoSwimPT.Server.Controllers
 {
@@ -14,9 +16,9 @@ namespace VitoSwimPT.Server.Controllers
     public class AllenamentiController : ControllerBase
     {
 
-        private readonly ILogger<AllenamentiController> _logger;
+        private readonly Serilog.ILogger _logger;
         private readonly IAllenamentoRepository _allenamentiRepo;
-        public AllenamentiController(ILogger<AllenamentiController> logger, IAllenamentoRepository repo)
+        public AllenamentiController(Serilog.ILogger logger, IAllenamentoRepository repo)
         {
             _allenamentiRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _logger = logger;
@@ -27,6 +29,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug("Controller Allenamenti Get()");
                 return Ok(await _allenamentiRepo.GetAllenamenti());
             }
             catch (Exception ex)
@@ -41,6 +44,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Allenamenti Post(train) with train = {train} ");
                 var result = await _allenamentiRepo.InsertAllenamento(train);
                 if (result.AllenamentoId == 0)
                 {
@@ -61,14 +65,23 @@ namespace VitoSwimPT.Server.Controllers
        
         public JsonResult Delete(int id)
         {
-           bool res =  _allenamentiRepo.DeleteAllenamento(id);
-            if (res)
+            try
             {
-               return new JsonResult("Deleted Successfully");
+                _logger.Debug($"Controller Allenamenti Delete(id) with id = {id}");
+                bool res = _allenamentiRepo.DeleteAllenamento(id);
+                if (res)
+                {
+                    return new JsonResult("Deleted Successfully");
+                }
+                else
+                {
+                    return new JsonResult("Allenamento not found or deleting error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new JsonResult("Allenamento not found or deleting error");
+
+                throw new Exception(ex.Message);
             }
         }
 
@@ -78,6 +91,7 @@ namespace VitoSwimPT.Server.Controllers
         {
             try
             {
+                _logger.Debug($"Controller Allenamenti Put(training) with training = {training}" );
                 //get training by id
                 Allenamento trainToUpd = await _allenamentiRepo.GetAllenamentoById(training.AllenamentoId);
 
