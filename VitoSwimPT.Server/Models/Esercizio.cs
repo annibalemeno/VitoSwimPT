@@ -1,4 +1,6 @@
-﻿namespace VitoSwimPT.Server.Models
+﻿using System.ComponentModel;
+
+namespace VitoSwimPT.Server.Models
 {
     public partial class Esercizio
     {
@@ -12,6 +14,11 @@
         public int Recupero { get; set; }
 
         public int StileId { get; set; }
+
+        public DateTime InsertDateTime { get; set; }
+
+        public DateTime UpdateDateTime { get; set; }
+
 
         //public Stile Stile { get; set; }
 

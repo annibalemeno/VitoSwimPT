@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /Learning
 /Resources
+/VitoSwimPT.Server/Infrastructure/BaseEntityTypeConfiguration.cs
+/VitoSwimPT.Server/Infrastructure/EsercizioConfig.cs
