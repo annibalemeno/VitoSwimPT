@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VitoSwimPT.Server.Models;
 
@@ -11,9 +12,11 @@ using VitoSwimPT.Server.Models;
 namespace VitoSwimPT.Server.Migrations
 {
     [DbContext(typeof(SwimContext))]
-    partial class SwimContextModelSnapshot : ModelSnapshot
+    [Migration("20250825131737_AuditEsercizi")]
+    partial class AuditEsercizi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,17 +33,11 @@ namespace VitoSwimPT.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AllenamentoId"));
 
-                    b.Property<DateTime>("InsertDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("NomeAllenamento")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("AllenamentoId");
 
@@ -86,12 +83,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.Property<int>("AllenamentoId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("InsertDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("EsercizioId", "AllenamentoId");
 
                     b.ToTable("EserciziAllenamenti");
@@ -108,17 +99,11 @@ namespace VitoSwimPT.Server.Migrations
                     b.Property<string>("Descrizione")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("InsertDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("NomePiano")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("PianoId");
 
@@ -133,12 +118,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.Property<int>("AllenamentoId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("InsertDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("PianoId", "AllenamentoId");
 
                     b.ToTable("PianiAllenamento");
@@ -152,9 +131,6 @@ namespace VitoSwimPT.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StileId"));
 
-                    b.Property<DateTime>("InsertDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -163,9 +139,6 @@ namespace VitoSwimPT.Server.Migrations
                         .IsRequired()
                         .HasMaxLength(2)
                         .HasColumnType("nvarchar(2)");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("StileId");
 
