@@ -1,6 +1,10 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Exceptions;
 using System.Diagnostics;
+using VitoSwimPT.Server.Infrastructure;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
@@ -18,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Enable CORS
 builder.Services.AddCors(c =>
 {   c.AddPolicy("AllowLocal", options => options.WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost:5194", "https://localhost:5194").AllowAnyMethod().AllowAnyHeader()); 
-}); 
+});
 //c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); undo
 
 
@@ -34,23 +38,48 @@ builder.Services.AddCors(c =>
 //        });
 //});
 
+//Logging configuration
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .Enrich.WithExceptionDetails()
+    .WriteTo.File("../Resources/VitoSwimPtLog.txt", rollingInterval: RollingInterval.Year, 
+    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss zzz} [{Level:u5}] {Message:lj}{NewLine}{Exception}{Properties:j}")
+    .CreateLogger();
+
+//builder.Logging.ClearProviders();
+
+builder.Services.AddSingleton(Log.Logger);
+//builder.Services.AddLogging(loggingBuilder =>
+//          loggingBuilder.Add(dispose:
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+// Register the global exception handler
+builder.Services.AddExceptionHandler<SwimExceptionHandler>();
 builder.Services.AddSwaggerGen();
-
 
 builder.Services.AddScoped<IEsercizioRepository, EserciziRepository>();
 builder.Services.AddScoped<IAllenamentoRepository, AllenamentiRepository>();
 builder.Services.AddScoped<IStiliRepository, StiliRepository>();
 builder.Services.AddScoped<IEserciziAllenamentiRepository, EserciziAllenamentiRepository>();
 builder.Services.AddScoped<IPianiRepository, PianiRepository>();
-builder.Services.AddScoped<IPianiAllenamentoRepository, PianiAllenamentoRepository
-    >();
-builder.Services.AddScoped<ModelMap>();
+builder.Services.AddScoped<IPianiAllenamentoRepository, PianiAllenamentoRepository>();
+
 
 //builder.Services.AddDbContext<SwimContext>(options => options.UseSqlServer("Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;"));
 builder.Services.AddDbContext<SwimContext>();
+
+// Auto Mapper Configurations
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+builder.Services.AddScoped<ModelMap>();
+
 
 var app = builder.Build();
 
@@ -67,6 +96,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+// Use the global exception handler
+app.UseExceptionHandler(_ => { });
 app.UseAuthorization();
 
 app.MapControllers();

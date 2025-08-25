@@ -1,0 +1,26 @@
+<div class="d-flex flex-row bd-highlight mb-9">
+  <div class="p-2 w-100 bd-highlight">
+    <div class="input-group mb-12" style="margin-right: 45px; margin-bottom: 20px">
+      <span class="input-group-text">Nome Piano</span>
+      <input type="text" class="form-control" [(ngModel)]="NomePiano">
+    </div>
+    <div class="input-group mb-12" style="margin-right:45px">
+      <span class="input-group-text">Descrizione</span>
+      <input type="text" class="form-control" [(ngModel)]="Descrizione">
+    </div>
+  </div>
+  <div class="p-2 w-100 bd-highlight">
+    <div class="input-group mb-12" style="margin-bottom: 20px">
+      <span class="input-group-text">Note</span>
+      <input type="text" class="form-control" [(ngModel)]="Note">
+    </div>
+  </div>
+  </div>
+
+  <button (click)="addPiano()" *ngIf="piano.pianoId == '0'" class="btn btn-primary">
+    Add
+  </button>
+
+  <button (click)="updatePiano()" *ngIf="piano.pianoId !='0'" class="btn btn-primary">
+    Update
+  </button>

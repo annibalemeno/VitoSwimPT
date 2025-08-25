@@ -9,9 +9,9 @@ namespace VitoSwimPT.Server.Controllers
     //[EnableCors("AllowLocal")]
     public class StiliController : ControllerBase
     {
-        private readonly ILogger<StiliController> _logger;
+        private readonly Serilog.ILogger _logger;
         private readonly IStiliRepository _stiliRepo;
-        public StiliController(ILogger<StiliController> logger, IStiliRepository repo)
+        public StiliController(Serilog.ILogger logger, IStiliRepository repo)
         {
             _stiliRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _logger = logger;
@@ -20,7 +20,16 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetStili")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _stiliRepo.GetStile());
+            try
+            {
+                _logger.Debug("Controller Stili Get()");
+                return Ok(await _stiliRepo.GetStile());
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
     }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
@@ -9,66 +11,90 @@ namespace VitoSwimPT.Server.Controllers
     [Route("[controller]")]
     public class EserciziAllenamentiController:ControllerBase
     {
-        private readonly ILogger<EserciziAllenamentiController> _logger;
+        //private readonly ILogger<EserciziAllenamentiController> _logger;
+        private readonly Serilog.ILogger _logger;
         private readonly IEserciziAllenamentiRepository _trainingRepo;
-        private ModelMap _mapper;
-        public EserciziAllenamentiController(ILogger<EserciziAllenamentiController> logger, IEserciziAllenamentiRepository trainingRepo, ModelMap mapper)
+        private ModelMap _mapper;       //TODO
+        private readonly IMapper _automapper;
+        public EserciziAllenamentiController(Serilog.ILogger logger, IEserciziAllenamentiRepository trainingRepo, ModelMap mapper, IMapper automapper)
         {
             _trainingRepo = trainingRepo ?? throw new ArgumentNullException(nameof(trainingRepo));
             _logger = logger;
             _mapper = mapper;
+            _automapper = automapper;
         }
 
         [HttpGet(Name = "GetEserciziAllenamento")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _trainingRepo.GetEserciziAllenamento());
+            try
+            {
+                _logger.Debug("Controller EserciziAllenamenti Get");
+                return Ok(await _trainingRepo.GetEserciziAllenamento());
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet("{id:int}")]
         public  async Task<IActionResult> Get(int id)
         {
-            //var esercizi = await _eserciziRepo.GetEsercizi();
-            ////Task<IEnumerable<EserciziVM>>
-            //var eserciziList = new List<EserciziVM>();
-            //foreach (var item in esercizi)
-            //{
-            //    var stile = await _stiliRepo.GetStileById(item.StileId);
-            //    var esercizio = _mapper.toViewModel(item);
-            //    esercizio.Stile = stile.Nome;
-            //    //eserciziList.Add(_mapper.toViewModel(item));
-            //    eserciziList.Add(esercizio);
-            //}
-            //return Ok(eserciziList);
+            try
+            {
 
-            //var training = _trainingRepo.GetEsercizioAllenamentoByID(id);
-            //return new JsonResult(training);
-            IEnumerable<EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
-            var trainVM = _mapper.toViewModel(training);       //robustezza
-            //trainVM.nomeAllenamento = ;
-            //trainVM.note = ;
+                _logger.Debug($"Controller EserciziAllenamenti Get(id) with id = {id}");
 
-            return Ok(trainVM);
+                IEnumerable<EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
+                var trainvVM = _automapper.Map<EserciziVM>(training);
+                //
+                //var trainVM = _mapper.toViewModel(training);       //robustezza
+
+                return Ok(trainvVM);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet("Associabili/{id:int}")]
         public async Task<IActionResult> GetAssociabili(int id)
         {
-            return Ok(await _trainingRepo.GetEserciziAssociabiliAllenamento(id));
+            try
+            {
+                _logger.Debug($"Controller EserciziAllenamenti GetAssociabili(id) with id = {id}");
+                return Ok(await _trainingRepo.GetEserciziAssociabiliAllenamento(id));
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         //multiple parameter
         [HttpPost("{allenamentoId}/{esercizioId}")]
         public async Task<IActionResult> Post(int allenamentoId, int esercizioId)
         {
-            var result = await _trainingRepo.AssociaEsercizioAllenamento(allenamentoId, esercizioId);
-            if (result.AllenamentoId == 0)
+            try
             {
-                //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
-                return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                _logger.Debug($"Controller EserciziAllenamenti Post(allenamentoId, esercizioID) with allenamentoId = {allenamentoId}, esercizioId = {esercizioId}");
+                var result = await _trainingRepo.AssociaEsercizioAllenamento(allenamentoId, esercizioId);
+                if (result.AllenamentoId == 0)
+                {
+                    return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                }
+                return new JsonResult("Added Successfully");
             }
-            //return Ok("Ok");
-            return new JsonResult("Added Successfully");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
 
@@ -76,14 +102,23 @@ namespace VitoSwimPT.Server.Controllers
         [HttpDelete("{allenamentoId}/{esercizioId}")]
         public JsonResult Delete(int allenamentoId, int esercizioId)
         {
-            bool res = _trainingRepo.DisassociaEsercizioAllenamento(allenamentoId, esercizioId);
-            if (res)
+            try
             {
-                return new JsonResult("Deleted Successfully");
+                _logger.Debug($"Controller EserciziAllenamenti Delete(allenamentoId, esercizioID) with allenamentoId = {allenamentoId}, esercizioId = {esercizioId}");
+                bool res = _trainingRepo.DisassociaEsercizioAllenamento(allenamentoId, esercizioId);
+                if (res)
+                {
+                    return new JsonResult("Deleted Successfully");
+                }
+                else
+                {
+                    return new JsonResult("Allenamento not found or deleting error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new JsonResult("Allenamento not found or deleting error");
+
+                throw new Exception(ex.Message);
             }
         }
 

@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Numerics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 
 namespace VitoSwimPT.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class PianiController : ControllerBase
     {
-        private readonly ILogger<PianiController> _logger;
+        private readonly Serilog.ILogger _logger;
         private readonly IPianiRepository _planRepo;
-        public PianiController(ILogger<PianiController> logger, IPianiRepository repo)
+        public PianiController(Serilog.ILogger logger, IPianiRepository repo)
         {
             _planRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _logger = logger;
@@ -20,33 +22,58 @@ namespace VitoSwimPT.Server.Controllers
         [HttpGet(Name = "GetPiani")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _planRepo.GetAllPiani());
+            try
+            {
+                _logger.Debug("Controller Piani Get()");
+                return Ok(await _planRepo.GetAllPiani());
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost(Name = "AddPiano")]
         public async Task<IActionResult> Post(Piano plan)
         {
-            var result = await _planRepo.InsertPiano(plan);
-            if (result.PianoId == 0)
+            try
             {
-                //return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
-                return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                _logger.Debug($"Controller Piani Post(plan) with plan = {plan}");
+                var result = await _planRepo.InsertPiano(plan);
+                if (result.PianoId == 0)
+                {
+                    return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
+                }
+                return new JsonResult("Added Successfully");
             }
-            //return Ok("Ok");
-            return new JsonResult("Added Successfully");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            bool res = _planRepo.DeletePiano(id);
-            if (res)
+            try
             {
-                return new JsonResult("Deleted Successfully");
+                _logger.Debug($"Controller Piani Delete(id) with id = {id}");
+                bool res = _planRepo.DeletePiano(id);
+                if (res)
+                {
+                    return new JsonResult("Deleted Successfully");
+                }
+                else
+                {
+                    return new JsonResult("Piano not found or deleting error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new JsonResult("Piano not found or deleting error");
+
+                throw new Exception(ex.Message);
             }
         }
 
@@ -54,16 +81,25 @@ namespace VitoSwimPT.Server.Controllers
         [Route("UpdatePiano")]
         public async Task<IActionResult> Put(Piano plan)
         {
-            //get plan by id
-            Piano planToUpdate = await _planRepo.GetPianoById(plan.PianoId);
+            try
+            {
+                _logger.Debug($"Controller Piani Put(plan) with plan = {plan} ");
+                //get plan by id
+                Piano planToUpdate = await _planRepo.GetPianoById(plan.PianoId);
 
-            //gestisco modifiche
-            planToUpdate.NomePiano = plan.NomePiano;
-            planToUpdate.Descrizione = plan.Descrizione;
-            planToUpdate.Note = plan.Note;
+                //gestisco modifiche
+                planToUpdate.NomePiano = plan.NomePiano;
+                planToUpdate.Descrizione = plan.Descrizione;
+                planToUpdate.Note = plan.Note;
 
-            await _planRepo.UpdatePiano(planToUpdate);
-            return new JsonResult("Updated Successfully");
+                await _planRepo.UpdatePiano(planToUpdate);
+                return new JsonResult("Updated Successfully");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

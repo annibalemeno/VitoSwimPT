@@ -28,6 +28,7 @@ export class DetailAllenamentiComponent implements OnInit {
 
   ngOnInit(): void {
     this.refreshGrid();
+    this.service.getEserciziAllenamentoList(); // to do
   }
 
   disassocia(esercizio: Esercizi) {

@@ -1,5 +1,4 @@
-﻿using VitoSwimPT.Server.Migrations;
-using VitoSwimPT.Server.Models;
+﻿using VitoSwimPT.Server.Models;
 
 namespace VitoSwimPT.Server.ViewModels
 {
