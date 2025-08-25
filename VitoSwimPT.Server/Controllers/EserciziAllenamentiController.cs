@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Numerics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
@@ -13,12 +14,14 @@ namespace VitoSwimPT.Server.Controllers
         //private readonly ILogger<EserciziAllenamentiController> _logger;
         private readonly Serilog.ILogger _logger;
         private readonly IEserciziAllenamentiRepository _trainingRepo;
-        private ModelMap _mapper;
-        public EserciziAllenamentiController(Serilog.ILogger logger, IEserciziAllenamentiRepository trainingRepo, ModelMap mapper)
+        private ModelMap _mapper;       //TODO
+        private readonly IMapper _automapper;
+        public EserciziAllenamentiController(Serilog.ILogger logger, IEserciziAllenamentiRepository trainingRepo, ModelMap mapper, IMapper automapper)
         {
             _trainingRepo = trainingRepo ?? throw new ArgumentNullException(nameof(trainingRepo));
             _logger = logger;
             _mapper = mapper;
+            _automapper = automapper;
         }
 
         [HttpGet(Name = "GetEserciziAllenamento")]
@@ -45,9 +48,11 @@ namespace VitoSwimPT.Server.Controllers
                 _logger.Debug($"Controller EserciziAllenamenti Get(id) with id = {id}");
 
                 IEnumerable<EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
-                var trainVM = _mapper.toViewModel(training);       //robustezza
+                var trainvVM = _automapper.Map<EserciziVM>(training);
+                //
+                //var trainVM = _mapper.toViewModel(training);       //robustezza
 
-                return Ok(trainVM);
+                return Ok(trainvVM);
             }
             catch (Exception ex)
             {
