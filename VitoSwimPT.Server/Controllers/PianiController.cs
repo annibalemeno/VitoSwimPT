@@ -91,6 +91,7 @@ namespace VitoSwimPT.Server.Controllers
                 planToUpdate.NomePiano = plan.NomePiano;
                 planToUpdate.Descrizione = plan.Descrizione;
                 planToUpdate.Note = plan.Note;
+                planToUpdate.UpdateDateTime = DateTime.Now;
 
                 await _planRepo.UpdatePiano(planToUpdate);
                 return new JsonResult("Updated Successfully");

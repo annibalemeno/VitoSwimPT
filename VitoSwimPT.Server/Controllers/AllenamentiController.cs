@@ -98,7 +98,7 @@ namespace VitoSwimPT.Server.Controllers
                 //gestisco modifiche
                 trainToUpd.NomeAllenamento = training.NomeAllenamento;
                 trainToUpd.Note = training.Note;
-
+                trainToUpd.UpdateDateTime = DateTime.Now;
                 await _allenamentiRepo.UpdateAllenamento(trainToUpd);
                 return new JsonResult("Updated Successfully");
             }

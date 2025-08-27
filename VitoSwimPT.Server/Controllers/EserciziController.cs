@@ -169,6 +169,7 @@ namespace VitoSwimPT.Server.Controllers
                 esToUpdate.Distanza = es.Distanza;
                 esToUpdate.Recupero = es.Recupero;
                 esToUpdate.StileId = stileId;
+                esToUpdate.UpdateDateTime = DateTime.Now;
 
                 await _eserciziRepo.UpdateEsercizio(esToUpdate);
                 return new JsonResult("Updated Successfully");
