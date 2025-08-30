@@ -49,6 +49,9 @@ Log.Logger = new LoggerConfiguration()
 //builder.Logging.ClearProviders();
 
 builder.Services.AddSingleton(Log.Logger);
+builder.Services.AddSingleton<PasswordHasher>();
+builder.Services.AddSingleton<TokenProvider>();
+
 //builder.Services.AddLogging(loggingBuilder =>
 //          loggingBuilder.Add(dispose:
 builder.Services.AddControllers();
