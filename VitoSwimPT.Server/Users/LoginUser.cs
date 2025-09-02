@@ -1,0 +1,41 @@
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
+using VitoSwimPT.Server.Infrastructure;
+using VitoSwimPT.Server.Models;
+
+namespace VitoSwimPT.Server.Users
+{
+    internal sealed class LoginUser(SwimContext context, PasswordHasher password, TokenProvider tokenProvider)
+    {
+        public sealed record Request(string Email, string Password);
+        public async Task<string> Handle(Request request)
+        {
+            //User? user = await context.Users.GetByEmail(request.Email);
+
+            //if (user is null || !user.EmailVerified)
+            //{
+            //    throw new Exception("The user was not found");
+            //}
+
+            //bool verified = passwordHasher.Verify(request.Password, user.PasswordHash);
+
+            //if (!verified)
+            //{
+            //    throw new Exception("The password is incorrect");
+            //}
+
+            var testUser = new User()
+            {
+                Id = Guid.NewGuid(),
+                Email = request.Email,
+                FirstName = "Annibale",
+                LastName = "Menolascina",
+                PasswordHash = request.Password,
+                EmailVerified = false
+            };
+            string token = tokenProvider.Create(testUser);
+
+            return token;
+        }
+    }
+}

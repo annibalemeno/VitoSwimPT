@@ -1,12 +1,16 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Exceptions;
 using System.Diagnostics;
+using System.Text;
 using VitoSwimPT.Server.Infrastructure;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
+using VitoSwimPT.Server.Users;
 using VitoSwimPT.Server.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -83,6 +87,20 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddScoped<ModelMap>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
+{
+    o.RequireHttpsMetadata = false;
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+
+builder.Services.AddScoped<LoginUser>();
 
 var app = builder.Build();
 
@@ -99,6 +117,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+UserEndpoints.Map(app);
 
 // Use the global exception handler
 app.UseExceptionHandler(_ => { });
