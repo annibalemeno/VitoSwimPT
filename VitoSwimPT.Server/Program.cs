@@ -17,11 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//builder.Services.AddDbContext<SwimContext>();
-//builder.Services.AddDbContext<ConfigurationContext>(options => {
-//    options.UseSqlServer(Configuration.GetConnectionString("MyConnection"));
-//});
-
 
 //Enable CORS
 builder.Services.AddCors(c =>
@@ -31,16 +26,7 @@ builder.Services.AddCors(c =>
 
 
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowAllHeaders",
-//        builder =>
-//        {
-//            builder.AllowAnyOrigin()
-//                   .AllowAnyHeader()              undo
-//                   .AllowAnyMethod();
-//        });
-//});
+
 
 //Logging configuration
 Log.Logger = new LoggerConfiguration()
@@ -61,9 +47,10 @@ builder.Services.AddSingleton<TokenProvider>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGenWithAuth();
+
 // Register the global exception handler
 builder.Services.AddExceptionHandler<SwimExceptionHandler>();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IEsercizioRepository, EserciziRepository>();
 builder.Services.AddScoped<IAllenamentoRepository, AllenamentiRepository>();
@@ -72,8 +59,6 @@ builder.Services.AddScoped<IEserciziAllenamentiRepository, EserciziAllenamentiRe
 builder.Services.AddScoped<IPianiRepository, PianiRepository>();
 builder.Services.AddScoped<IPianiAllenamentoRepository, PianiAllenamentoRepository>();
 
-
-//builder.Services.AddDbContext<SwimContext>(options => options.UseSqlServer("Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;"));
 builder.Services.AddDbContext<SwimContext>();
 
 // Auto Mapper Configurations
@@ -84,9 +69,9 @@ var mapperConfig = new MapperConfiguration(mc =>
 
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
-
 builder.Services.AddScoped<ModelMap>();
 
+builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
 {
     o.RequireHttpsMetadata = false;
@@ -121,6 +106,8 @@ UserEndpoints.Map(app);
 
 // Use the global exception handler
 app.UseExceptionHandler(_ => { });
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -136,12 +123,6 @@ using (var context = new SwimContext(configuration))
 {
     //creates db if not exists
     context.Database.EnsureCreated();
-
-    //retrieve all the students from the database
-    //foreach (var a in context.Esercizi)
-    //{
-    //    Console.WriteLine($"Ripetizioni: {a.Ripetizioni}, Distanza: {a.Distanza}, Recupero: {a.Recupero}, Stile: {a.Stile}");
-    //}
 }
 
 app.Run();

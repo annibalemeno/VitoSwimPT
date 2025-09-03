@@ -11,6 +11,7 @@ namespace VitoSwimPT.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     //[EnableCors("AllowAllHeaders")]
     //[EnableCors("AllowLocal")] 
     public class AllenamentiController : ControllerBase
@@ -24,6 +25,7 @@ namespace VitoSwimPT.Server.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetAllenamenti")]
         public async Task<IActionResult> Get()
         {

@@ -5,24 +5,26 @@ using VitoSwimPT.Server.Models;
 
 namespace VitoSwimPT.Server.Users
 {
-    internal sealed class LoginUser(SwimContext context, PasswordHasher password, TokenProvider tokenProvider)
+    internal sealed class LoginUser(SwimContext context, PasswordHasher passwordHasher, TokenProvider tokenProvider)
     {
         public sealed record Request(string Email, string Password);
         public async Task<string> Handle(Request request)
         {
-            //User? user = await context.Users.GetByEmail(request.Email);
+            User? user = await context.Utenti.GetByEmail(request.Email);
 
-            //if (user is null || !user.EmailVerified)
-            //{
-            //    throw new Exception("The user was not found");
-            //}
+            if (user is null || !user.EmailVerified)
+            {
+                throw new Exception("The user was not found");
+            }
 
-            //bool verified = passwordHasher.Verify(request.Password, user.PasswordHash);
 
-            //if (!verified)
-            //{
-            //    throw new Exception("The password is incorrect");
-            //}
+            //string hashedpassword = passwordHasher.Hash(request.Password);
+            bool verified = passwordHasher.Verify(request.Password, user.PasswordHash);
+
+            if (!verified)
+            {
+                throw new Exception("The password is incorrect");
+            }
 
             var testUser = new User()
             {
