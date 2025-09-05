@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VitoSwimPT.Server.Models;
@@ -9,6 +10,7 @@ namespace VitoSwimPT.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class PianiAllenamentoController : ControllerBase
     {
         private readonly Serilog.ILogger _logger;

@@ -52,6 +52,8 @@ builder.Services.AddSwaggerGenWithAuth();
 // Register the global exception handler
 builder.Services.AddExceptionHandler<SwimExceptionHandler>();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<IEsercizioRepository, EserciziRepository>();
 builder.Services.AddScoped<IAllenamentoRepository, AllenamentiRepository>();
 builder.Services.AddScoped<IStiliRepository, StiliRepository>();
@@ -84,8 +86,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services
+    .AddFluentEmail(builder.Configuration["Email:SenderEmail"], builder.Configuration["Email:Sender"])
+    .AddSmtpSender(builder.Configuration["Email:Host"], builder.Configuration.GetValue<int>("Email:Port"),
+    builder.Configuration["Email:Username"], builder.Configuration["Email:Password"]);
+
+
 
 builder.Services.AddScoped<LoginUser>();
+builder.Services.AddScoped<RegisterUser>();
+builder.Services.AddScoped<VerifyEmail>();
+builder.Services.AddScoped<EmailVerificationLinkFactory>();
 
 var app = builder.Build();
 
@@ -106,6 +117,7 @@ UserEndpoints.Map(app);
 
 // Use the global exception handler
 app.UseExceptionHandler(_ => { });
+
 
 app.UseAuthentication();
 app.UseAuthorization();

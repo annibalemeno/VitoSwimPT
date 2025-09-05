@@ -23,7 +23,7 @@ namespace VitoSwimPT.Server.Infrastructure
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("email_verified", user.EmailVerified.ToString())
                 ]),
-                Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:ExpirationInMinutes")),
+                Expires = DateTime.Now.AddMinutes(configuration.GetValue<int>("Jwt:ExpirationInMinutes")),       //UtcNow
                 SigningCredentials = credentials,
                 Issuer = configuration["Jwt:Issuer"],
                 Audience = configuration["Jwt:Audience"]

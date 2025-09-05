@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VitoSwimPT.Server.Repository;
 
@@ -6,6 +7,7 @@ namespace VitoSwimPT.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     //[EnableCors("AllowLocal")]
     public class StiliController : ControllerBase
     {
