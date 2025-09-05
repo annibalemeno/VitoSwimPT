@@ -24,6 +24,16 @@
                 .WithTags(Tag)
                 .WithName(VerifyEmail);
 
+
+            builder.MapGet("users/{id:guid}", async (Guid id, GetUser useCase) =>
+            {
+                GetUser.UserResponse? user = await useCase.Handle(id);
+
+                return user is not null ? Results.Ok(user) : Results.NotFound();
+            })
+            .WithTags(Tag)
+            .RequireAuthorization();
+
             return builder;
         }
     }

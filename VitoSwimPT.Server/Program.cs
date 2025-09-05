@@ -97,6 +97,7 @@ builder.Services.AddScoped<LoginUser>();
 builder.Services.AddScoped<RegisterUser>();
 builder.Services.AddScoped<VerifyEmail>();
 builder.Services.AddScoped<EmailVerificationLinkFactory>();
+builder.Services.AddScoped <GetUser>();
 
 var app = builder.Build();
 
