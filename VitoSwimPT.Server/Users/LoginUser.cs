@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using VitoSwimPT.Server.Infrastructure;
 using VitoSwimPT.Server.Models;
 
@@ -8,7 +9,7 @@ namespace VitoSwimPT.Server.Users
     internal sealed class LoginUser(SwimContext context, PasswordHasher passwordHasher, TokenProvider tokenProvider)
     {
         public sealed record Request(string Email, string Password);
-        public async Task<string> Handle(Request request)
+        public async Task<JsonResult> Handle(Request request)
         {
             User? user = await context.Utenti.GetByEmail(request.Email);
 
@@ -37,7 +38,7 @@ namespace VitoSwimPT.Server.Users
             };
             string token = tokenProvider.Create(testUser);
 
-            return token;
+            return new JsonResult(token);
         }
     }
 }

@@ -17,6 +17,12 @@ export class ApiserviceService {
 
   constructor(private http: HttpClient) { }
 
+  login(credentials: any): Observable<string>  {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.post<any>(this.apiUrl + '/users/login', credentials, { headers });
+  }
+
   // #region Esercizi
 
   getEserciziList(): Observable<Esercizi[]> {
@@ -51,7 +57,18 @@ export class ApiserviceService {
   // #region Allenamenti
 
   getAllenamentiList(): Observable<Allenamenti[]> {
-    return this.http.get<Allenamenti[]>(this.apiUrl + '/allenamenti');
+    debugger;
+    let auth_token = sessionStorage.getItem('token');
+    //let headers = new HttpHeaders();
+    //headers = headers.set('Content-Type', 'application/json; charset=utf-8').set('Authorization', `Bearer ${auth_token}`);
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json; charset=utf-8',
+      Authorization: `Bearer ${auth_token}`,
+    });
+
+    return this.http.get<Allenamenti[]>(this.apiUrl + '/allenamenti', { headers });
+    debugger;
   }
 
   addAllenamento(training: Allenamenti): Observable<any> {

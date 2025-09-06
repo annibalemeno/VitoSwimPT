@@ -77,6 +77,21 @@ export class ShowEserciziComponent implements OnInit {
     }
   }
 
+  login() {
+    let credentials = {
+     "email": "annibale.meno@gmail.com",
+  "password": "FabioTambone84"
+    }
+    let token = this.service.login(credentials).subscribe((data: any) => {
+      /*      alert('login called');*/
+      debugger;
+      let token = data;
+      console.log(data.value);
+      sessionStorage.setItem('token', token.value);
+    });
+
+  }
+
 
   closeClick() {
     this.ActivateAddEditEsercComp = false;
