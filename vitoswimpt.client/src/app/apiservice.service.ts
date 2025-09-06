@@ -68,7 +68,6 @@ export class ApiserviceService {
     });
 
     return this.http.get<Allenamenti[]>(this.apiUrl + '/allenamenti', { headers });
-    debugger;
   }
 
   addAllenamento(training: Allenamenti): Observable<any> {

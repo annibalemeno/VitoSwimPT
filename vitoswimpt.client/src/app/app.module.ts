@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { PianiComponent } from './components/piani/piani.component';
 import { ShowPianiComponent } from './components/piani/show-piani/show-piani.component';
 import { AddEditPianiComponent } from './components/piani/add-edit-piani/add-edit-piani.component';
 import { DetailPianiComponent } from './components/piani/detail-piani/detail-piani.component';
+import { authInterceptorInterceptor} from './infrastructure/auth-interceptor.interceptor';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,11 @@ import { DetailPianiComponent } from './components/piani/detail-piani/detail-pia
     BrowserModule, HttpClientModule,
     AppRoutingModule, FormsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: authInterceptorInterceptor,
+    multi: true,
+  },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
