@@ -16,6 +16,10 @@ import { ShowPianiComponent } from './components/piani/show-piani/show-piani.com
 import { AddEditPianiComponent } from './components/piani/add-edit-piani/add-edit-piani.component';
 import { DetailPianiComponent } from './components/piani/detail-piani/detail-piani.component';
 import { authInterceptor} from './infrastructure/auth-interceptor';
+import { UserLoginComponent } from './components/user/user-login/user-login.component';
+import { LoginUserComponent } from './components/user/login-user/login-user.component';
+import { RegisterUserComponent } from './components/user/register-user/register-user.component';
+import { DetailUserComponent } from './components/user/detail-user/detail-user.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,11 @@ import { authInterceptor} from './infrastructure/auth-interceptor';
     PianiComponent,
     ShowPianiComponent,
     AddEditPianiComponent,
-    DetailPianiComponent
+    DetailPianiComponent,
+    UserLoginComponent,
+    LoginUserComponent,
+    RegisterUserComponent,
+    DetailUserComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
