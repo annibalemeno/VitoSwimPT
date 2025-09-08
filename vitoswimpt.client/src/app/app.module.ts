@@ -19,6 +19,7 @@ import { authInterceptor} from './infrastructure/auth-interceptor';
 import { LoginUserComponent } from './components/user/login-user/login-user.component';
 import { RegisterUserComponent } from './components/user/register-user/register-user.component';
 import { DetailUserComponent } from './components/user/detail-user/detail-user.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { DetailUserComponent } from './components/user/detail-user/detail-user.c
     DetailPianiComponent,
     LoginUserComponent,
     RegisterUserComponent,
-    DetailUserComponent
+    DetailUserComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

@@ -17,11 +17,15 @@ export class ApiserviceService {
 
   constructor(private http: HttpClient) { }
 
+  //#region Utenti
+
   login(credentials: any): Observable<string>  {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.http.post<any>(this.apiUrl + '/users/login', credentials, { headers });
   }
+  // #endregion
+
 
   // #region Esercizi
 
