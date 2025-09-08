@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { authInterceptorInterceptor } from './auth-interceptor.interceptor';
+import { authInterceptor } from './auth-interceptor';
 
-describe('authInterceptorInterceptor', () => {
-  let service: authInterceptorInterceptor;
+describe('authInterceptor', () => {
+  let service: authInterceptor;
 
   //beforeEach(() => {
   //  TestBed.configureTestingModule({});

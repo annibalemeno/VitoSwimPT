@@ -15,7 +15,7 @@ import { PianiComponent } from './components/piani/piani.component';
 import { ShowPianiComponent } from './components/piani/show-piani/show-piani.component';
 import { AddEditPianiComponent } from './components/piani/add-edit-piani/add-edit-piani.component';
 import { DetailPianiComponent } from './components/piani/detail-piani/detail-piani.component';
-import { authInterceptorInterceptor} from './infrastructure/auth-interceptor.interceptor';
+import { authInterceptor} from './infrastructure/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import { authInterceptorInterceptor} from './infrastructure/auth-interceptor.int
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
-    useClass: authInterceptorInterceptor,
+    useClass: authInterceptor,
     multi: true,
   },],
   bootstrap: [AppComponent]
