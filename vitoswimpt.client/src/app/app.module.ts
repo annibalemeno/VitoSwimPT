@@ -19,7 +19,7 @@ import { authInterceptor} from './infrastructure/auth-interceptor';
 import { LoginUserComponent } from './components/user/login-user/login-user.component';
 import { RegisterUserComponent } from './components/user/register-user/register-user.component';
 import { DetailUserComponent } from './components/user/detail-user/detail-user.component';
-import { HomeComponent } from './home/home.component';
+import {HomeComponent } from './components/home/home.component'
 
 @NgModule({
   declarations: [
