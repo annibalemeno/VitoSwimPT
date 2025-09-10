@@ -1,4 +1,39 @@
-<div class="container">
+<!-- nav -->
+<nav class="navbar navbar-expand navbar-dark bg-dark px-3" *ngIf="loggedIn">
+  <div class="navbar-nav">
+    <a class="nav-item nav-link" routerLink="/piani" routerLinkActive="active">Piani</a>
+    <a class="nav-item nav-link" routerLink="/allenamenti" routerLinkActive="active">Allenamenti</a>
+    <a class="nav-item nav-link" routerLink="/esercizi" routerLinkActive="active">Esercizi</a>
+    <button class="btn btn-link nav-item nav-link" (click)="logout()">Logout</button>
+    <!--<a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>-->
+    <!--<a class="nav-item nav-link" routerLink="/users" routerLinkActive="active">Users</a>-->
+    <!--<button class="btn btn-link nav-item nav-link" (click)="logout()">Logout</button>-->
+  </div>
+</nav>
+
+<!-- main app container -->
+<div class="app-container bg-light">
+  <!--<alert></alert>npm ins-->
+  <router-outlet>
+
+    <!--<div *ngIf="!loggedIn">
+      <app-login-user></app-login-user>
+    </div>-->
+  </router-outlet>
+</div>
+
+<!-- credits -->
+<div class="text-center mt-4">
+  <p>
+    <a href="https://jasonwatmore.com/post/2022/11/29/angular-14-user-registration-and-login-example-tutorial" target="_top">Angular 14 - User Registration and Login Example & Tutorial</a>
+  </p>
+  <p>
+    <a href="https://jasonwatmore.com" target="_top">JasonWatmore.com</a>
+  </p>
+</div>
+
+
+<!--<div class="container">
 
   <div *ngIf="loggedIn">
     <h3 class="d-flex justify-content-center">VitoSwim PT</h3>
@@ -28,4 +63,4 @@
       <app-login-user></app-login-user>
     </div>
   </router-outlet>
-</div>
+</div>-->

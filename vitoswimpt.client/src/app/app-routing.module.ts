@@ -6,19 +6,23 @@ import { DetailAllenamentiComponent } from './components/allenamenti/detail-alle
 import { DetailPianiComponent} from './components/piani/detail-piani/detail-piani.component'
 import { PianiComponent } from './components/piani/piani.component'
 import { LoginUserComponent } from './components/user/login-user/login-user.component'
+import {RegisterUserComponent } from './components/user/register-user/register-user.component'
 import {HomeComponent } from './components/home/home.component'
 
 
 /*{ path: '', redirectTo: '/login', pathMatch: 'full' },*/
 
 const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+
   { path: 'esercizi', component: EserciziComponent },
   { path: 'allenamenti', component: AllenamentiComponent },
   { path: 'trainDetail/:id', component: DetailAllenamentiComponent },
   { path: 'pianiDetail/:id', component: DetailPianiComponent },
   { path: 'piani', component: PianiComponent },
   { path: 'login', component: LoginUserComponent },
-  { path: 'home', component: HomeComponent }
+  { path: 'home', component: HomeComponent },
+  { path: 'register', component: RegisterUserComponent}
 ];
 
 @NgModule({

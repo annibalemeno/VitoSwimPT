@@ -11,18 +11,21 @@ import { ApiserviceService } from '../../../apiservice.service';
 export class LoginUserComponent implements OnInit{
 
   constructor(private service: ApiserviceService, private router: Router) { }
+  loggedIn: boolean = false;
+  loading = false;
   login_mail = "";
   login_password = "";
 /*  loggedIn: boolean = false;*/
 
     ngOnInit(): void {
-      //if (sessionStorage.getItem('token') != null) {
-      //  this.loggedIn = true;
-      //}
+      if (sessionStorage.getItem('token') != null) {
+        this.loggedIn = true;
+      }
     }
 
 
   login() {
+    this.loading = true;
     let credentials = {
       "email": this.login_mail,
       "password": this.login_password
@@ -32,6 +35,7 @@ export class LoginUserComponent implements OnInit{
       console.log(data.value);
       sessionStorage.setItem('token', token.value);
       alert('Logged in successfully!');
+      this.loading = false;
       window.location.reload();
        /*this.router.navigate(['/home'])*/
     });
