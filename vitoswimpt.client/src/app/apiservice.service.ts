@@ -24,6 +24,14 @@ export class ApiserviceService {
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.http.post<any>(this.apiUrl + '/users/login', credentials, { headers });
   }
+
+  register(full_credentials: any): Observable<string> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.post<any>(this.apiUrl + '/users/register', full_credentials, { headers });
+  }
+
+
   // #endregion
 
 

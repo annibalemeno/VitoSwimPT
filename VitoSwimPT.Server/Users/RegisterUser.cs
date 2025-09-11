@@ -1,4 +1,5 @@
 ﻿using FluentEmail.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using VitoSwimPT.Server.Infrastructure;
@@ -10,7 +11,7 @@ namespace VitoSwimPT.Server.Users
     {
         public sealed record Request(string Email, string FirstName, string LastName, string Password);
 
-        public async Task<User> Handle(Request request)
+        public async Task<JsonResult> Handle(Request request)
         {
             if (await context.Utenti.Exists(request.Email))
             {
@@ -58,7 +59,7 @@ namespace VitoSwimPT.Server.Users
                 .Body($"To verify your email address <a href='{verificationLink}'>click here</a>", isHtml: true)
                 .SendAsync();
 
-            return user;
+            return new JsonResult(user);
         }
     }
 }
