@@ -1,4 +1,7 @@
-﻿namespace VitoSwimPT.Server.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using VitoSwimPT.Server.Users;
+
+namespace VitoSwimPT.Server.Models
 {
     public partial class Piano
     {
@@ -8,7 +11,12 @@
         public string? Note { get; set; }
         public DateTime InsertDateTime { get; set; }
 
+        public Guid Createdby { get; set; }
+
         public DateTime UpdateDateTime { get; set; }
+
+        [ForeignKey("Createdby")]
+        public User Utente { get; set; }
 
         //public IList<PianoAllenamento> PianiAllenamento { get; set; }
     }
