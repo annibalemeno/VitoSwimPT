@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Numerics;
 using VitoSwimPT.Server.Models;
@@ -9,6 +10,7 @@ namespace VitoSwimPT.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class EserciziAllenamentiController:ControllerBase
     {
         //private readonly ILogger<EserciziAllenamentiController> _logger;

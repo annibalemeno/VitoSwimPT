@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VitoSwimPT.Server.Models;
 
@@ -11,9 +12,11 @@ using VitoSwimPT.Server.Models;
 namespace VitoSwimPT.Server.Migrations
 {
     [DbContext(typeof(SwimContext))]
-    partial class SwimContextModelSnapshot : ModelSnapshot
+    [Migration("20250830111037_AddEmailVerifiedToUsers")]
+    partial class AddEmailVerifiedToUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,28 +175,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.ToTable("Stili");
                 });
 
-            modelBuilder.Entity("VitoSwimPT.Server.Users.EmailVerificationToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiresOnUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EmailVerificationTokens");
-                });
-
             modelBuilder.Entity("VitoSwimPT.Server.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -225,17 +206,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Utenti");
-                });
-
-            modelBuilder.Entity("VitoSwimPT.Server.Users.EmailVerificationToken", b =>
-                {
-                    b.HasOne("VitoSwimPT.Server.Users.User", "Utente")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Utente");
                 });
 #pragma warning restore 612, 618
         }

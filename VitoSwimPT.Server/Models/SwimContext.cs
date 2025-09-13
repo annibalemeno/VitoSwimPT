@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Xml;
+using VitoSwimPT.Server.Users;
 
 namespace VitoSwimPT.Server.Models
 {
@@ -18,7 +19,11 @@ namespace VitoSwimPT.Server.Models
         }
 
         //entities
-       public DbSet<Stile> Stili {  get; set; }
+
+        public DbSet<User> Utenti { get; set; }
+
+        public DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; }
+        public DbSet<Stile> Stili {  get; set; }
         public DbSet<Esercizio> Esercizi { get; set; }
         public DbSet<Allenamento> Allenamenti { get; set; }
         public DbSet<Piano> Piani { get; set; }

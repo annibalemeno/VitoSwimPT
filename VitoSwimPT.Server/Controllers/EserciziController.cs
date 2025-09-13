@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -10,6 +11,7 @@ namespace VitoSwimPT.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     //[EnableCors("AllowLocal")]
     public class EserciziController : ControllerBase
     {
@@ -48,6 +50,7 @@ namespace VitoSwimPT.Server.Controllers
         //}
 
         [HttpGet(Name = "GetEsercizi")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             try
@@ -75,6 +78,8 @@ namespace VitoSwimPT.Server.Controllers
         }
 
         [HttpGet("{id:int}")]
+
+        [AllowAnonymous]
         //[HttpDelete("{id}")]
         //[Route("DeleteEsercizi/{Id}")]
         //[Route("/{Id}")]
@@ -169,6 +174,7 @@ namespace VitoSwimPT.Server.Controllers
                 esToUpdate.Distanza = es.Distanza;
                 esToUpdate.Recupero = es.Recupero;
                 esToUpdate.StileId = stileId;
+                esToUpdate.UpdateDateTime = DateTime.Now;
 
                 await _eserciziRepo.UpdateEsercizio(esToUpdate);
                 return new JsonResult("Updated Successfully");

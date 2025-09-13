@@ -77,7 +77,6 @@ export class ShowEserciziComponent implements OnInit {
     }
   }
 
-
   closeClick() {
     this.ActivateAddEditEsercComp = false;
     this.refreshEserciziList();

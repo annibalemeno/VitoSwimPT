@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Numerics;
@@ -9,6 +10,7 @@ namespace VitoSwimPT.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class PianiController : ControllerBase
     {
         private readonly Serilog.ILogger _logger;
@@ -91,6 +93,7 @@ namespace VitoSwimPT.Server.Controllers
                 planToUpdate.NomePiano = plan.NomePiano;
                 planToUpdate.Descrizione = plan.Descrizione;
                 planToUpdate.Note = plan.Note;
+                planToUpdate.UpdateDateTime = DateTime.Now;
 
                 await _planRepo.UpdatePiano(planToUpdate);
                 return new JsonResult("Updated Successfully");
