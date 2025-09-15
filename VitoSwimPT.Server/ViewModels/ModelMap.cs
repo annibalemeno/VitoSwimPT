@@ -68,7 +68,7 @@ namespace VitoSwimPT.Server.ViewModels
                 //esVmList.Add(new EserciziVM(es.EsercizioId, es.Ripetizioni, es.Distanza, es.Recupero, "Fake Style"));
                 esVmList.Add(this.toViewModel(es));
             }
-            dettaglio.EserciziAssociati = esVmList;
+            //dettaglio.EserciziAssociati = esVmList;
 
             //es.Add (new EserciziVM( 1, 50, 4,100, "Trugeo"));
             //es.Add(new EserciziVM(2, 55, 6, 200, "Rana"));

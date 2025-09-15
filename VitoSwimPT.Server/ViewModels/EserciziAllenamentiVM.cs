@@ -4,6 +4,8 @@ namespace VitoSwimPT.Server.ViewModels
 {
     public class EserciziAllenamentiVM
     {
+
+        public EserciziAllenamentiVM() { }
         public EserciziAllenamentiVM(int allenamentoId, string nomeAllenamento, string note)
         {
             this.allenamentoId = allenamentoId;
@@ -15,10 +17,9 @@ namespace VitoSwimPT.Server.ViewModels
         public String nomeAllenamento { get; set; }
 
         public String note { get; set; }
-
         public List <EserciziVM>EserciziAssociati { get; set; } 
-
-
 
     }
 }
+
+

@@ -53,7 +53,8 @@ export class DetailAllenamentiComponent implements OnInit {
   getEsercizioAllenamentoData(id:number) {
     this.service.getEsercizioAllenamento(id).subscribe(data => {
       this.eserciziAllenamento = data;
-     /* console.log("EserciziAllenamento = ", data, 'ad Allenamento', this.id);*/
+      console.log(data);
+      //console.log("EserciziAllenamento = ", data, 'ad Allenamento', this.id);*/
     });
   }
 

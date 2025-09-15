@@ -1,7 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Exceptions;
@@ -63,15 +65,20 @@ builder.Services.AddScoped<IPianiAllenamentoRepository, PianiAllenamentoReposito
 
 builder.Services.AddDbContext<SwimContext>();
 
-// Auto Mapper Configurations
-var mapperConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new MappingProfile());
-});
+//// Auto Mapper Configurations
+//var mapperConfig = new MapperConfiguration(mc =>
+//{
+//    mc.AddProfile(new MappingProfile());
+//});
 
-IMapper mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+//builder.Services.AddScoped(map => mapperConfig.CreateMapper());
+
+//IMapper mapper = mapperConfig.CreateMapper();
+//builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<ModelMap>();
+//builder.Services.AddAutoMapper(typeof(IStartup).Assembly);
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
