@@ -27,8 +27,15 @@ builder.Services.AddCors(c =>
 //c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); undo
 
 
-
-
+builder.Services.AddProblemDetails(configure =>
+    {
+        configure.CustomizeProblemDetails = context =>
+        {
+            context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+        };
+    });
+// Register the global exception handler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 //Logging configuration
 Log.Logger = new LoggerConfiguration()
@@ -50,9 +57,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGenWithAuth();
-
-// Register the global exception handler
-builder.Services.AddExceptionHandler<SwimExceptionHandler>();
 
 builder.Services.AddHttpContextAccessor();
 

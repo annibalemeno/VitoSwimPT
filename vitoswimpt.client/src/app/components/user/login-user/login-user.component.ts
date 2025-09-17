@@ -38,7 +38,11 @@ export class LoginUserComponent implements OnInit{
       this.loading = false;
       window.location.reload();
        /*this.router.navigate(['/home'])*/
-    });
+    }, error => {
+      alert(error.error.title + ' : ' + error.error.detail);
+      this.loading = false;
+    }
+    );
 
   }
 
