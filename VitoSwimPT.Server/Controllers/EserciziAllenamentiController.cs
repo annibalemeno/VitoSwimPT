@@ -19,17 +19,15 @@ namespace VitoSwimPT.Server.Controllers
         private readonly IAllenamentoRepository _allenamentoRepo;
         private readonly IEsercizioRepository _esercizioRepo;
         private readonly IStiliRepository _stiliRepo;
-        private ModelMap _mapper;       //TODO
         private readonly IMapper _automapper;
         public EserciziAllenamentiController(Serilog.ILogger logger, IEserciziAllenamentiRepository trainingRepo, IAllenamentoRepository allenamentoRepo, IEsercizioRepository esercizioRepo,
-            IStiliRepository stiliRepo, ModelMap mapper, IMapper automapper)
+            IStiliRepository stiliRepo, IMapper automapper)
         {
             _trainingRepo = trainingRepo ?? throw new ArgumentNullException(nameof(trainingRepo));
             _allenamentoRepo = allenamentoRepo ?? throw new ArgumentNullException(nameof(allenamentoRepo));
             _esercizioRepo = esercizioRepo ?? throw new ArgumentNullException(nameof(esercizioRepo));
             _stiliRepo = stiliRepo ?? throw new ArgumentNullException(nameof(stiliRepo));
             _logger = logger;
-            _mapper = mapper;
             _automapper = automapper;
         }
 

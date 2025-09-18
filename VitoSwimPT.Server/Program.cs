@@ -81,7 +81,6 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 //IMapper mapper = mapperConfig.CreateMapper();
 //builder.Services.AddSingleton(mapper);
-builder.Services.AddScoped<ModelMap>();
 //builder.Services.AddAutoMapper(typeof(IStartup).Assembly);
 
 builder.Services.AddAuthorization();
