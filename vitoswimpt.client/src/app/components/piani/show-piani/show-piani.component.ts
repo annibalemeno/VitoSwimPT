@@ -35,11 +35,15 @@ export class ShowPianiComponent implements OnInit{
     }
 
   public refreshPianiList() {
-    this.service.getPianiList().subscribe(data => {
-      this.PianiList = data;
-      console.log("PianiList", this.PianiList);
-      this.PianiListWithoutFilter = data;
-    });
+    debugger;
+    if (sessionStorage.getItem('email') != null) {
+      let email = sessionStorage.getItem('email')!;
+      this.service.getPianiByUser(email).subscribe(data => {
+        this.PianiList = data;
+        console.log("PianiList", this.PianiList);
+        this.PianiListWithoutFilter = data;
+      });
+    }
   }
 
   sortResult(prop: any, asc: any) {

@@ -34,6 +34,7 @@ export class LoginUserComponent implements OnInit{
       let token = data;
       console.log(data.value);
       sessionStorage.setItem('token', token.value);
+      sessionStorage.setItem('email', this.login_mail);;
       alert('Logged in successfully!');
       this.loading = false;
       window.location.reload();

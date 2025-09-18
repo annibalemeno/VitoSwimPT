@@ -145,6 +145,13 @@ export class ApiserviceService {
     return this.http.get<Piani[]>(this.apiUrl + '/piani', { headers });
   }
 
+  getPianiByUser(email: string): Observable<Piani[]> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.get<Piani[]>(this.apiUrl + '/piani/getPianiByUser?email=' + email, { headers });
+  }
+  //
+
   addPiano(piano: Piani): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');

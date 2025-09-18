@@ -36,6 +36,14 @@ namespace VitoSwimPT.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet("GetPianiByUser")]
+        public async Task<IActionResult> GetPianiByUser(string email)
+        {
+            _logger.Debug("Controller Piani GetPianiByUser()");
+            return Ok(await _planRepo.GetPianiByUser(email));
+        }
+
         [HttpPost(Name = "AddPiano")]
         public async Task<IActionResult> Post(Piano plan)
         {

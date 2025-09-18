@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VitoSwimPT.Server.Models;
+using VitoSwimPT.Server.Users;
 
 namespace VitoSwimPT.Server.Repository
 {
     public interface IPianiRepository
     {
         Task<IEnumerable<Piano>> GetAllPiani();
+
+        Task<IEnumerable<Piano>> GetPianiByUser(string email);
 
         Task<Piano> GetPianoById(int pianoId);
 
@@ -65,6 +68,23 @@ namespace VitoSwimPT.Server.Repository
         public async Task<Piano> GetPianoById(int pianoId)
         {
             return await _swimDBContext.Piani.FindAsync(pianoId);
+        }
+
+        public async Task<IEnumerable<Piano>> GetPianiByUser(string email)
+        {
+            var pianiList = new List<Piano>();
+            User? user = await _swimDBContext.Utenti.GetByEmail(email);
+
+            if (user is null || !user.EmailVerified)
+            {
+                throw new Exception("The user was not found");
+            }
+            else
+            {
+                var userId = user.Id;
+                pianiList = await _swimDBContext.Piani.Where(p => p.Createdby == userId).ToListAsync();
+            }
+            return pianiList;
         }
     }
 }
