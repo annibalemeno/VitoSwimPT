@@ -161,7 +161,6 @@ export class ApiserviceService {
   updatePiano(piano: Piani): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-
     return this.http.put<Piani[]>(this.apiUrl + '/piani/UpdatePiano/', piano, { headers });
   }
 

@@ -3,5 +3,6 @@ export interface Piani {
   nomePiano: string;
   descrizione: string;
   note: string;
+  username: string;
 }
 

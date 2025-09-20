@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VitoSwimPT.Server.Models;
+using VitoSwimPT.Server.Users;
 
 namespace VitoSwimPT.Server.Repository
 {

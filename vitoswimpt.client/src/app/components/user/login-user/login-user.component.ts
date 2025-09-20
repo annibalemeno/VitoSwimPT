@@ -38,7 +38,6 @@ export class LoginUserComponent implements OnInit{
       alert('Logged in successfully!');
       this.loading = false;
       window.location.reload();
-       /*this.router.navigate(['/home'])*/
     }, error => {
       alert(error.error.title + ' : ' + error.error.detail);
       this.loading = false;

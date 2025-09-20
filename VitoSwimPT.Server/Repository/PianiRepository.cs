@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentEmail.Core;
+using Microsoft.EntityFrameworkCore;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Users;
 
@@ -14,9 +15,9 @@ namespace VitoSwimPT.Server.Repository
 
         bool DeletePiano(int Id);
 
-        Task<Piano> UpdatePiano(Piano plan);
+        Task<Piano> UpdatePiano(Piano plan, string username);
 
-        Task<Piano> InsertPiano(Piano plan);
+        Task<Piano> InsertPiano(Piano plan, string username);
     }
     
 
@@ -51,18 +52,40 @@ namespace VitoSwimPT.Server.Repository
             return result;
         }
 
-        public async Task<Piano> UpdatePiano(Piano plan)
+        public async Task<Piano> UpdatePiano(Piano plan, string username)
         {
-            _swimDBContext.Entry(plan).State = EntityState.Modified;
-            await _swimDBContext.SaveChangesAsync();
-            return plan;
+            User? user = await _swimDBContext.Utenti.GetByEmail(username);
+            if (user is null || !user.EmailVerified)
+            {
+                throw new Exception("The user was not found");
+            }
+            else
+            {
+                plan.Utente = user;
+                plan.UpdateDateTime = DateTime.Now;
+                _swimDBContext.Entry(plan).State = EntityState.Modified;
+                await _swimDBContext.SaveChangesAsync();
+                return plan;
+            }   
         }
 
-        public async Task<Piano> InsertPiano(Piano plan)
+        public async Task<Piano> InsertPiano(Piano plan, string username)
         {
-            _swimDBContext.Piani.Add(plan);
-            await _swimDBContext.SaveChangesAsync();
-            return plan;
+            User? user = await _swimDBContext.Utenti.GetByEmail(username);
+
+            if (user is null || !user.EmailVerified)
+            {
+                throw new Exception("The user was not found");
+            }
+            else
+            {
+                plan.Utente = user;
+                plan.InsertDateTime = DateTime.Now;
+                plan.UpdateDateTime = DateTime.Now;
+                _swimDBContext.Piani.Add(plan);
+                await _swimDBContext.SaveChangesAsync();
+                return plan;
+            }
         }
 
         public async Task<Piano> GetPianoById(int pianoId)

@@ -4,6 +4,7 @@ using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.Users;
 using VitoSwimPT.Server.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VitoSwimPT.Server.Infrastructure
 {
@@ -22,11 +23,13 @@ namespace VitoSwimPT.Server.Infrastructure
                  .ForMember(dest => dest.nomeAllenamento, act => act.MapFrom(src => src.NomeAllenamento))
                  .ForMember(dest => dest.note, act => act.MapFrom(src => src.Note));
 
-
+            CreateMap<PianiVM, Piano>().ForMember(dest => dest.PianoId, act => act.MapFrom(src => src.PianoId))
+                 .ForMember(dest => dest.NomePiano, act => act.MapFrom(src => src.NomePiano))
+                 .ForMember(dest => dest.Descrizione, act => act.MapFrom(src => src.Descrizione))
+                 .ForMember(dest => dest.Note, act => act.MapFrom(src => src.Note));
         }
     }
 }
-
 
 //CreateMap<Piano, PianiAllenamentoVM>().ForMember(dest => dest.piano.PianoId, act => act.MapFrom(src => src.PianoId))
 //    .ForMember(dest => dest.piano.NomePiano, act => act.MapFrom(src => src.NomePiano))
