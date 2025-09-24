@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace VitoSwimPT.Server.Infrastructure
 {
@@ -27,18 +27,20 @@ namespace VitoSwimPT.Server.Infrastructure
                 Exception = exception,
                 ProblemDetails = new ProblemDetails
                 {
+                    Title = "Validation Failed",
                     Detail = "One or more validation errors occurred",
-                    Status = StatusCodes.Status400BadRequest
+                    Status = StatusCodes.Status400BadRequest,
+                    Instance = httpContext.Request.Path.Value
                 }
             };
 
-            //var errors = validationException.Error
-            //    .GroupBy(e => e.PropertyName)
-            //    .ToDictionary(
-            //        g => g.Key.ToLowerInvariant(),
-            //        g => g.Select(e => e.ErrorMessage).ToArray()
-            //    );
-            //context.ProblemDetails.Extensions.Add("errors", errors);
+            var errors = validationException.Errors
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary(
+                    g => g.Key.ToLowerInvariant(),
+                    g => g.Select(e => e.ErrorMessage).ToArray()
+                );
+            context.ProblemDetails.Extensions.Add("errors", errors);
 
             return await problemDetailsService.TryWriteAsync(context);
         }

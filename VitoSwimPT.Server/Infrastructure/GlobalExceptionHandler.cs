@@ -25,6 +25,7 @@ namespace VitoSwimPT.Server.Infrastructure
             //        Detail = exception.Message
             //    });
             //return true;
+
             return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
             {
                 HttpContext = httpContext,

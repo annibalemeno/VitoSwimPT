@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ builder.Services.AddProblemDetails(configure =>
         };
     });
 // Register the global exception handler
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 //Logging configuration
@@ -102,6 +104,7 @@ builder.Services
     builder.Configuration["Email:Username"], builder.Configuration["Email:Password"]);
 
 
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes:true);
 
 builder.Services.AddScoped<LoginUser>();
 builder.Services.AddScoped<RegisterUser>();
