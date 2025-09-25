@@ -13,6 +13,7 @@ export class RegisterUserComponent {
   reg_lastname = "";
   reg_email = "";
   reg_password = "";
+  req_password_confirm = "";
   constructor(private service: ApiserviceService, private router: Router) { }
 
 
@@ -22,6 +23,7 @@ export class RegisterUserComponent {
       "lastname": this.reg_lastname,
       "email": this.reg_email,
       "password": this.reg_password,
+      "confirmPassword": this.req_password_confirm
   };
     let token = this.service.register(credentials).subscribe((data: any) => {
       let user = data;

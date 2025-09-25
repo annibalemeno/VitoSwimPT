@@ -25,6 +25,8 @@ namespace VitoSwimPT.Server.Validators
             RuleFor(r => r.Password).NotEmpty().WithMessage("Password is required")
                 .MinimumLength(8).WithMessage("Password must be at least 8 characters long");
 
+            RuleFor(r => r.confirmPassword).Equal(r => r.Password).WithMessage("Passwords do not match");
+
             RuleFor(r => r.Email).MustAsync(async (email, _) =>
             {
                 return await utenteRepository.IsEmailUiniqueAsync(email);

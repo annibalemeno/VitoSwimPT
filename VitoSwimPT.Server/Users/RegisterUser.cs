@@ -10,7 +10,7 @@ namespace VitoSwimPT.Server.Users
 {
     internal sealed class RegisterUser(SwimContext context, PasswordHasher passwordHasher, IFluentEmail fluentEmail, EmailVerificationLinkFactory emailfactory, IValidator<RegisterUser.Request> validator)
     {
-        public sealed record Request(string Email, string FirstName, string LastName, string Password);
+        public sealed record Request(string Email, string FirstName, string LastName, string Password, string confirmPassword);
 
         public async Task<JsonResult> Handle(Request request)
         {
@@ -68,7 +68,6 @@ namespace VitoSwimPT.Server.Users
             }
             catch (ValidationException ex)
             {
-
                 throw;
             }
 
@@ -90,12 +89,6 @@ namespace VitoSwimPT.Server.Users
             //{
             //}
 
-
-           
-
-
         }
-
-
     }
 }

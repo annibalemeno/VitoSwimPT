@@ -18,7 +18,7 @@ namespace VitoSwimPT.Server.Repository
         }
         public async Task<bool> IsEmailUiniqueAsync(string email)
         {
-            return await _swimDBContext.Utenti.AnyAsync(u => u.Email == email);
+            return !await _swimDBContext.Utenti.AnyAsync(u => u.Email == email);
         }
     }
 }
