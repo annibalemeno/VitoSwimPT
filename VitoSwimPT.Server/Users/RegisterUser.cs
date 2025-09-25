@@ -16,12 +16,12 @@ namespace VitoSwimPT.Server.Users
         {
             try
             {
-                validator.ValidateAndThrow(request);
+                await validator.ValidateAndThrowAsync(request);
 
-                if (await context.Utenti.Exists(request.Email))
-                {
-                    throw new Exception("The email is already in use");
-                }
+                //if (await context.Utenti.Exists(request.Email))
+                //{
+                //    throw new Exception("The email is already in use");
+                //}
 
                 var user = new User
                 {
@@ -53,7 +53,7 @@ namespace VitoSwimPT.Server.Users
                 catch (DbUpdateException e)
                 //  when (e.InnerException is NpgsqlException { SqlState: PostgresErrorCodes.UniqueViolation })
                 {
-                    throw new Exception("The email is already in use", e);
+                    throw new Exception("Error registering User", e);
                 }
 
                 string verificationLink = emailfactory.Create(verificationToken);
@@ -66,7 +66,7 @@ namespace VitoSwimPT.Server.Users
 
                 return new JsonResult(user);
             }
-            catch (Exception ex)
+            catch (ValidationException ex)
             {
 
                 throw;

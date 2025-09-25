@@ -32,8 +32,9 @@ export class RegisterUserComponent {
       //alert('Logged in successfully!');
       //this.loading = false;
       //window.location.reload();   
+    }, error => {
+      alert(error.error.title + ' : ' + error.error.detail);
     });
-
   }
 
 }

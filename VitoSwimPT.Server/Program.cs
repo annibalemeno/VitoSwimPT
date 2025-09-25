@@ -68,6 +68,7 @@ builder.Services.AddScoped<IStiliRepository, StiliRepository>();
 builder.Services.AddScoped<IEserciziAllenamentiRepository, EserciziAllenamentiRepository>();
 builder.Services.AddScoped<IPianiRepository, PianiRepository>();
 builder.Services.AddScoped<IPianiAllenamentoRepository, PianiAllenamentoRepository>();
+builder.Services.AddScoped<IUtenteRepository, UtentiRepository>();
 
 builder.Services.AddDbContext<SwimContext>();
 

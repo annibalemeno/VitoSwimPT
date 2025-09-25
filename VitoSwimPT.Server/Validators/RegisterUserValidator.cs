@@ -1,11 +1,13 @@
-﻿using FluentValidation;
+﻿using FluentEmail.Core;
+using FluentValidation;
+using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.Users;
 
 namespace VitoSwimPT.Server.Validators
 {
     internal sealed class RegisterUserValidator:AbstractValidator<RegisterUser.Request>
     {
-        public RegisterUserValidator()
+        public RegisterUserValidator(IUtenteRepository utenteRepository)
         {
             //string Email, string FirstName, string LastName, string Password
 
@@ -23,10 +25,15 @@ namespace VitoSwimPT.Server.Validators
             RuleFor(r => r.Password).NotEmpty().WithMessage("Password is required")
                 .MinimumLength(8).WithMessage("Password must be at least 8 characters long");
 
+            RuleFor(r => r.Email).MustAsync(async (email, _) =>
+            {
+                return await utenteRepository.IsEmailUiniqueAsync(email);
+            }).WithMessage("The email is already in use");
+
             //Confirm Password
             //RuleFor(r => r.Password)
             //    .Equal(r => r.Password).WithMessage("Password do not match");
-              
+
         }
     }
 }
