@@ -92,7 +92,18 @@ namespace VitoSwimPT.Server.Controllers
             try
             {
                 _logger.Debug($"Controller EserciziAllenamenti GetAssociabili(id) with id = {id}");
-                return Ok(await _trainingRepo.GetEserciziAssociabiliAllenamento(id));
+                var eserciziAssociabili = await _trainingRepo.GetEserciziAssociabiliAllenamento(id);
+                
+                var eserciziVMassociabili = new List<EserciziVM>();
+                foreach(var es in eserciziAssociabili)
+                {
+                    var esercizioVM = _automapper.Map<EserciziVM>(es);
+                    string stile = _stiliRepo.GetStileById(es.StileId).Result.Nome;
+                    esercizioVM.Stile = stile;
+                    eserciziVMassociabili.Add(esercizioVM);
+                }
+
+                return Ok(eserciziVMassociabili);
             }
             catch (Exception ex)
             {
