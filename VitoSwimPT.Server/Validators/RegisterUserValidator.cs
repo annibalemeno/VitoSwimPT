@@ -5,7 +5,7 @@ using VitoSwimPT.Server.Users;
 
 namespace VitoSwimPT.Server.Validators
 {
-    internal sealed class RegisterUserValidator:AbstractValidator<RegisterUser.Request>
+    public  class RegisterUserValidator:AbstractValidator<RegisterUser.Request>
     {
         public RegisterUserValidator(IUtenteRepository utenteRepository)
         {

@@ -16,7 +16,7 @@ namespace VitoSwimPT.Server.Repository
         {
             _swimDBContext = swimContext ?? throw new ArgumentNullException(nameof(swimContext));
         }
-        public async Task<bool> IsEmailUiniqueAsync(string email)
+        public async virtual Task<bool> IsEmailUiniqueAsync(string email)
         {
             return !await _swimDBContext.Utenti.AnyAsync(u => u.Email == email);
         }

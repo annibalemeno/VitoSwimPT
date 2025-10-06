@@ -2,7 +2,7 @@
 
 namespace VitoSwimPT.Server.Infrastructure
 {
-    internal sealed class EmailVerificationLinkFactory(IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
+    public class EmailVerificationLinkFactory(IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
     {
         public string Create(EmailVerificationToken emailVerificationToken)
         {
