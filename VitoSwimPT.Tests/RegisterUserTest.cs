@@ -1,6 +1,5 @@
-using Castle.Core.Configuration;
+using Microsoft.Extensions.Configuration;
 using FluentValidation;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using NSubstitute;
 using NSubstitute.Extensions;
 using VitoSwimPT.Server.Models;
@@ -14,52 +13,99 @@ namespace VitoSwimPT.Tests
 
     public class RegisterUserTest
     {
-        //[Fact]
-        //public void Test1()
-        //{
-        //    // Arrange
-        //    int a = 3;
-        //    int b = 5;
+        private readonly IConfiguration _configMock;
+        private readonly SwimContext _swimContextMock;
+        private readonly UtentiRepository _utentiRepositoryMock;
+        private readonly RegisterUserValidator _validator;
 
-        //    // Act
-        //    int result = a + b;
-
-        //    // Assert
-        //    Assert.Equal(8, result); // Check if the result is as expected.
-        //}
-
-        // public sealed record Request(string Email, string FirstName, string LastName, string Password, string confirmPassword);
+        public RegisterUserTest()
+        {
+            _configMock = Substitute.For<IConfiguration>();
+            _swimContextMock = Substitute.For<SwimContext>(_configMock);
+            _utentiRepositoryMock = Substitute.For<UtentiRepository>(_swimContextMock);
+            _utentiRepositoryMock.Configure().IsEmailUiniqueAsync(Arg.Any<string>()).Returns(Task.FromResult(false));
+            _validator = new RegisterUserValidator(_utentiRepositoryMock);
+        }
 
         [Fact]
-        public void Register_ShouldReturnError_WhenEmailEmpty()
+        public async void Register_ShouldReturnError_WhenFirstNameEmpty()
         {
             //Arrange
-            RegisterUser.Request testRequest = new RegisterUser.Request("mail","name","surname","pwd","pwd");
-            var _configMock = Substitute.For<Microsoft.Extensions.Configuration.IConfiguration>();
-            var _swimContextMock = Substitute.For<SwimContext>(_configMock);
-            var _utentiRepositoryMock = Substitute.For<UtentiRepository>(_swimContextMock);
+            RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com",string.Empty,"lastname","CorrectPwd82", "CorrectPwd82");
 
-            _utentiRepositoryMock.Configure().IsEmailUiniqueAsync(Arg.Any<string>()).Returns(true);
-
-
-            RegisterUserValidator validator = new RegisterUserValidator(_utentiRepositoryMock);
-
-            //RegisterUser.Request testRequest = new RegisterUser.Request("mail","name","surname","pwd","pwd");
-            //RegisterUser useCase = null;
-            //IValidator<RegisterUser.Request> validator;
             //Act
-            var result = validator.ValidateAsync(testRequest);
-
-            //var tmp =  async (RegisterUser.Request request, RegisterUser useCase) =>
-            //    await useCase.Handle(request);
-
-            //var result = useCase.Handle(testRequest);
-
-            //public async Task<JsonResult> Handle(Request request)
+            var result = await _validator.ValidateAsync(testRequest);
+            string errorMessage = result.Errors.First().ErrorMessage;
 
             //Assert
-            Assert.Equal(1, 1);
+            Assert.Equal("First Name is required", errorMessage);
         }
-            
+        [Fact]
+        public async void Register_ShouldReturnError_WhenLastNameEmpty()
+        {
+            //Arrange
+            RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com", "firstname", string.Empty, "CorrectPwd82", "CorrectPwd82");
+
+            //Act
+            var result = await _validator.ValidateAsync(testRequest);
+            string errorMessage = result.Errors.First().ErrorMessage;
+
+            //Assert
+            Assert.Equal("Last Name is required", errorMessage);
+        }
+
+        [Fact]
+        public async void Register_ShouldReturnError_WhenPasswordShort()
+        {
+            //Arrange
+            RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com", "firstname", "lastname", "Short82", "Short82");
+
+            //Act
+            var result = await _validator.ValidateAsync(testRequest);
+            string errorMessage = result.Errors.First().ErrorMessage;
+
+            //Assert
+            Assert.Equal("Password must be at least 8 characters long", errorMessage);
+        }
+        [Fact]
+        public async void Register_ShouldReturnError_WhenPasswordNotWellFormed()
+        {
+            //Arrange
+            RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com", "firstname", "lastname", "PasswordNotWell", "PasswordNotWell");
+
+            //Act
+            var result = await _validator.ValidateAsync(testRequest);
+            string errorMessage = result.Errors.First().ErrorMessage;
+
+            //Assert
+            Assert.Equal("Password should contain letters, digits and uppercase", errorMessage);
+        }
+        [Fact]
+        public async void Register_ShouldReturnError_WhenPasswordNotMatch()
+        {
+            //Arrange
+            RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com", "firstname", "lastname", "Password82", "Password71");
+
+            //Act
+            var result = await _validator.ValidateAsync(testRequest);
+            string errorMessage = result.Errors.First().ErrorMessage;
+
+            //Assert
+            Assert.Equal("Passwords do not match", errorMessage);
+        }
+        [Fact]
+        public async void Register_ShouldReturnError_WhenEmailInUse()
+        {
+            //Arrange
+            RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com", "firstname", "lastname", "Password82", "Password82");
+
+            //Act
+            var result = await _validator.ValidateAsync(testRequest);
+            string errorMessage = result.Errors.First().ErrorMessage;
+
+            //Assert
+            Assert.Equal("The email is already in use", errorMessage);
+        }
+
     }
 }
