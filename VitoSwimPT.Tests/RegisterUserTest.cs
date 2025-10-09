@@ -1,5 +1,6 @@
-using Microsoft.Extensions.Configuration;
+using FluentEmail.Core;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using NSubstitute.Extensions;
 using VitoSwimPT.Server.Models;
@@ -80,11 +81,13 @@ namespace VitoSwimPT.Tests
             //Assert
             Assert.Equal("Password should contain letters, digits and uppercase", errorMessage);
         }
-        [Fact]
-        public async void Register_ShouldReturnError_WhenPasswordNotMatch()
+
+        [Theory]
+        [InlineData("mail@mail.com", "firstname", "lastname", "Password82", "Password71")]
+        public async void Register_ShouldReturnError_WhenPasswordNotMatch(string email, string firstname, string lastname, string password, string confirmPassword)
         {
             //Arrange
-            RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com", "firstname", "lastname", "Password82", "Password71");
+            RegisterUser.Request testRequest = new RegisterUser.Request(email, firstname, lastname, password, confirmPassword);
 
             //Act
             var result = await _validator.ValidateAsync(testRequest);
@@ -93,11 +96,21 @@ namespace VitoSwimPT.Tests
             //Assert
             Assert.Equal("Passwords do not match", errorMessage);
         }
-        [Fact]
-        public async void Register_ShouldReturnError_WhenEmailInUse()
+
+        public class RegisterTestData : TheoryData<RegisterUser.Request>
+        {
+            public RegisterTestData()
+            {
+                Add(new RegisterUser.Request("mail@mail.com", "firstname", "lastname", "Password82", "Password82"));
+            }
+        }
+
+        [Theory]
+        [ClassData(typeof(RegisterTestData))]
+        public async void Register_ShouldReturnError_WhenEmailInUse(RegisterUser.Request testRequest)
         {
             //Arrange
-            RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com", "firstname", "lastname", "Password82", "Password82");
+            //RegisterUser.Request testRequest = new RegisterUser.Request("mail@mail.com", "firstname", "lastname", "Password82", "Password82");
 
             //Act
             var result = await _validator.ValidateAsync(testRequest);
