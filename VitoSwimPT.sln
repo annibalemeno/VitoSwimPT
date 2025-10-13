@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VitoSwimPT.Server", "VitoSw
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "vitoswimpt.client", "vitoswimpt.client\vitoswimpt.client.esproj", "{2472C563-837A-4C0C-B71A-34689B97765B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VitoSwimPT.Tests", "VitoSwimPT.Tests\VitoSwimPT.Tests.csproj", "{EEFC5ED0-22F8-42AE-998E-CA13884E8004}"
+	ProjectSection(ProjectDependencies) = postProject
+		{49CF0FB6-8D36-4D89-B1BC-A3F5CF5E51BC} = {49CF0FB6-8D36-4D89-B1BC-A3F5CF5E51BC}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +28,10 @@ Global
 		{2472C563-837A-4C0C-B71A-34689B97765B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2472C563-837A-4C0C-B71A-34689B97765B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2472C563-837A-4C0C-B71A-34689B97765B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{EEFC5ED0-22F8-42AE-998E-CA13884E8004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEFC5ED0-22F8-42AE-998E-CA13884E8004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEFC5ED0-22F8-42AE-998E-CA13884E8004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEFC5ED0-22F8-42AE-998E-CA13884E8004}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

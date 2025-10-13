@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace VitoSwimPT.Server.Controllers
         private readonly Serilog.ILogger _logger;
         private readonly IEsercizioRepository _eserciziRepo;
         private readonly IStiliRepository _stiliRepo;
-        private ModelMap _mapper;
+        private readonly IMapper _mapper;
 
         private static readonly string[] Stiles = new[]
         {
@@ -27,7 +28,7 @@ namespace VitoSwimPT.Server.Controllers
 
         //private readonly ILogger<EserciziController> _logger;
 
-        public EserciziController(Serilog.ILogger logger, IEsercizioRepository repo, IStiliRepository slrepo, ModelMap mapper)
+        public EserciziController(Serilog.ILogger logger, IEsercizioRepository repo, IStiliRepository slrepo, IMapper mapper)   
         {
             _eserciziRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _stiliRepo = slrepo ?? throw new ArgumentNullException(nameof(slrepo));
@@ -63,9 +64,11 @@ namespace VitoSwimPT.Server.Controllers
                 foreach (var item in esercizi)
                 {
                     var stile = await _stiliRepo.GetStileById(item.StileId);
-                    var esercizio = _mapper.toViewModel(item);
+
+                    var esercizio = _mapper.Map<EserciziVM>(item);
+
+
                     esercizio.Stile = stile.Nome;
-                    //eserciziList.Add(_mapper.toViewModel(item));
                     eserciziList.Add(esercizio);
                 }
                 return Ok(eserciziList);

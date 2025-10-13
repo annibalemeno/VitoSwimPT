@@ -16,13 +16,18 @@ namespace VitoSwimPT.Server.Controllers
         //private readonly ILogger<EserciziAllenamentiController> _logger;
         private readonly Serilog.ILogger _logger;
         private readonly IEserciziAllenamentiRepository _trainingRepo;
-        private ModelMap _mapper;       //TODO
+        private readonly IAllenamentoRepository _allenamentoRepo;
+        private readonly IEsercizioRepository _esercizioRepo;
+        private readonly IStiliRepository _stiliRepo;
         private readonly IMapper _automapper;
-        public EserciziAllenamentiController(Serilog.ILogger logger, IEserciziAllenamentiRepository trainingRepo, ModelMap mapper, IMapper automapper)
+        public EserciziAllenamentiController(Serilog.ILogger logger, IEserciziAllenamentiRepository trainingRepo, IAllenamentoRepository allenamentoRepo, IEsercizioRepository esercizioRepo,
+            IStiliRepository stiliRepo, IMapper automapper)
         {
             _trainingRepo = trainingRepo ?? throw new ArgumentNullException(nameof(trainingRepo));
+            _allenamentoRepo = allenamentoRepo ?? throw new ArgumentNullException(nameof(allenamentoRepo));
+            _esercizioRepo = esercizioRepo ?? throw new ArgumentNullException(nameof(esercizioRepo));
+            _stiliRepo = stiliRepo ?? throw new ArgumentNullException(nameof(stiliRepo));
             _logger = logger;
-            _mapper = mapper;
             _automapper = automapper;
         }
 
@@ -49,8 +54,26 @@ namespace VitoSwimPT.Server.Controllers
 
                 _logger.Debug($"Controller EserciziAllenamenti Get(id) with id = {id}");
 
-                IEnumerable<EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id); // await
-                var trainvVM = _automapper.Map<EserciziVM>(training);
+                IEnumerable<EsercizioAllenamento> training = await _trainingRepo.GetEserciziAllenamentoByID(id);
+                var allenamento = await _allenamentoRepo.GetAllenamentoById(training.FirstOrDefault().AllenamentoId);
+                var trainvVM = _automapper.Map<EserciziAllenamentiVM>(allenamento);
+
+                var eserciziAssociati = new List<Esercizio>();
+                var eserciziAssociatiDTO = new List<EserciziVM>();
+                foreach (var item in training.Select(x => x.EsercizioId).ToList())
+                {
+                    var esercizio = _esercizioRepo.GetEsercizioByID(item).Result;
+                    eserciziAssociati.Add(esercizio);
+                }
+                foreach (var item in eserciziAssociati)
+                {
+                    var esercizioDTO = _automapper.Map<EserciziVM>(item);
+                    string nomeStile = _stiliRepo.GetStileById(item.StileId).Result.Nome;
+                    esercizioDTO.Stile = nomeStile;
+                    eserciziAssociatiDTO.Add(esercizioDTO);
+                }
+
+                trainvVM.EserciziAssociati = eserciziAssociatiDTO;
                 //
                 //var trainVM = _mapper.toViewModel(training);       //robustezza
 
@@ -69,7 +92,18 @@ namespace VitoSwimPT.Server.Controllers
             try
             {
                 _logger.Debug($"Controller EserciziAllenamenti GetAssociabili(id) with id = {id}");
-                return Ok(await _trainingRepo.GetEserciziAssociabiliAllenamento(id));
+                var eserciziAssociabili = await _trainingRepo.GetEserciziAssociabiliAllenamento(id);
+                
+                var eserciziVMassociabili = new List<EserciziVM>();
+                foreach(var es in eserciziAssociabili)
+                {
+                    var esercizioVM = _automapper.Map<EserciziVM>(es);
+                    string stile = _stiliRepo.GetStileById(es.StileId).Result.Nome;
+                    esercizioVM.Stile = stile;
+                    eserciziVMassociabili.Add(esercizioVM);
+                }
+
+                return Ok(eserciziVMassociabili);
             }
             catch (Exception ex)
             {

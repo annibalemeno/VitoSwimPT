@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VitoSwimPT.Server.Models;
 
@@ -11,9 +12,11 @@ using VitoSwimPT.Server.Models;
 namespace VitoSwimPT.Server.Migrations
 {
     [DbContext(typeof(SwimContext))]
-    partial class SwimContextModelSnapshot : ModelSnapshot
+    [Migration("20250913091435_PianoCreatedBy")]
+    partial class PianoCreatedBy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,45 +24,6 @@ namespace VitoSwimPT.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("VitoSwimPT.Server.AllenamentiUtente.AllenamentoUtente", b =>
-                {
-                    b.Property<int>("AllenamentoUtenteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AllenamentoUtenteId"));
-
-                    b.Property<int>("AllenamentoId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DateDone")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DatePlanned")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DoneBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("InsertDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.HasKey("AllenamentoUtenteId");
-
-                    b.HasIndex("AllenamentoId");
-
-                    b.HasIndex("DoneBy");
-
-                    b.ToTable("AllenamentiUtente");
-                });
 
             modelBuilder.Entity("VitoSwimPT.Server.Models.Allenamento", b =>
                 {
@@ -150,9 +114,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.Property<string>("Descrizione")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("InsertDateTime")
                         .HasColumnType("datetime2");
 
@@ -161,9 +122,6 @@ namespace VitoSwimPT.Server.Migrations
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UpdateDateTime")
                         .HasColumnType("datetime2");
@@ -275,25 +233,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Utenti");
-                });
-
-            modelBuilder.Entity("VitoSwimPT.Server.AllenamentiUtente.AllenamentoUtente", b =>
-                {
-                    b.HasOne("VitoSwimPT.Server.Models.Allenamento", "Allenamento")
-                        .WithMany()
-                        .HasForeignKey("AllenamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VitoSwimPT.Server.Users.User", "Utente")
-                        .WithMany()
-                        .HasForeignKey("DoneBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Allenamento");
-
-                    b.Navigation("Utente");
                 });
 
             modelBuilder.Entity("VitoSwimPT.Server.Models.Piano", b =>

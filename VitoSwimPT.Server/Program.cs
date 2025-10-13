@@ -1,7 +1,10 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Exceptions;
@@ -25,8 +28,16 @@ builder.Services.AddCors(c =>
 //c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); undo
 
 
-
-
+builder.Services.AddProblemDetails(configure =>
+    {
+        configure.CustomizeProblemDetails = context =>
+        {
+            context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+        };
+    });
+// Register the global exception handler
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 //Logging configuration
 Log.Logger = new LoggerConfiguration()
@@ -49,9 +60,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGenWithAuth();
 
-// Register the global exception handler
-builder.Services.AddExceptionHandler<SwimExceptionHandler>();
-
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IEsercizioRepository, EserciziRepository>();
@@ -60,18 +68,23 @@ builder.Services.AddScoped<IStiliRepository, StiliRepository>();
 builder.Services.AddScoped<IEserciziAllenamentiRepository, EserciziAllenamentiRepository>();
 builder.Services.AddScoped<IPianiRepository, PianiRepository>();
 builder.Services.AddScoped<IPianiAllenamentoRepository, PianiAllenamentoRepository>();
+builder.Services.AddScoped<IUtenteRepository, UtentiRepository>();
 
 builder.Services.AddDbContext<SwimContext>();
 
-// Auto Mapper Configurations
-var mapperConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new MappingProfile());
-});
+//// Auto Mapper Configurations
+//var mapperConfig = new MapperConfiguration(mc =>
+//{
+//    mc.AddProfile(new MappingProfile());
+//});
 
-IMapper mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
-builder.Services.AddScoped<ModelMap>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+//builder.Services.AddScoped(map => mapperConfig.CreateMapper());
+
+//IMapper mapper = mapperConfig.CreateMapper();
+//builder.Services.AddSingleton(mapper);
+//builder.Services.AddAutoMapper(typeof(IStartup).Assembly);
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
@@ -92,6 +105,7 @@ builder.Services
     builder.Configuration["Email:Username"], builder.Configuration["Email:Password"]);
 
 
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes:true);
 
 builder.Services.AddScoped<LoginUser>();
 builder.Services.AddScoped<RegisterUser>();

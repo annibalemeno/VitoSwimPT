@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Numerics;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
+using VitoSwimPT.Server.ViewModels;
 
 namespace VitoSwimPT.Server.Controllers
 {
@@ -15,10 +17,12 @@ namespace VitoSwimPT.Server.Controllers
     {
         private readonly Serilog.ILogger _logger;
         private readonly IPianiRepository _planRepo;
-        public PianiController(Serilog.ILogger logger, IPianiRepository repo)
+        private readonly IMapper _automapper;
+        public PianiController(Serilog.ILogger logger, IPianiRepository repo, IMapper automapper)
         {
             _planRepo = repo ?? throw new ArgumentNullException(nameof(repo));
             _logger = logger;
+            _automapper = automapper;
         }
 
         [HttpGet(Name = "GetPiani")]
@@ -36,13 +40,24 @@ namespace VitoSwimPT.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet("GetPianiByUser")]
+        public async Task<IActionResult> GetPianiByUser(string email)
+        {
+            _logger.Debug("Controller Piani GetPianiByUser()");
+            return Ok(await _planRepo.GetPianiByUser(email));
+        }
+
         [HttpPost(Name = "AddPiano")]
-        public async Task<IActionResult> Post(Piano plan)
+        public async Task<IActionResult> Post(PianiVM plan)
         {
             try
             {
                 _logger.Debug($"Controller Piani Post(plan) with plan = {plan}");
-                var result = await _planRepo.InsertPiano(plan);
+
+                Piano piano = _automapper.Map<Piano>(plan);
+
+                var result = await _planRepo.InsertPiano(piano, plan.Username);
                 if (result.PianoId == 0)
                 {
                     return new JsonResult(StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong"));
@@ -81,21 +96,23 @@ namespace VitoSwimPT.Server.Controllers
 
         [HttpPut]
         [Route("UpdatePiano")]
-        public async Task<IActionResult> Put(Piano plan)
+        public async Task<IActionResult> Put(PianiVM plan)
         {
             try
             {
                 _logger.Debug($"Controller Piani Put(plan) with plan = {plan} ");
                 //get plan by id
-                Piano planToUpdate = await _planRepo.GetPianoById(plan.PianoId);
+                //Piano planToUpdate = await _planRepo.GetPianoById(plan.PianoId);
 
                 //gestisco modifiche
-                planToUpdate.NomePiano = plan.NomePiano;
-                planToUpdate.Descrizione = plan.Descrizione;
-                planToUpdate.Note = plan.Note;
-                planToUpdate.UpdateDateTime = DateTime.Now;
+                //planToUpdate.NomePiano = plan.NomePiano;
+                //planToUpdate.Descrizione = plan.Descrizione;
+                //planToUpdate.Note = plan.Note;
+                //planToUpdate.UpdateDateTime = DateTime.Now;
 
-                await _planRepo.UpdatePiano(planToUpdate);
+                
+               Piano planToUpdate = _automapper.Map<Piano>( plan );
+                await _planRepo.UpdatePiano(planToUpdate,plan.Username);
                 return new JsonResult("Updated Successfully");
             }
             catch (Exception ex)

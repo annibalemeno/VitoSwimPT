@@ -2,7 +2,7 @@
 
 namespace VitoSwimPT.Server.Infrastructure
 {
-    internal sealed class PasswordHasher
+    public class PasswordHasher
     {
         private const int SaltSize = 16;
         private const int HashSize = 32;

@@ -5,5 +5,7 @@ export interface EserciziAllenamento {
   nomeAllenamento: string;
   note: string;
 
-  EserciziAssociati: Esercizi[];
+  
 }
+
+//EserciziAssociati: Esercizi[];

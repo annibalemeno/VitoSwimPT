@@ -35,8 +35,10 @@ export class AddEditPianiComponent implements OnInit {
       pianoId: this.PianoId,
       nomePiano: this.NomePiano,
       descrizione: this.Descrizione,
-      note: this.Note
+      note: this.Note,
+      username: sessionStorage.getItem('email')!
     };
+
 
     this.service.addPiano(pianoToAdd).subscribe(data => {
       alert(data.toString());
@@ -49,12 +51,17 @@ export class AddEditPianiComponent implements OnInit {
       pianoId: this.PianoId,
       nomePiano: this.NomePiano,
       descrizione: this.Descrizione,
-      note: this.Note
+      note: this.Note,
+      username: sessionStorage.getItem('email')!
     };
-
     this.service.updatePiano(pianoToUpd).subscribe(data => {
       alert(data.toString());
-    });
+    },
+      error => {
+        debugger;
+        alert(error.error.title + ' : ' + error.error.detail);
+      }
+    );
 }
 
 }

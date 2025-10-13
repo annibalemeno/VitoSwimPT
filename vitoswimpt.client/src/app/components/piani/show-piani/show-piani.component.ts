@@ -26,20 +26,23 @@ export class ShowPianiComponent implements OnInit{
     pianoId: 0,
     nomePiano: "",
     descrizione: "",
-    note: ""
+    note: "",
+    username: ""
   };
-
 
     ngOnInit(): void {
       this.refreshPianiList();
     }
 
   public refreshPianiList() {
-    this.service.getPianiList().subscribe(data => {
-      this.PianiList = data;
-      console.log("PianiList", this.PianiList);
-      this.PianiListWithoutFilter = data;
-    });
+    if (sessionStorage.getItem('email') != null) {
+      let email = sessionStorage.getItem('email')!;
+      this.service.getPianiByUser(email).subscribe(data => {
+        this.PianiList = data;
+        console.log("PianiList", this.PianiList);
+        this.PianiListWithoutFilter = data;
+      });
+    }
   }
 
   sortResult(prop: any, asc: any) {
@@ -78,7 +81,8 @@ export class ShowPianiComponent implements OnInit{
       pianoId: 0,
       nomePiano: "",
       descrizione: "",
-      note: ""
+      note: "",
+      username: sessionStorage.getItem('email')!
     };
 
     this.ModalTitle = "Add Piano";
@@ -95,7 +99,8 @@ export class ShowPianiComponent implements OnInit{
       pianoId: item.pianoId,
       nomePiano: item.nomePiano,
       descrizione: item.descrizione,
-      note: item.note
+      note: item.note,
+      username: sessionStorage.getItem('email')!
     };
 
 /*    this.plan = item;*/

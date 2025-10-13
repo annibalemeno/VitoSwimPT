@@ -11,6 +11,8 @@
             this.Stile = stile;
         }
 
+        public EserciziVM() { }
+
         public int EsercizioId { get; set; }
         public int Ripetizioni { get; set; }
 

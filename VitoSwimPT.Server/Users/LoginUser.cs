@@ -11,34 +11,42 @@ namespace VitoSwimPT.Server.Users
         public sealed record Request(string Email, string Password);
         public async Task<JsonResult> Handle(Request request)
         {
-            User? user = await context.Utenti.GetByEmail(request.Email);
-
-            if (user is null || !user.EmailVerified)
+            try
             {
-                throw new Exception("The user was not found");
+                User? user = await context.Utenti.GetByEmail(request.Email);
+
+                if (user is null || !user.EmailVerified)
+                {
+                    throw new Exception("The user was not found");
+                }
+
+
+                //string hashedpassword = passwordHasher.Hash(request.Password);
+                bool verified = passwordHasher.Verify(request.Password, user.PasswordHash);
+
+                if (!verified)
+                {
+                    throw new Exception("The password is incorrect");
+                }
+
+                var testUser = new User()
+                {
+                    Id = Guid.NewGuid(),
+                    Email = request.Email,
+                    FirstName = "Annibale",
+                    LastName = "Menolascina",
+                    PasswordHash = request.Password,
+                    EmailVerified = false
+                };
+                string token = tokenProvider.Create(testUser);
+
+                return new JsonResult(token);
             }
-
-
-            //string hashedpassword = passwordHasher.Hash(request.Password);
-            bool verified = passwordHasher.Verify(request.Password, user.PasswordHash);
-
-            if (!verified)
+            catch (Exception ex)
             {
-                throw new Exception("The password is incorrect");
+
+                throw ex;
             }
-
-            var testUser = new User()
-            {
-                Id = Guid.NewGuid(),
-                Email = request.Email,
-                FirstName = "Annibale",
-                LastName = "Menolascina",
-                PasswordHash = request.Password,
-                EmailVerified = false
-            };
-            string token = tokenProvider.Create(testUser);
-
-            return new JsonResult(token);
         }
     }
 }

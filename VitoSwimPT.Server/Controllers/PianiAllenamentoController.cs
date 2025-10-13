@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -16,15 +17,14 @@ namespace VitoSwimPT.Server.Controllers
         private readonly Serilog.ILogger _logger;
         private readonly IPianiAllenamentoRepository _plantrainRepo;
         private readonly IPianiRepository _planRepo;
-        private ModelMap _mapper;
+        private readonly IMapper _automapper;
 
-        public PianiAllenamentoController(Serilog.ILogger logger, IPianiAllenamentoRepository planTrainRepo, IPianiRepository planRepo,
-            ModelMap mapper)
+        public PianiAllenamentoController(Serilog.ILogger logger, IPianiAllenamentoRepository planTrainRepo, IPianiRepository planRepo, IMapper automapper) 
         {
             _plantrainRepo = planTrainRepo ?? throw new ArgumentNullException(nameof(planTrainRepo));
             _planRepo = planRepo ?? throw new ArgumentNullException(nameof(planRepo));
             _logger = logger;
-            _mapper = mapper;
+            _automapper = automapper;
         }
 
         [HttpGet(Name = "GetPianiAllenamento")]
@@ -49,7 +49,9 @@ namespace VitoSwimPT.Server.Controllers
             {
                 _logger.Debug($"Controller PianiAllenamento Get(id) with id = {id} ");
                 Piano plan = await _planRepo.GetPianoById(id); // await
-                PianiAllenamentoVM trainVM = _mapper.toViewModel(plan);      //robustezza
+                PianiAllenamentoVM trainVM = new PianiAllenamentoVM();
+                trainVM.piano = plan;
+                trainVM.allenamenti = _plantrainRepo.GetAllenamentiPiano(plan.PianoId).ToList();
 
                 return Ok(trainVM);
             }

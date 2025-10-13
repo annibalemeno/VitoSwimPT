@@ -13,5 +13,13 @@ namespace VitoSwimPT.Server.Users
         {
             return await users.SingleOrDefaultAsync(u => u.Email == email);
         }
+
+        public static async Task<User?> GetByFullname(this DbSet<User> users, string fullname)
+        {
+            string name = fullname.Split(' ')[0];
+            string surname = fullname.Split(" ")[1];
+
+            return await users.SingleOrDefaultAsync(u => u.FirstName == name && u.LastName == surname);
+        }
     }
 }

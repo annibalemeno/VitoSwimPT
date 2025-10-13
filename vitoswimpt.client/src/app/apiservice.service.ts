@@ -69,7 +69,7 @@ export class ApiserviceService {
   // #region Allenamenti
 
   getAllenamentiList(): Observable<Allenamenti[]> {
-    debugger;
+    /*debugger;*/
     let auth_token = sessionStorage.getItem('token');
     //let headers = new HttpHeaders();
     //headers = headers.set('Content-Type', 'application/json; charset=utf-8').set('Authorization', `Bearer ${auth_token}`);
@@ -145,6 +145,13 @@ export class ApiserviceService {
     return this.http.get<Piani[]>(this.apiUrl + '/piani', { headers });
   }
 
+  getPianiByUser(email: string): Observable<Piani[]> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.get<Piani[]>(this.apiUrl + '/piani/getPianiByUser?email=' + email, { headers });
+  }
+  //
+
   addPiano(piano: Piani): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
@@ -154,7 +161,6 @@ export class ApiserviceService {
   updatePiano(piano: Piani): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-
     return this.http.put<Piani[]>(this.apiUrl + '/piani/UpdatePiano/', piano, { headers });
   }
 
