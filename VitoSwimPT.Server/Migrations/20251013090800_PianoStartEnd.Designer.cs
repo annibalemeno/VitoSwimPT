@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VitoSwimPT.Server.Models;
 
@@ -11,9 +12,11 @@ using VitoSwimPT.Server.Models;
 namespace VitoSwimPT.Server.Migrations
 {
     [DbContext(typeof(SwimContext))]
-    partial class SwimContextModelSnapshot : ModelSnapshot
+    [Migration("20251013090800_PianoStartEnd")]
+    partial class PianoStartEnd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,36 +48,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.HasKey("AllenamentoId");
 
                     b.ToTable("Allenamenti");
-                });
-
-            modelBuilder.Entity("VitoSwimPT.Server.Models.AllenamentoUtente", b =>
-                {
-                    b.Property<int>("AllenamentoUtenteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AllenamentoUtenteId"));
-
-                    b.Property<int>("AllenamentoId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DateDone")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DatePlanned")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InsertDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("AllenamentoUtenteId");
-
-                    b.HasIndex("AllenamentoId");
-
-                    b.ToTable("AllenamentiUtente");
                 });
 
             modelBuilder.Entity("VitoSwimPT.Server.Models.Esercizio", b =>
@@ -266,17 +239,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Utenti");
-                });
-
-            modelBuilder.Entity("VitoSwimPT.Server.Models.AllenamentoUtente", b =>
-                {
-                    b.HasOne("VitoSwimPT.Server.Models.Allenamento", "Allenamento")
-                        .WithMany()
-                        .HasForeignKey("AllenamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Allenamento");
                 });
 
             modelBuilder.Entity("VitoSwimPT.Server.Models.Piano", b =>

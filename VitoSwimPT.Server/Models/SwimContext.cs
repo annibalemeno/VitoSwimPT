@@ -32,6 +32,8 @@ namespace VitoSwimPT.Server.Models
 
         public DbSet<PianoAllenamento> PianiAllenamento { get; set; }
 
+        public DbSet<AllenamentoUtente> AllenamentiUtente { get; set; }
+
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

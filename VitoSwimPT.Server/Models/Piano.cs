@@ -12,11 +12,11 @@ namespace VitoSwimPT.Server.Models
         public DateTime InsertDateTime { get; set; }
 
         public Guid Createdby { get; set; }
-
         public DateTime UpdateDateTime { get; set; }
-
         [ForeignKey("Createdby")]
         public User Utente { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         //public IList<PianoAllenamento> PianiAllenamento { get; set; }
     }
