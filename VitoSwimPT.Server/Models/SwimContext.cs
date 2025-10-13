@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Xml;
+using VitoSwimPT.Server.AllenamentiUtente;
 using VitoSwimPT.Server.Users;
 
 namespace VitoSwimPT.Server.Models
@@ -105,7 +106,6 @@ namespace VitoSwimPT.Server.Models
                     context.Set<Piano>().AddRange(piano1, piano2);
                     context.SaveChanges();
                 }
-
                 //var esercizioAllenamentoTest = context.Set<EsercizioAllenamento>().FirstOrDefault(e => e.Allenamento.NomeAllenamento == "Aerobico 1");
                 //if (esercizioAllenamentoTest == null)
                 //{
@@ -135,6 +135,26 @@ namespace VitoSwimPT.Server.Models
                     context.Add(piano_all1);
                     context.SaveChanges();
                 }
+
+                var allenamentiUtenteTest = context.Set<AllenamentoUtente>().FirstOrDefault();
+                if (allenamentiUtenteTest == null)
+                {
+                    var allUtenteSeed01 = new AllenamentoUtente();
+                    allUtenteSeed01.Allenamento = Allenamenti.FirstOrDefault();
+                    allUtenteSeed01.DatePlanned = DateTime.Today;
+                    allUtenteSeed01.DateDone = DateTime.Today.AddMonths(1);
+                    allUtenteSeed01.Utente = Utenti.FirstOrDefault();
+                    context.Add(allUtenteSeed01);
+                    context.SaveChanges();
+
+                    var allUtenteSeed02 = new AllenamentoUtente();
+                    allUtenteSeed02.Allenamento = Allenamenti.OrderBy(x => x.InsertDateTime).LastOrDefault();
+                    allUtenteSeed02.DatePlanned = DateTime.Today.AddMonths(1);
+                    allUtenteSeed02.DateDone = DateTime.Today.AddMonths(2);
+                    allUtenteSeed02.Utente = Utenti.OrderBy(x => x.Email).FirstOrDefault();
+                    context.Add(allUtenteSeed02);
+                    context.SaveChanges();
+                }
             });
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -142,6 +162,10 @@ namespace VitoSwimPT.Server.Models
             modelBuilder.Entity<EsercizioAllenamento>().HasKey(ea => new { ea.EsercizioId, ea.AllenamentoId });
             modelBuilder.Entity<PianoAllenamento>().HasKey(pa => new { pa.PianoId, pa.AllenamentoId });
             modelBuilder.Entity<Stile>().Property(x => x.Sigla).HasMaxLength(2);
+
+            modelBuilder.Entity<AllenamentoUtente>().Property(b => b.InsertDateTime).HasDefaultValueSql("getdate()");
+            modelBuilder.Entity<AllenamentoUtente>().Property(b => b.UpdateDateTime).HasDefaultValueSql("getdate()");
+
         }
     }
 }

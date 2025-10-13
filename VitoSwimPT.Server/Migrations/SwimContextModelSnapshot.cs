@@ -22,6 +22,45 @@ namespace VitoSwimPT.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("VitoSwimPT.Server.AllenamentiUtente.AllenamentoUtente", b =>
+                {
+                    b.Property<int>("AllenamentoUtenteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AllenamentoUtenteId"));
+
+                    b.Property<int>("AllenamentoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateDone")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DatePlanned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DoneBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("InsertDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<DateTime>("UpdateDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.HasKey("AllenamentoUtenteId");
+
+                    b.HasIndex("AllenamentoId");
+
+                    b.HasIndex("DoneBy");
+
+                    b.ToTable("AllenamentiUtente");
+                });
+
             modelBuilder.Entity("VitoSwimPT.Server.Models.Allenamento", b =>
                 {
                     b.Property<int>("AllenamentoId")
@@ -45,36 +84,6 @@ namespace VitoSwimPT.Server.Migrations
                     b.HasKey("AllenamentoId");
 
                     b.ToTable("Allenamenti");
-                });
-
-            modelBuilder.Entity("VitoSwimPT.Server.Models.AllenamentoUtente", b =>
-                {
-                    b.Property<int>("AllenamentoUtenteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AllenamentoUtenteId"));
-
-                    b.Property<int>("AllenamentoId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DateDone")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DatePlanned")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InsertDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("AllenamentoUtenteId");
-
-                    b.HasIndex("AllenamentoId");
-
-                    b.ToTable("AllenamentiUtente");
                 });
 
             modelBuilder.Entity("VitoSwimPT.Server.Models.Esercizio", b =>
@@ -268,7 +277,7 @@ namespace VitoSwimPT.Server.Migrations
                     b.ToTable("Utenti");
                 });
 
-            modelBuilder.Entity("VitoSwimPT.Server.Models.AllenamentoUtente", b =>
+            modelBuilder.Entity("VitoSwimPT.Server.AllenamentiUtente.AllenamentoUtente", b =>
                 {
                     b.HasOne("VitoSwimPT.Server.Models.Allenamento", "Allenamento")
                         .WithMany()
@@ -276,7 +285,15 @@ namespace VitoSwimPT.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("VitoSwimPT.Server.Users.User", "Utente")
+                        .WithMany()
+                        .HasForeignKey("DoneBy")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Allenamento");
+
+                    b.Navigation("Utente");
                 });
 
             modelBuilder.Entity("VitoSwimPT.Server.Models.Piano", b =>

@@ -18,10 +18,6 @@ namespace VitoSwimPT.Server.Users
             {
                 await validator.ValidateAndThrowAsync(request);
 
-                //if (await context.Utenti.Exists(request.Email))
-                //{
-                //    throw new Exception("The email is already in use");
-                //}
 
                 var user = new User
                 {
