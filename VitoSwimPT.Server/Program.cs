@@ -10,6 +10,7 @@ using Serilog;
 using Serilog.Exceptions;
 using System.Diagnostics;
 using System.Text;
+using VitoSwimPT.Server.AllenamentiUtente;
 using VitoSwimPT.Server.Infrastructure;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
@@ -112,6 +113,7 @@ builder.Services.AddScoped<RegisterUser>();
 builder.Services.AddScoped<VerifyEmail>();
 builder.Services.AddScoped<EmailVerificationLinkFactory>();
 builder.Services.AddScoped <GetUser>();
+builder.Services.AddScoped<GetAllenamentoUtente>();
 
 var app = builder.Build();
 
@@ -128,7 +130,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//add minimal api endpoints
 UserEndpoints.Map(app);
+AllenamentoUtenteEndpoints.Map(app);
 
 // Use the global exception handler
 app.UseExceptionHandler(_ => { });
