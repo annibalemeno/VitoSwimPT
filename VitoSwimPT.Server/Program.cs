@@ -114,6 +114,8 @@ builder.Services.AddScoped<VerifyEmail>();
 builder.Services.AddScoped<EmailVerificationLinkFactory>();
 builder.Services.AddScoped <GetUser>();
 builder.Services.AddScoped<GetAllenamentoUtente>();
+builder.Services.AddScoped<GetAllenamentiUtente>();
+builder.Services.AddScoped<AssociaAllenamentoUtente>();
 
 var app = builder.Build();
 

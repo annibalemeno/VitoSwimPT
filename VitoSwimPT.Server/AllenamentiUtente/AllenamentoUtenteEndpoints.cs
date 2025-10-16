@@ -9,7 +9,12 @@ namespace VitoSwimPT.Server.AllenamentiUtente
 
         public static IEndpointRouteBuilder Map(IEndpointRouteBuilder builder)
         {
-            builder.MapGet("allenamentiUtente", async (int id, GetAllenamentoUtente useCase) =>
+            builder.MapPost("associaAllenamentoUtente", async(AssociaAllenamentoUtente.Request request, AssociaAllenamentoUtente useCase) => 
+                await useCase.Handle(request))          
+            .WithTags(Tag)
+            .RequireAuthorization();
+
+            builder.MapGet("allenamentoUtente/{id:int}", async (int id, GetAllenamentoUtente useCase) =>
             {
                 GetAllenamentoUtente.AllenamentoResponse? training = await useCase.Handle(id);
 
@@ -17,6 +22,15 @@ namespace VitoSwimPT.Server.AllenamentiUtente
             })
             .WithTags(Tag)
             .RequireAuthorization();
+
+            builder.MapGet("allenamentiUtente/{idUtente:guid}", async (Guid idUtente, GetAllenamentiUtente useCase) =>
+            {
+                List<GetAllenamentiUtente.AllenamentoResponse>? trainings = await useCase.Handle(idUtente);
+
+                return trainings is not null ? Results.Ok(trainings) : Results.NotFound();
+            })
+                .WithTags(Tag)
+                .RequireAuthorization();
 
             return builder;
         }
