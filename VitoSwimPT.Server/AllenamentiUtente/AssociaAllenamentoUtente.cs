@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VitoSwimPT.Server.Models;
 
 namespace VitoSwimPT.Server.AllenamentiUtente
@@ -19,7 +20,15 @@ namespace VitoSwimPT.Server.AllenamentiUtente
                     DoneBy = request.doneBy
                 };
                 context.AllenamentiUtente.Add(train);
-                await context.SaveChangesAsync();
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch (DbUpdateException e)
+                {
+
+                    throw new Exception("Error Adding AllenamentoUtente",e);
+                }
 
                 return new JsonResult(train);
             }

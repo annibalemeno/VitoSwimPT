@@ -116,6 +116,8 @@ builder.Services.AddScoped <GetUser>();
 builder.Services.AddScoped<GetAllenamentoUtente>();
 builder.Services.AddScoped<GetAllenamentiUtente>();
 builder.Services.AddScoped<AssociaAllenamentoUtente>();
+builder.Services.AddScoped<ModifyAllenamentoUtente>();
+builder.Services.AddScoped<DeleteAllenamentoUtente>();
 
 var app = builder.Build();
 
