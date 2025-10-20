@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using VitoSwimPT.Server.Users;
 
@@ -34,6 +35,10 @@ namespace VitoSwimPT.Server.Infrastructure
             string token = handler.CreateToken(tokenDescriptor);
 
             return token;
+        }
+        public string GenerateRefreshToken()
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
         }
     }
 }

@@ -69,7 +69,6 @@ export class ApiserviceService {
   // #region Allenamenti
 
   getAllenamentiList(): Observable<Allenamenti[]> {
-    /*debugger;*/
     let auth_token = sessionStorage.getItem('token');
     //let headers = new HttpHeaders();
     //headers = headers.set('Content-Type', 'application/json; charset=utf-8').set('Authorization', `Bearer ${auth_token}`);

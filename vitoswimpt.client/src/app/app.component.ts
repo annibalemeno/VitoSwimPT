@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
-    debugger;
     let tmp = this.dataService.getData();
     if (sessionStorage.getItem('token') != null) {
       this.loggedIn = true;

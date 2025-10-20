@@ -31,9 +31,11 @@ export class LoginUserComponent implements OnInit{
       "password": this.login_password
     }
     let token = this.service.login(credentials).subscribe((data: any) => {
-      let token = data;
-      console.log(data.value);
-      sessionStorage.setItem('token', token.value);
+      debugger;
+      let token = data.accessToken;
+      let refreshToken = data.refreshToken;
+      console.log(data);
+      sessionStorage.setItem('token', token);
       sessionStorage.setItem('email', this.login_mail);;
       alert('Logged in successfully!');
       this.loading = false;

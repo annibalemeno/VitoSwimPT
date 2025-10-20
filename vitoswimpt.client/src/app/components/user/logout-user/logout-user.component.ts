@@ -14,7 +14,6 @@ export class LogoutUserComponent {
   }
 
   logout() {
-    debugger;
     sessionStorage.clear();
     this.dataService.updateData(false);
     /*  this.router.navigate(['']);*/

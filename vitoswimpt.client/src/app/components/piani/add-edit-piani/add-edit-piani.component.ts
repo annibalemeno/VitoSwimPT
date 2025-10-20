@@ -58,7 +58,6 @@ export class AddEditPianiComponent implements OnInit {
       alert(data.toString());
     },
       error => {
-        debugger;
         alert(error.error.title + ' : ' + error.error.detail);
       }
     );
