@@ -111,6 +111,8 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInte
 builder.Services.AddScoped<LoginUser>();
 builder.Services.AddScoped<RegisterUser>();
 builder.Services.AddScoped<VerifyEmail>();
+builder.Services.AddScoped<LoginUserWithRefreshToken>();
+builder.Services.AddScoped<RevokeRefreshTokens>();
 builder.Services.AddScoped<EmailVerificationLinkFactory>();
 builder.Services.AddScoped <GetUser>();
 builder.Services.AddScoped<GetAllenamentoUtente>();

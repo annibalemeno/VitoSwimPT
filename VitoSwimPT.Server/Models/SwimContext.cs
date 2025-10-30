@@ -24,6 +24,8 @@ namespace VitoSwimPT.Server.Models
         public DbSet<User> Utenti { get; set; }
 
         public DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Stile> Stili {  get; set; }
         public DbSet<Esercizio> Esercizi { get; set; }
         public DbSet<Allenamento> Allenamenti { get; set; }
@@ -34,9 +36,6 @@ namespace VitoSwimPT.Server.Models
         public DbSet<PianoAllenamento> PianiAllenamento { get; set; }
 
         public DbSet<AllenamentoUtente> AllenamentiUtente { get; set; }
-
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
-
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
