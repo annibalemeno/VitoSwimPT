@@ -17,17 +17,9 @@ export class authInterceptor implements HttpInterceptor {
     console.log('Interceptor in action on ' + new Date().toLocaleTimeString());
     let token = sessionStorage.getItem('token');
     if (token) {
-      return next.handle(this.addToken(req, token)).pipe(
-        catchError((error) => {
-          if (error.status === 401) {
-            console.log('Errore 401');
-            return this.handleUnauthorized(req, next);
-          }
-          return throwError(() => error);
-        }),
-      );
+      req = this.addToken(req, token);
     }
-    else return next.handle(req).pipe(
+    return next.handle(req).pipe(
       catchError((error) => {
         if (error.status === 401) {
           console.log('Errore 401');
