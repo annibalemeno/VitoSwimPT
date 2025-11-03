@@ -25,6 +25,8 @@ export class LoginUserComponent implements OnInit{
 
 
   login() {
+    debugger;
+
     this.loading = true;
     let credentials = {
       "email": this.login_mail,
@@ -36,6 +38,7 @@ export class LoginUserComponent implements OnInit{
       let refreshToken = data.refreshToken;
       console.log(data);
       sessionStorage.setItem('token', token);
+      sessionStorage.setItem('refreshToken', refreshToken);
       sessionStorage.setItem('email', this.login_mail);;
       alert('Logged in successfully!');
       this.loading = false;
@@ -45,7 +48,12 @@ export class LoginUserComponent implements OnInit{
       this.loading = false;
     }
     );
+  }
 
+  loginWithUserToken() {
+    let refreshToken = sessionStorage.getItem('refreshToken')!;
+    this.service.loginWithRefreshToken(refreshToken).subscribe((data: any) => {
+    }, error => { });
   }
 
 }

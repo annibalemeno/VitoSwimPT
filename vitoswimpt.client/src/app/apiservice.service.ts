@@ -25,6 +25,12 @@ export class ApiserviceService {
     return this.http.post<any>(this.apiUrl + '/users/login', credentials, { headers });
   }
 
+  loginWithRefreshToken(refreshToken: any): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.http.post<any>(this.apiUrl + '/users/refresh-token', refreshToken, { headers });
+  }
+
   register(full_credentials: any): Observable<string> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');

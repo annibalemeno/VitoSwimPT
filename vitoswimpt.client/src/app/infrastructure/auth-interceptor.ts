@@ -4,48 +4,88 @@ import {
   HttpHandler,
   HttpRequest,
   HttpEvent,
+  HttpHandlerFn,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, finalize, map, Observable, switchMap, throwError } from 'rxjs';
+import { ApiserviceService } from '../apiservice.service';
 
 @Injectable()
 export class authInterceptor implements HttpInterceptor { 
-  constructor() { }
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Get the token from localStorage
-    const token = sessionStorage.getItem('token');
-
-    // Clone the request and add the token to the headers if it exists
+  constructor(private service: ApiserviceService) { }
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    debugger;
+    console.log('Interceptor in action on ' + new Date().toLocaleTimeString());
+    let token = sessionStorage.getItem('token');
     if (token) {
-      const authReq = req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` },
-      });
-      console.log('Interceptor in action on ' + new Date().toLocaleTimeString());
-      return next.handle(authReq);
+      return next.handle(this.addToken(req, token)).pipe(
+        catchError((error) => {
+          if (error.status === 401) {
+            console.log('Errore 401');
+            return this.handleUnauthorized(req, next);
+          }
+          return throwError(() => error);
+        }),
+      );
     }
-    // If there's no token, just pass the original request
-      return next.handle(req);
+    else return next.handle(req).pipe(
+      catchError((error) => {
+        if (error.status === 401) {
+          console.log('Errore 401');
+          return this.handleUnauthorized(req, next);
+        }
+        return throwError(() => error);
+      }));
   };
+
+
+  handleUnauthorized(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<any> {
+    debugger;
+    return this.refreshToken().pipe(
+      switchMap((newToken: any) => {
+        if (newToken) {
+          // Retry the original request with the new token
+          sessionStorage.setItem('refreshToken', newToken.refreshToken);
+          return next.handle(this.addToken(req, newToken.accessToken));
+        }
+
+        // If token refresh fails, log out the user
+        this.logout();
+        return throwError(() => 'Token expired');
+      }),
+      catchError((error) => {
+        this.logout(); // Log out on error
+        return throwError(() => error);
+      }),
+      finalize(() => {
+      }),
+    );
+  }
+
+  addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
+    debugger;
+    console.log('AddToken' + token);
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      },
+    });
+  }
+
+  logout() {
+    //sessionStorage.clear();
+    console.log('logout from authInterceptor');
+  }
+
+  refreshToken(): Observable<any> {
+    debugger;
+    console.log('STO REFRESHANDO IL TOKEN')
+    const refreshToken = sessionStorage.getItem('refreshToken')!;
+    let rt = {
+      "refreshToken": refreshToken
+    }
+    return this.service.loginWithRefreshToken(rt);
+  }
 };
-
-
-
-
-
-//export const authInterceptorInterceptor2: HttpInterceptorFn = (req, next) => {
-
-//  // Get the token from localStorage
-//  const token = localStorage.getItem('token');
-
-//  // Clone the request and add the token to the headers if it exists
-//  if (token) {
-//    const authReq = req.clone({
-//      setHeaders: { Authorization: `Bearer ${token}` },
-//    });
-//    return next(authReq);
-//  }
-//  // If there's no token, just pass the original request
-//  return next(req);
-//};
-
-
-

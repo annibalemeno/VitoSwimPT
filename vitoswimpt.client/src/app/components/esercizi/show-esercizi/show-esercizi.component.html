@@ -4,29 +4,29 @@
 
 <p *ngIf="!EserciziList"><em>In caricamento... Ricarica la pagina dopo che il backend ASP.NET  è partito. Vedere <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> per ulteriori dettagli.</em></p>
   >-->
+<button class="btn btn-primary" (click)="loginWithUserToken()">LoginWithRefreshToken</button>
+  <button type="button" class="btn btn-primary m-2 float-end" data-bs-toggle="modal" data-bs-target="#eserciziModal"
+          (click)="addClick()">
+    Add Esercizio
+  </button>
 
-<button type="button" class="btn btn-primary m-2 float-end" data-bs-toggle="modal" data-bs-target="#eserciziModal"
-        (click)="addClick()">
-  Add Esercizio
-</button>
-
-<div class="modal fade" id="eserciziModal" tabindex="-1" role="dialog" aria-labelledby="eserciziModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="eserciziModalLabel">{{ModalTitle}}</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" (click)="closeClick()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-add-edit-esercizi    [eserc]="eserc"  *ngIf="ActivateAddEditEsercComp">
-        </app-add-edit-esercizi>
+  <div class="modal fade" id="eserciziModal" tabindex="-1" role="dialog" aria-labelledby="eserciziModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eserciziModalLabel">{{ModalTitle}}</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" (click)="closeClick()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-add-edit-esercizi [eserc]="eserc" *ngIf="ActivateAddEditEsercComp">
+          </app-add-edit-esercizi>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <table class="table table-striped">
 
@@ -123,7 +123,7 @@
           Stile
         </th>
         <th>
-            Options
+          Options
         </th>
       </tr>
     </thead>
@@ -153,5 +153,5 @@
             </svg>
           </button>
         </td>
-</tbody>
+    </tbody>
   </table>

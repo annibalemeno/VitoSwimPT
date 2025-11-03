@@ -123,4 +123,15 @@ export class ShowEserciziComponent implements OnInit {
       }
     );
   }
+
+  loginWithUserToken() {
+    debugger;
+    let refreshToken = sessionStorage.getItem('refreshToken')!;
+    let rt = {
+      "refreshToken": refreshToken
+    }
+    
+    this.service.loginWithRefreshToken(rt).subscribe((data: any) => {
+    }, error => { });
+  }
 }
