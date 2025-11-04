@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiserviceService } from '../../../apiservice.service';
+import { AuthService } from '../../../infrastructure/auth.service';
 
 @Component({
   selector: 'app-login-user',
@@ -10,7 +11,7 @@ import { ApiserviceService } from '../../../apiservice.service';
 })
 export class LoginUserComponent implements OnInit{
 
-  constructor(private service: ApiserviceService) { }
+  constructor(private authService: AuthService) { }
   loggedIn: boolean = false;
   loading = false;
   login_mail = "";
@@ -25,15 +26,20 @@ export class LoginUserComponent implements OnInit{
 
 
   login() {
+    debugger;
+
     this.loading = true;
     let credentials = {
       "email": this.login_mail,
       "password": this.login_password
     }
-    let token = this.service.login(credentials).subscribe((data: any) => {
-      let token = data;
-      console.log(data.value);
-      sessionStorage.setItem('token', token.value);
+    let token = this.authService.login(credentials).subscribe((data: any) => {
+      debugger;
+      let token = data.accessToken;
+      let refreshToken = data.refreshToken;
+      console.log(data);
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('refreshToken', refreshToken);
       sessionStorage.setItem('email', this.login_mail);;
       alert('Logged in successfully!');
       this.loading = false;
@@ -43,7 +49,11 @@ export class LoginUserComponent implements OnInit{
       this.loading = false;
     }
     );
+  }
 
+  loginWithUserToken() {
+    this.authService.loginWithRefreshToken().subscribe((data: any) => {
+    }, error => { });
   }
 
 }

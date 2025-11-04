@@ -17,24 +17,6 @@ export class ApiserviceService {
 
   constructor(private http: HttpClient) { }
 
-  //#region Utenti
-
-  login(credentials: any): Observable<string>  {
-    let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-    return this.http.post<any>(this.apiUrl + '/users/login', credentials, { headers });
-  }
-
-  register(full_credentials: any): Observable<string> {
-    let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-    return this.http.post<any>(this.apiUrl + '/users/register', full_credentials, { headers });
-  }
-
-
-  // #endregion
-
-
   // #region Esercizi
 
   getEserciziList(): Observable<Esercizi[]> {
@@ -69,16 +51,9 @@ export class ApiserviceService {
   // #region Allenamenti
 
   getAllenamentiList(): Observable<Allenamenti[]> {
-    /*debugger;*/
-    let auth_token = sessionStorage.getItem('token');
     //let headers = new HttpHeaders();
     //headers = headers.set('Content-Type', 'application/json; charset=utf-8').set('Authorization', `Bearer ${auth_token}`);
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json; charset=utf-8',
-      Authorization: `Bearer ${auth_token}`,
-    });
-
+    let headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8' });
     return this.http.get<Allenamenti[]>(this.apiUrl + '/allenamenti', { headers });
   }
 

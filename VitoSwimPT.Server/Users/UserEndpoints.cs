@@ -15,6 +15,11 @@
                 await useCase.Handle(request))
                 .WithTags(Tag);
 
+            builder.MapPost("users/refresh-token", async (LoginUserWithRefreshToken.Request request, LoginUserWithRefreshToken useCase) =>
+                await useCase.Handle(request))
+            .WithTags(UserEndpoints.Tag);
+
+
             builder.MapGet("users/verify-email", async (Guid token, VerifyEmail useCase) =>
             {
                 bool success = await useCase.Handle(token);
@@ -32,6 +37,15 @@
                 return user is not null ? Results.Ok(user) : Results.NotFound();
             })
             .WithTags(Tag)
+            .RequireAuthorization();
+
+            builder.MapDelete("users/{id:guid}/refresh-tokens", async (Guid id, RevokeRefreshTokens useCase) =>
+            {
+                bool success = await useCase.Handle(id);
+
+                return success ? Results.NoContent() : Results.BadRequest();
+            })
+            .WithTags(UserEndpoints.Tag)
             .RequireAuthorization();
 
             return builder;

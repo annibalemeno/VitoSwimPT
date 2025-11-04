@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using VitoSwimPT.Server.Infrastructure;
 using VitoSwimPT.Server.Models;
@@ -9,7 +8,9 @@ namespace VitoSwimPT.Server.Users
     internal sealed class LoginUser(SwimContext context, PasswordHasher passwordHasher, TokenProvider tokenProvider)
     {
         public sealed record Request(string Email, string Password);
-        public async Task<JsonResult> Handle(Request request)
+
+        public sealed record Response(string AccessToken, string RefreshToken);
+        public async Task<Response> Handle(Request request)
         {
             try
             {
@@ -29,18 +30,21 @@ namespace VitoSwimPT.Server.Users
                     throw new Exception("The password is incorrect");
                 }
 
-                var testUser = new User()
+                string token = tokenProvider.Create(user);
+
+                var refreshToken = new RefreshToken
                 {
                     Id = Guid.NewGuid(),
-                    Email = request.Email,
-                    FirstName = "Annibale",
-                    LastName = "Menolascina",
-                    PasswordHash = request.Password,
-                    EmailVerified = false
+                    UserId = user.Id,
+                    Token = tokenProvider.GenerateRefreshToken(),
+                    ExpiresOnUTC = DateTime.UtcNow.AddDays(7)
                 };
-                string token = tokenProvider.Create(testUser);
 
-                return new JsonResult(token);
+                context.RefreshTokens.Add(refreshToken);
+
+                await context.SaveChangesAsync();
+
+                return new Response(token, refreshToken.Token);
             }
             catch (Exception ex)
             {

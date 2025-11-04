@@ -15,12 +15,13 @@ import { PianiComponent } from './components/piani/piani.component';
 import { ShowPianiComponent } from './components/piani/show-piani/show-piani.component';
 import { AddEditPianiComponent } from './components/piani/add-edit-piani/add-edit-piani.component';
 import { DetailPianiComponent } from './components/piani/detail-piani/detail-piani.component';
-import { authInterceptor} from './infrastructure/auth-interceptor';
+import { authInterceptor } from './infrastructure/auth-interceptor';
+import { LogoutUserComponent } from './components/user/logout-user/logout-user.component'
 import { LoginUserComponent } from './components/user/login-user/login-user.component';
 import { RegisterUserComponent } from './components/user/register-user/register-user.component';
 import { DetailUserComponent } from './components/user/detail-user/detail-user.component';
 import {HomeComponent } from './components/home/home.component';
-import { LogoutUserComponent } from './components/user/logout-user/logout-user.component'
+import { AuthService } from './infrastructure/auth.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { LogoutUserComponent } from './components/user/logout-user/logout-user.c
     RegisterUserComponent,
     DetailUserComponent,
     HomeComponent,
-    LogoutUserComponent
+    LogoutUserComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,
@@ -50,7 +51,8 @@ import { LogoutUserComponent } from './components/user/logout-user/logout-user.c
     provide: HTTP_INTERCEPTORS,
     useClass: authInterceptor,
     multi: true,
-  },],
+  },
+    AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

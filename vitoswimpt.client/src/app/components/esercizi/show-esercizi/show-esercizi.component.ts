@@ -18,14 +18,14 @@ export class ShowEserciziComponent implements OnInit {
   // EserciziList: any = [];
   ModalTitle = "";
   ActivateAddEditEsercComp: boolean = false;
-  eserc: Esercizi 
+  eserc: Esercizi
     = {
-    esercizioId: 0,
-    ripetizioni: 0,
-    distanza: 0,
-    recupero: 0,
-    stile: "Libero"
-  };
+      esercizioId: 0,
+      ripetizioni: 0,
+      distanza: 0,
+      recupero: 0,
+      stile: "Libero"
+    };
 
   EserciziIdFilter = "";
   EerciziRipetizioniFilter = "";
@@ -35,8 +35,8 @@ export class ShowEserciziComponent implements OnInit {
   EserciziListWithoutFilter: any = [];
 
   ngOnInit(): void {
-        this.refreshEserciziList();
-        //this.getAllenamenti();
+    this.refreshEserciziList();
+    //this.getAllenamenti();
   }
 
   addClick() {
@@ -47,7 +47,7 @@ export class ShowEserciziComponent implements OnInit {
       recupero: 0,
       stile: "Libero"
     };
-    
+
     this.ModalTitle = "Add Esercizio";
     this.ActivateAddEditEsercComp = true;
   }
@@ -89,7 +89,7 @@ export class ShowEserciziComponent implements OnInit {
       this.EserciziListWithoutFilter = data;
     });
   }
- 
+
   sortResult(prop: any, asc: any) {
     this.EserciziList = this.EserciziListWithoutFilter.sort(function (a: any, b: any) {
       if (asc) {

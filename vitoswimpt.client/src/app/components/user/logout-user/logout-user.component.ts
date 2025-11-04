@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DataService } from '../../../data.service';
 
 @Component({
   selector: 'app-logout-user',
@@ -10,13 +9,11 @@ import { DataService } from '../../../data.service';
 })
 export class LogoutUserComponent {
 
-  constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService) {
+  constructor(private router: Router, private route: ActivatedRoute) {
   }
 
   logout() {
-    debugger;
     sessionStorage.clear();
-    this.dataService.updateData(false);
     /*  this.router.navigate(['']);*/
     /*    window.location.reload();*/
     /* this.router.onSameUrlNavigation = 'reload';*/
