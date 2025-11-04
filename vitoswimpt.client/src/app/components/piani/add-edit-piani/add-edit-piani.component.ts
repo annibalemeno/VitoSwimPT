@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ApiserviceService } from '../../../apiservice.service';
 import { Piani } from '../../../interfaces/piani';
+import { AuthService } from '../../../infrastructure/auth.service';
 
 @Component({
   selector: 'app-add-edit-piani',
@@ -9,8 +10,7 @@ import { Piani } from '../../../interfaces/piani';
   styleUrl: './add-edit-piani.component.css'
 })
 export class AddEditPianiComponent implements OnInit {
-  constructor(private service: ApiserviceService) { }
-
+  constructor(private service: ApiserviceService, private authService:AuthService) { }
 
   @Input() piano: any;
   PianoId = 0;
@@ -36,7 +36,7 @@ export class AddEditPianiComponent implements OnInit {
       nomePiano: this.NomePiano,
       descrizione: this.Descrizione,
       note: this.Note,
-      username: sessionStorage.getItem('email')!
+      username: this.authService.email!
     };
 
 
@@ -52,7 +52,7 @@ export class AddEditPianiComponent implements OnInit {
       nomePiano: this.NomePiano,
       descrizione: this.Descrizione,
       note: this.Note,
-      username: sessionStorage.getItem('email')!
+      username: this.authService.email!
     };
     this.service.updatePiano(pianoToUpd).subscribe(data => {
       alert(data.toString());

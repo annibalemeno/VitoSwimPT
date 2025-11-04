@@ -4,18 +4,17 @@ import {
   HttpHandler,
   HttpRequest,
   HttpEvent,
-  HttpHandlerFn,
 } from '@angular/common/http';
-import { catchError, finalize, map, Observable, switchMap, throwError } from 'rxjs';
-import { ApiserviceService } from '../apiservice.service';
+import { catchError, finalize, Observable, switchMap, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class authInterceptor implements HttpInterceptor { 
-  constructor(private service: ApiserviceService) { }
+  constructor(private authService: AuthService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     debugger;
     console.log('Interceptor in action on ' + new Date().toLocaleTimeString());
-    let token = sessionStorage.getItem('token');
+    let token = this.authService.token;
     if (token) {
       req = this.addToken(req, token);
     }
@@ -73,11 +72,11 @@ export class authInterceptor implements HttpInterceptor {
 
   refreshToken(): Observable<any> {
     debugger;
-    console.log('STO REFRESHANDO IL TOKEN')
-    const refreshToken = sessionStorage.getItem('refreshToken')!;
-    let rt = {
-      "refreshToken": refreshToken
-    }
-    return this.service.loginWithRefreshToken(rt);
+    console.log('i am refreshing the token')
+    //const refreshToken = sessionStorage.getItem('refreshToken')!;
+    //let rt = {
+    //  "refreshToken": refreshToken
+    //}
+    return this.authService.loginWithRefreshToken();
   }
 };

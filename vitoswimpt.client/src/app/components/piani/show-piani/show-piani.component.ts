@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiserviceService } from '../../../apiservice.service';
 import { Piani } from '../../../interfaces/piani';
+import { AuthService } from '../../../infrastructure/auth.service';
 
 @Component({
   selector: 'app-show-piani',
@@ -10,7 +11,7 @@ import { Piani } from '../../../interfaces/piani';
 })
 export class ShowPianiComponent implements OnInit{
 
-  constructor(private service: ApiserviceService) { }
+  constructor(private service: ApiserviceService, private authService:AuthService) { }
 
   public PianiList: Piani[] = [];
   PianiIdFilter = "";
@@ -35,8 +36,8 @@ export class ShowPianiComponent implements OnInit{
     }
 
   public refreshPianiList() {
-    if (sessionStorage.getItem('email') != null) {
-      let email = sessionStorage.getItem('email')!;
+    if (this.authService.email != null) {
+      let email = this.authService.email;
       this.service.getPianiByUser(email).subscribe(data => {
         this.PianiList = data;
         console.log("PianiList", this.PianiList);
@@ -82,7 +83,7 @@ export class ShowPianiComponent implements OnInit{
       nomePiano: "",
       descrizione: "",
       note: "",
-      username: sessionStorage.getItem('email')!
+      username: this.authService.email!
     };
 
     this.ModalTitle = "Add Piano";
@@ -100,7 +101,7 @@ export class ShowPianiComponent implements OnInit{
       nomePiano: item.nomePiano,
       descrizione: item.descrizione,
       note: item.note,
-      username: sessionStorage.getItem('email')!
+      username: this.authService.email!
     };
 
 /*    this.plan = item;*/

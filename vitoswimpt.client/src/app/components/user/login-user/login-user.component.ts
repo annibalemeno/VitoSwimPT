@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiserviceService } from '../../../apiservice.service';
+import { AuthService } from '../../../infrastructure/auth.service';
 
 @Component({
   selector: 'app-login-user',
@@ -10,7 +11,7 @@ import { ApiserviceService } from '../../../apiservice.service';
 })
 export class LoginUserComponent implements OnInit{
 
-  constructor(private service: ApiserviceService) { }
+  constructor(private authService: AuthService) { }
   loggedIn: boolean = false;
   loading = false;
   login_mail = "";
@@ -32,7 +33,7 @@ export class LoginUserComponent implements OnInit{
       "email": this.login_mail,
       "password": this.login_password
     }
-    let token = this.service.login(credentials).subscribe((data: any) => {
+    let token = this.authService.login(credentials).subscribe((data: any) => {
       debugger;
       let token = data.accessToken;
       let refreshToken = data.refreshToken;
@@ -51,8 +52,7 @@ export class LoginUserComponent implements OnInit{
   }
 
   loginWithUserToken() {
-    let refreshToken = sessionStorage.getItem('refreshToken')!;
-    this.service.loginWithRefreshToken(refreshToken).subscribe((data: any) => {
+    this.authService.loginWithRefreshToken().subscribe((data: any) => {
     }, error => { });
   }
 

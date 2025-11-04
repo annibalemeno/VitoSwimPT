@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from './data.service';
-
+import { AuthService } from './infrastructure/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +10,11 @@ import { DataService } from './data.service';
 export class AppComponent implements OnInit {
   loggedIn: boolean = false;
 
-  constructor(private dataService: DataService) { }
+  constructor(private authService:AuthService) { }
 
   ngOnInit() {
-    let tmp = this.dataService.getData();
-    if (sessionStorage.getItem('token') != null) {
+    debugger;
+    if (this.authService.token != null) {
       this.loggedIn = true;
     }
   }

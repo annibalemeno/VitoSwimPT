@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiserviceService } from '../../../apiservice.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../infrastructure/auth.service';
 
 @Component({
   selector: 'app-register-user',
@@ -22,7 +23,7 @@ export class RegisterUserComponent implements OnInit {
 
 
   submitted = false;
-  constructor(private service: ApiserviceService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
   ngOnInit(): void {
     this.validationErrors = { ['firstname']: undefined, ['lastname']: undefined, ['email']: undefined, ['password']: undefined, ['confirmpassword']: undefined };
     }
@@ -39,17 +40,13 @@ export class RegisterUserComponent implements OnInit {
 
     this.submitted = true;
 
-    let token = this.service.register(credentials).subscribe((data: any) => {
+    let token = this.authService.register(credentials).subscribe((data: any) => {
       //let checkconsistency = typeof (this.validationErrors) != 'undefined';
       //console.log('Validation Error is different from undefined: ' + checkconsistency);
       let user = data;
       console.log(user.value);
       alert('User registered! Wait for activation email');
-      this.router.navigate([''])
-      //sessionStorage.setItem('token', token.value);
-      //alert('Logged in successfully!');
-      //this.loading = false;
-      //window.location.reload();   
+      this.router.navigate([''])  
     }, error => {
       this.validationErrors = error.error.errors;
       console.log(this.validationErrors);
