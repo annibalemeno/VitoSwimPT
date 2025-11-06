@@ -15,7 +15,7 @@ namespace VitoSwimPT.Server.Users
 
             if(refreshToken is null || refreshToken.ExpiresOnUTC < DateTime.UtcNow)
             {
-                throw new ApplicationException("The refresh token has expired");
+                throw new Exception("The refresh token has expired");
             }
             else
             {
@@ -23,8 +23,9 @@ namespace VitoSwimPT.Server.Users
                 if(lastRTforUser.Id != refreshToken.Id)
                 {
                     //security issue: we are not using last user refresh token
-                    throw new ApplicationException("we are not using last user refresh token: should revoke and logout");
+                    throw new Exception("we are not using last user refresh token: should revoke and logout");
                 }
+                
             }
 
             string accessToken = tokenProvider.Create(refreshToken.User);

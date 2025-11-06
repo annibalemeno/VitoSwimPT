@@ -9,12 +9,11 @@ namespace VitoSwimPT.Server.Users
         private Guid? GetCurrentUserId()
         {
             return Guid.TryParse(
-                httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid parsed) ? parsed : null;              
+                httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid parsed) ? parsed : null;
         }
-
         public async Task<bool> Handle(Guid userId)
         {
-            if(userId != GetCurrentUserId())
+            if (userId != GetCurrentUserId())
             {
                 throw new ApplicationException("You can't do this");
             }

@@ -36,6 +36,7 @@ export class authInterceptor implements HttpInterceptor {
     debugger;
     return this.refreshToken().pipe(
       switchMap((newToken: any) => {
+        debugger;
         if (newToken) {
           // Retry the original request with the new token
           sessionStorage.setItem('refreshToken', newToken.refreshToken);
@@ -68,6 +69,8 @@ export class authInterceptor implements HttpInterceptor {
   logout() {
     //sessionStorage.clear();
     console.log('logout from authInterceptor');
+    debugger;
+    return this.authService.logout();
   }
 
   refreshToken(): Observable<any> {

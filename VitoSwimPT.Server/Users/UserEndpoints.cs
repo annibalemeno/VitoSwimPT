@@ -39,7 +39,8 @@
             .WithTags(Tag)
             .RequireAuthorization();
 
-            builder.MapDelete("users/{id:guid}/refresh-tokens", async (Guid id, RevokeRefreshTokens useCase) =>
+            //builder.MapDelete("users/{id:guid}/refresh-tokens", async (Guid id, RevokeRefreshTokens useCase) =>
+            builder.MapDelete("users/{id:guid}", async (Guid id, RevokeRefreshTokens useCase) =>
             {
                 bool success = await useCase.Handle(id);
 

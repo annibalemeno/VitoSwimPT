@@ -66,11 +66,17 @@ export class AuthService {
     let rt = {
       "refreshToken": sessionStorage.getItem('refreshToken')
     }
-
     return this.http.post<any>(this.apiUrl + '/users/refresh-token', rt, { headers });
+  }
 
+
+  logout(): Observable<any> {
+    debugger;
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    let userId = '4914C4FC-9A68-4168-88B0-2DB780D6F4FC';
+    return this.http.delete<any>(this.apiUrl + '/users/'+userId, { headers });
+    } 
   }
 
   // #endregion
-
-}
