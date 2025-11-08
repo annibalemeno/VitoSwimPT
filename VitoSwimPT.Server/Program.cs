@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Exceptions;
+using System;
 using System.Diagnostics;
 using System.Text;
 using VitoSwimPT.Server.AllenamentiUtente;
@@ -156,7 +158,11 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .Build();
 
-using (var context = new SwimContext(configuration))
+DbContextOptions<SwimContext> options = new DbContextOptionsBuilder<SwimContext>().UseSqlServer("Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;").Options;
+
+//using (var context = new SwimContext(configuration))
+
+using (var context = new SwimContext(options))
 {
     //creates db if not exists
     context.Database.EnsureCreated();
