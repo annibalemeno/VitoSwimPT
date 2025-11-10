@@ -1,8 +1,10 @@
 using FluentEmail.Core;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using NSubstitute.Extensions;
+using System;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.Users;
@@ -14,15 +16,18 @@ namespace VitoSwimPT.Tests
 
     public class RegisterUserTest
     {
-        private readonly IConfiguration _configMock;
+        //private readonly IConfiguration _configMock;
         private readonly SwimContext _swimContextMock;
         private readonly UtentiRepository _utentiRepositoryMock;
         private readonly RegisterUserValidator _validator;
 
         public RegisterUserTest()
         {
-            _configMock = Substitute.For<IConfiguration>();
-            _swimContextMock = Substitute.For<SwimContext>(_configMock);
+            //configMock = Substitute.For<IConfiguration>();
+            DbContextOptions<SwimContext> options = new DbContextOptionsBuilder<SwimContext>()
+            .UseInMemoryDatabase(databaseName: "VitoSwimTest")
+           .Options;
+            _swimContextMock = Substitute.For<SwimContext>(options);
             _utentiRepositoryMock = Substitute.For<UtentiRepository>(_swimContextMock);
             _utentiRepositoryMock.Configure().IsEmailUiniqueAsync(Arg.Any<string>()).Returns(Task.FromResult(false));
             _validator = new RegisterUserValidator(_utentiRepositoryMock);

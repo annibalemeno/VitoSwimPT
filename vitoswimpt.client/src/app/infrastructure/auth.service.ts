@@ -74,8 +74,9 @@ export class AuthService {
     debugger;
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-    let userId = '4914C4FC-9A68-4168-88B0-2DB780D6F4FC';
-    return this.http.delete<any>(this.apiUrl + '/users/'+userId, { headers });
+   /* let userId = '4914C4FC-9A68-4168-88B0-2DB780D6F4FC';*/
+    let email =  this.email;
+    return this.http.delete<any>(this.apiUrl + '/users/'+email, { headers });
     } 
   }
 

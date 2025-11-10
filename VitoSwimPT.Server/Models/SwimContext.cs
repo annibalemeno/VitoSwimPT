@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Diagnostics;
 using System.Xml;
 using VitoSwimPT.Server.AllenamentiUtente;
@@ -167,6 +168,10 @@ namespace VitoSwimPT.Server.Models
 
             modelBuilder.Entity<AllenamentoUtente>().Property(b => b.InsertDateTime).HasDefaultValueSql("getdate()");
             modelBuilder.Entity<AllenamentoUtente>().Property(b => b.UpdateDateTime).HasDefaultValueSql("getdate()");
+
+            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(SwimContext).Assembly);
+
+           base.OnModelCreating(modelBuilder);
 
         }
     }

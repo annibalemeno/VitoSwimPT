@@ -19,7 +19,7 @@ namespace VitoSwimPT.Server.Repository
         {
             _swimDBContext = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<IEnumerable<Stile>> GetStile()
+        public async virtual Task<IEnumerable<Stile>> GetStile()
         {
             return await _swimDBContext.Stili.ToListAsync();
         }
