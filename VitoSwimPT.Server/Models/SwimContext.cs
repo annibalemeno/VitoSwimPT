@@ -39,7 +39,10 @@ namespace VitoSwimPT.Server.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;");
+            string localSwimDb = "Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;";
+            string azureSwimDb = "Server=vitoswimptsql.database.windows.net,1433;Initial Catalog=SwimDB;Persist Security Info=False;User ID=vitoswimptsql-admin;Password=LFui$Gv78L82Bvqp;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+            optionsBuilder.UseSqlServer(localSwimDb);
         }
 
 
