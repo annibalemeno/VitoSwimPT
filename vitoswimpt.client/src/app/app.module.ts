@@ -40,8 +40,7 @@ import { AuthService } from './infrastructure/auth.service';
     LoginUserComponent,
     RegisterUserComponent,
     DetailUserComponent,
-    HomeComponent,
-    LogoutUserComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
