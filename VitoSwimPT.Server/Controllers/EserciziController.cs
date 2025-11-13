@@ -51,8 +51,8 @@ namespace VitoSwimPT.Server.Controllers
         //}
 
         [HttpGet(Name = "GetEsercizi")]
-        //[Authorize]
-        [AllowAnonymous]
+        [Authorize]
+        //[AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             try
