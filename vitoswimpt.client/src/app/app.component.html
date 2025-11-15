@@ -1,5 +1,5 @@
 <!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark px-3" *ngIf="loggedIn">
+<nav class="navbar navbar-expand navbar-dark bg-dark px-3" *ngIf="accountService.token">
   <div class="navbar-nav">
     <a class="nav-item nav-link" routerLink="/piani" routerLinkActive="active">Piani</a>
     <a class="nav-item nav-link" routerLink="/allenamenti" routerLinkActive="active">Allenamenti</a>

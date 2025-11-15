@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHandler, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,7 @@ export class AccountService {
     return sessionStorage.getItem('email');
   }
 
-  public set token(token: string|null) {
+  public set token(token: string | null) {
     if (token == null) {
       throw new Error('Assegnazione di token errata');
     }
@@ -72,15 +72,6 @@ export class AccountService {
     ));
   }
 
-  //login2(username: string, password: string) {
-  //  return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, { username, password })
-  //    .pipe(map(user => {
-  //      // store user details and jwt token in local storage to keep user logged in between page refreshes
-  //      localStorage.setItem('user', JSON.stringify(user));
-  //      this.userSubject.next(user);
-  //      return user;
-  //    }));
-  //  }
 
   register(full_credentials: any): Observable<string> {
     let headers = new HttpHeaders();
@@ -88,22 +79,25 @@ export class AccountService {
     return this.http.post<any>(this.apiUrl + '/users/register', full_credentials, { headers });
   }
 
-  loginWithRefreshToken(): Observable<any> {
+  loginWithRefreshToken() {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
 
     let rt = {
       "refreshToken": sessionStorage.getItem('refreshToken')
     }
-    return this.http.post<any>(this.apiUrl + '/users/refresh-token', rt, { headers });
+    this.http.post<any>(this.apiUrl + '/users/refresh-token', rt, { headers }).subscribe((data: any) => {
+      let token = data.accessToken;
+      this.tokenSubject.next(token);
+      sessionStorage.setItem('refreshToken', data.refreshToken);
+    }, error => { console.log('errore in refresh token'); });
   }
-
 
   logout() {
     debugger;
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-   /* let userId = '4914C4FC-9A68-4168-88B0-2DB780D6F4FC';*/
+    /* let userId = '4914C4FC-9A68-4168-88B0-2DB780D6F4FC';*/
     let email = this.email;
     //remove all refresh token for the current user
     this.http.delete<any>(this.apiUrl + '/users/' + email, { headers }).subscribe(() => {
@@ -111,7 +105,7 @@ export class AccountService {
       console.log('logout ok');
       sessionStorage.clear();
       this.tokenSubject.next(null);
-     /* sessionStorage.removeItem('');*/
+      /* sessionStorage.removeItem('');*/
       if (window.location.href.indexOf('login') !== -1) {
         window.location.reload();
       } else {
@@ -124,23 +118,32 @@ export class AccountService {
       });
   }
 
-  //logout(): Observable<any>  {
-  //  debugger;
-  //  let headers = new HttpHeaders();
-  //  headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-  // /* let userId = '4914C4FC-9A68-4168-88B0-2DB780D6F4FC';*/
-  //  let email = this.email;
-  //  //remove all refresh token for the current user
-  //  return this.http.delete<any>(this.apiUrl + '/users/' + email, { headers });
-  //}
+  addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
+    debugger;
+    console.log('AddToken' + token);
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      },
+    });
+  }
 
+  handleUnauthorized(
+    req: HttpRequest<any>, next: HttpHandler): Observable<any> {
+    /*    return this.refreshToken().pipe(*/
+    console.log("handleUnauthorized");
+    this.loginWithRefreshToken();
+    if (this.token) {
+      console.log("New Access Token generated: ", this.token.toString());
+      // Retry the original request with the new token
+      return next.handle(this.addToken(req, this.token));
+    } else {
+      // If token refresh fails, log out the user
+      this.logout();
+      return throwError(() => 'Token expired');
+    }
+  }
 }
+  //#endregion
 
-//logout() {
-//  // remove user from local storage and set current user to null
-//  localStorage.removeItem('user');
-//  this.userSubject.next(null);
-//  this.router.navigate(['/account/login']);
-//}
 
-  // #endregion

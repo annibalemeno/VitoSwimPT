@@ -8,20 +8,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   standalone: false,
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
-  loggedIn: boolean = false;
+export class AppComponent {
 
-  constructor(private router: Router, private route: ActivatedRoute, private authService: AccountService) { }
+  constructor(private router: Router, private route: ActivatedRoute, public accountService: AccountService) { }
 
-  ngOnInit() {
-    debugger;
-    if (this.authService.token != null) {
-      this.loggedIn = true;
-    }
-  }
   title = 'vitoswimpt.client';
 
   logout() {
-    this.authService.logout();
+    this.accountService.logout();
   }
 }

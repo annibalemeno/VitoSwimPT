@@ -53,10 +53,4 @@ export class LoginUserComponent implements OnInit{
     }
     );
   }
-
-  loginWithUserToken() {
-    this.accountService.loginWithRefreshToken().subscribe((data: any) => {
-    }, error => { });
-  }
-
 }
