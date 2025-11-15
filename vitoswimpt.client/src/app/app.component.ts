@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './infrastructure/auth.service';
+import { AccountService } from './infrastructure/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AppComponent implements OnInit {
   loggedIn: boolean = false;
 
-  constructor(private router: Router, private route: ActivatedRoute, private authService:AuthService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private authService: AccountService) { }
 
   ngOnInit() {
     debugger;
@@ -22,19 +22,6 @@ export class AppComponent implements OnInit {
   title = 'vitoswimpt.client';
 
   logout() {
-    debugger;
-    this.authService.logout().subscribe((data: any) => {
-      console.log('logout' + data);
-      sessionStorage.clear();
-      if (window.location.href.indexOf('login') !== -1) {
-        window.location.reload();
-      } else {
-        /* this.router.navigate(['']);*/
-        window.location.href = '';
-      }
-    },
-      error => {
-        console.log('errore in logout');
-      });;
+    this.authService.logout();
   }
 }

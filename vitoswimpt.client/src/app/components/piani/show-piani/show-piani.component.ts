@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiserviceService } from '../../../apiservice.service';
 import { Piani } from '../../../interfaces/piani';
-import { AuthService } from '../../../infrastructure/auth.service';
+import { AccountService } from '../../../infrastructure/account.service';
 
 @Component({
   selector: 'app-show-piani',
@@ -11,7 +11,7 @@ import { AuthService } from '../../../infrastructure/auth.service';
 })
 export class ShowPianiComponent implements OnInit{
 
-  constructor(private service: ApiserviceService, private authService:AuthService) { }
+  constructor(private service: ApiserviceService, private authService: AccountService) { }
 
   public PianiList: Piani[] = [];
   PianiIdFilter = "";

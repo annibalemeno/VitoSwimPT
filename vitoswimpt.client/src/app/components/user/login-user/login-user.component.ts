@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiserviceService } from '../../../apiservice.service';
-import { AuthService } from '../../../infrastructure/auth.service';
+import { AccountService } from '../../../infrastructure/account.service';
 
 @Component({
   selector: 'app-login-user',
@@ -11,7 +11,7 @@ import { AuthService } from '../../../infrastructure/auth.service';
 })
 export class LoginUserComponent implements OnInit{
 
-  constructor(private authService: AuthService) { }
+  constructor(public accountService: AccountService) { }
   loggedIn: boolean = false;
   loading = false;
   login_mail = "";
@@ -19,7 +19,10 @@ export class LoginUserComponent implements OnInit{
 /*  loggedIn: boolean = false;*/
 
     ngOnInit(): void {
-      if (sessionStorage.getItem('token') != null) {
+      //if (sessionStorage.getItem('token') != null) {
+      //  this.loggedIn = true;
+      //}
+      if (this.accountService.token) {
         this.loggedIn = true;
       }
     }
@@ -33,11 +36,11 @@ export class LoginUserComponent implements OnInit{
       "email": this.login_mail,
       "password": this.login_password
     }
-    let token = this.authService.login(credentials).subscribe((data: any) => {
+    let token = this.accountService.login(credentials).subscribe((data: any) => {
       debugger;
       let token = data.accessToken;
       let refreshToken = data.refreshToken;
-      console.log(data);
+      console.log('data in login user component: '+data.toString());
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('refreshToken', refreshToken);
       sessionStorage.setItem('email', this.login_mail);;
@@ -52,7 +55,7 @@ export class LoginUserComponent implements OnInit{
   }
 
   loginWithUserToken() {
-    this.authService.loginWithRefreshToken().subscribe((data: any) => {
+    this.accountService.loginWithRefreshToken().subscribe((data: any) => {
     }, error => { });
   }
 

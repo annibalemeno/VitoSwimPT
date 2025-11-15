@@ -6,11 +6,11 @@ import {
   HttpEvent,
 } from '@angular/common/http';
 import { catchError, finalize, Observable, switchMap, throwError } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AccountService } from './account.service';
 
 @Injectable()
 export class authInterceptor implements HttpInterceptor { 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AccountService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     debugger;
     console.log('Interceptor in action on ' + new Date().toLocaleTimeString());

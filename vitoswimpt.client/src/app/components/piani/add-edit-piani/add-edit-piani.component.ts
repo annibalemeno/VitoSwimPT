@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ApiserviceService } from '../../../apiservice.service';
 import { Piani } from '../../../interfaces/piani';
-import { AuthService } from '../../../infrastructure/auth.service';
+import { AccountService } from '../../../infrastructure/account.service';
 
 @Component({
   selector: 'app-add-edit-piani',
@@ -10,7 +10,7 @@ import { AuthService } from '../../../infrastructure/auth.service';
   styleUrl: './add-edit-piani.component.css'
 })
 export class AddEditPianiComponent implements OnInit {
-  constructor(private service: ApiserviceService, private authService:AuthService) { }
+  constructor(private service: ApiserviceService, private authService: AccountService) { }
 
   @Input() piano: any;
   PianoId = 0;

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../../infrastructure/auth.service';
+import { AccountService } from '../../../infrastructure/account.service';
 
 @Component({
   selector: 'app-logout-user',
@@ -10,23 +10,23 @@ import { AuthService } from '../../../infrastructure/auth.service';
 })
 export class LogoutUserComponent {
 
-  constructor(private router: Router, private route: ActivatedRoute, private authService: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, private authService: AccountService) {
   }
 
   logout() {
     debugger;
-    this.authService.logout().subscribe((data: any) => {
-      console.log('logout' + data);
-      sessionStorage.clear();
-      if (window.location.href.indexOf('login') !== -1) {
-        window.location.reload();
-      } else {
-        /* this.router.navigate(['']);*/
-        window.location.href = '';
-      }
-    },
-      error => {
-        console.log('errore in logout');
-      });;
+    //this.authService.logout().subscribe((data: any) => {
+    //  console.log('logout' + data);
+    //  sessionStorage.clear();
+    //  if (window.location.href.indexOf('login') !== -1) {
+    //    window.location.reload();
+    //  } else {
+    //    /* this.router.navigate(['']);*/
+    //    window.location.href = '';
+    //  }
+    //},
+    //  error => {
+    //    console.log('errore in logout');
+    //  });;
     } 
   }

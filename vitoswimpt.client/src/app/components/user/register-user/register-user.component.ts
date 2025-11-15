@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiserviceService } from '../../../apiservice.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../infrastructure/auth.service';
+import { AccountService } from '../../../infrastructure/account.service';
 
 @Component({
   selector: 'app-register-user',
@@ -23,7 +22,7 @@ export class RegisterUserComponent implements OnInit {
 
 
   submitted = false;
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AccountService, private router: Router) { }
   ngOnInit(): void {
     this.validationErrors = { ['firstname']: undefined, ['lastname']: undefined, ['email']: undefined, ['password']: undefined, ['confirmpassword']: undefined };
     }

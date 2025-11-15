@@ -21,7 +21,7 @@ import { LoginUserComponent } from './components/user/login-user/login-user.comp
 import { RegisterUserComponent } from './components/user/register-user/register-user.component';
 import { DetailUserComponent } from './components/user/detail-user/detail-user.component';
 import {HomeComponent } from './components/home/home.component';
-import { AuthService } from './infrastructure/auth.service';
+import { AccountService } from './infrastructure/account.service';
 
 @NgModule({
   declarations: [
@@ -51,7 +51,7 @@ import { AuthService } from './infrastructure/auth.service';
     useClass: authInterceptor,
     multi: true,
   },
-    AuthService],
+    AccountService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
