@@ -79,18 +79,14 @@ export class AccountService {
     return this.http.post<any>(this.apiUrl + '/users/register', full_credentials, { headers });
   }
 
-  loginWithRefreshToken() {
+  loginWithRefreshToken():Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
 
     let rt = {
       "refreshToken": sessionStorage.getItem('refreshToken')
     }
-    this.http.post<any>(this.apiUrl + '/users/refresh-token', rt, { headers }).subscribe((data: any) => {
-      let token = data.accessToken;
-      this.tokenSubject.next(token);
-      sessionStorage.setItem('refreshToken', data.refreshToken);
-    }, error => { console.log('errore in refresh token'); });
+    return this.http.post<any>(this.apiUrl + '/users/refresh-token', rt, { headers });
   }
 
   logout() {
@@ -132,16 +128,28 @@ export class AccountService {
     req: HttpRequest<any>, next: HttpHandler): Observable<any> {
     /*    return this.refreshToken().pipe(*/
     console.log("handleUnauthorized");
-    this.loginWithRefreshToken();
-    if (this.token) {
-      console.log("New Access Token generated: ", this.token.toString());
-      // Retry the original request with the new token
-      return next.handle(this.addToken(req, this.token));
-    } else {
-      // If token refresh fails, log out the user
-      this.logout();
-      return throwError(() => 'Token expired');
-    }
+    this.tokenSubject.next(null);
+    this.loginWithRefreshToken().subscribe({
+      next: (data: any) => {
+        let token = data.accessToken;
+        this.tokenSubject.next(token);
+        sessionStorage.setItem('refreshToken', data.refreshToken);
+        if (this.token) {
+          console.log("New Access Token generated: ", this.token.toString());
+          // Retry the original request with the new token
+          return next.handle(this.addToken(req, this.token));
+        }
+        else {
+          //  // If token refresh fails, log out the user
+            this.logout();
+            return throwError(() => 'Token expired');
+          }
+      },
+      error: () => { console.log('errore in refresh token'); }
+    });
+
+    return throwError(() => 'handleUnauthorized fail');
+
   }
 }
   //#endregion
