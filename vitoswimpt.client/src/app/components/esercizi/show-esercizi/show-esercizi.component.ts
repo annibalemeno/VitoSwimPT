@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Esercizi } from '../../../interfaces/esercizi';
 import { ApiserviceService } from '../../../apiservice.service';
-import { Observable } from 'rxjs';
-
 
 @Component({
   selector: 'app-show-esercizi',
@@ -12,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class ShowEserciziComponent implements OnInit {
 
-  constructor(private service: ApiserviceService) { }
+  constructor(private service: ApiserviceService, ) { }
 
   public EserciziList: Esercizi[] = [];
   // EserciziList: any = [];

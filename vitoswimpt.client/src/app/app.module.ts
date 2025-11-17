@@ -16,12 +16,16 @@ import { ShowPianiComponent } from './components/piani/show-piani/show-piani.com
 import { AddEditPianiComponent } from './components/piani/add-edit-piani/add-edit-piani.component';
 import { DetailPianiComponent } from './components/piani/detail-piani/detail-piani.component';
 import { authInterceptor } from './infrastructure/auth-interceptor';
-import { LogoutUserComponent } from './components/user/logout-user/logout-user.component'
 import { LoginUserComponent } from './components/user/login-user/login-user.component';
 import { RegisterUserComponent } from './components/user/register-user/register-user.component';
 import { DetailUserComponent } from './components/user/detail-user/detail-user.component';
 import {HomeComponent } from './components/home/home.component';
 import { AccountService } from './infrastructure/account.service';
+
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
+import { ButtonModule } from 'primeng/button'; 
 
 @NgModule({
   declarations: [
@@ -44,14 +48,17 @@ import { AccountService } from './infrastructure/account.service';
   ],
   imports: [
     BrowserModule, HttpClientModule,
-    AppRoutingModule, FormsModule
+    AppRoutingModule, FormsModule,
+    ButtonModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: authInterceptor,
     multi: true,
   },
-    AccountService],
+    AccountService,
+    provideAnimationsAsync(),
+    providePrimeNG({ theme: { preset: Aura } })],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
