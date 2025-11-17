@@ -20,7 +20,7 @@ namespace VitoSwimPT.Server.Controllers
         }
 
         [HttpGet(Name = "GetStili")]
-        public async Task<IActionResult> Get()
+        public virtual async Task<IActionResult> Get()
         {
             try
             {

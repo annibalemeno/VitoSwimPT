@@ -2,12 +2,15 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Exceptions;
+using System;
 using System.Diagnostics;
 using System.Text;
 using VitoSwimPT.Server.AllenamentiUtente;
@@ -16,6 +19,7 @@ using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.Users;
 using VitoSwimPT.Server.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -130,11 +134,12 @@ app.UseCors("AllowLocal");
 //app.UseCors("AllowAllHeaders"); ;
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+   
+//}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //add minimal api endpoints
 UserEndpoints.Map(app);
@@ -156,10 +161,23 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .Build();
 
-using (var context = new SwimContext(configuration))
+//DbContextOptions<SwimContext> options = new DbContextOptionsBuilder<SwimContext>().UseSqlServer("Server=vitoswimptsql.database.windows.net,1433;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=False;").Options;
+
+
+string localSwimDb = "Server=FGBAL051944;Database=SwimDB;Trusted_Connection=True; TrustServerCertificate=true;";
+string azureSwimDb = "Server=vitoswimptsql.database.windows.net,1433;Initial Catalog=SwimDB;Persist Security Info=False;User ID=vitoswimptsql-admin;Password=LFui$Gv78L82Bvqp;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+
+DbContextOptions<SwimContext> options = new DbContextOptionsBuilder<SwimContext>().UseSqlServer(localSwimDb).Options;
+
+
+//using (var context = new SwimContext(configuration))
+
+using (var context = new SwimContext(options))
 {
     //creates db if not exists
-    context.Database.EnsureCreated();
+    //context.Database.EnsureCreated();
+    context.Database.Migrate();
 }
 
 app.Run();

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './infrastructure/auth.service';
+import { AccountService } from './infrastructure/account.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,16 +8,13 @@ import { AuthService } from './infrastructure/auth.service';
   standalone: false,
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
-  loggedIn: boolean = false;
+export class AppComponent {
 
-  constructor(private authService:AuthService) { }
+  constructor(private router: Router, private route: ActivatedRoute, public accountService: AccountService) { }
 
-  ngOnInit() {
-    debugger;
-    if (this.authService.token != null) {
-      this.loggedIn = true;
-    }
-  }
   title = 'vitoswimpt.client';
+
+  logout() {
+    this.accountService.logout();
+  }
 }

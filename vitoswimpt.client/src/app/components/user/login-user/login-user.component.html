@@ -1,5 +1,5 @@
 
-<div class="card" *ngIf="!loggedIn">
+<div class="card" *ngIf="!accountService.token">
   <h4 class="card-header">Login</h4>
   <div class="card-body">
     <form>
@@ -25,7 +25,7 @@
 </div>
 
 
-
+<!--<div class="card" *ngIf="!loggedIn">-->
   <!--<h2>Login</h2>
   <form>
     <div>

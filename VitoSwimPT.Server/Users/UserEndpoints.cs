@@ -39,9 +39,10 @@
             .WithTags(Tag)
             .RequireAuthorization();
 
-            builder.MapDelete("users/{id:guid}/refresh-tokens", async (Guid id, RevokeRefreshTokens useCase) =>
+            //builder.MapDelete("users/{id:guid}/refresh-tokens", async (Guid id, RevokeRefreshTokens useCase) =>
+            builder.MapDelete("users/{email}", async (string email, RevokeRefreshTokens useCase) =>
             {
-                bool success = await useCase.Handle(id);
+                bool success = await useCase.Handle(email);
 
                 return success ? Results.NoContent() : Results.BadRequest();
             })

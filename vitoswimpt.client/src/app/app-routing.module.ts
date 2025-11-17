@@ -8,6 +8,7 @@ import { PianiComponent } from './components/piani/piani.component'
 import { LoginUserComponent } from './components/user/login-user/login-user.component'
 import {RegisterUserComponent } from './components/user/register-user/register-user.component'
 import {HomeComponent } from './components/home/home.component'
+import { AuthGuard } from './infrastructure/auth.guard';
 
 
 /*{ path: '', redirectTo: '/login', pathMatch: 'full' },*/
@@ -15,11 +16,11 @@ import {HomeComponent } from './components/home/home.component'
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-  { path: 'esercizi', component: EserciziComponent },
-  { path: 'allenamenti', component: AllenamentiComponent },
-  { path: 'trainDetail/:id', component: DetailAllenamentiComponent },
-  { path: 'pianiDetail/:id', component: DetailPianiComponent },
-  { path: 'piani', component: PianiComponent },
+  { path: 'esercizi', component: EserciziComponent, canActivate: [AuthGuard] },
+  { path: 'allenamenti', component: AllenamentiComponent, canActivate: [AuthGuard] },
+  { path: 'trainDetail/:id', component: DetailAllenamentiComponent, canActivate: [AuthGuard] },
+  { path: 'pianiDetail/:id', component: DetailPianiComponent, canActivate: [AuthGuard] },
+  { path: 'piani', component: PianiComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginUserComponent },
   { path: 'home', component: HomeComponent },
   { path: 'register', component: RegisterUserComponent}
