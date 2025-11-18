@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiserviceService } from '../../../apiservice.service';
 import { AccountService } from '../../../infrastructure/account.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login-user',
@@ -10,40 +11,45 @@ import { AccountService } from '../../../infrastructure/account.service';
   styleUrl: './login-user.component.css'
 })
 export class LoginUserComponent implements OnInit{
+  form!: FormGroup;
 
-  constructor(public accountService: AccountService) { }
-  loggedIn: boolean = false;
   loading = false;
-  login_mail = "";
-  login_password = "";
-/*  loggedIn: boolean = false;*/
+  submitted = false;
 
-    ngOnInit(): void {
-      //if (sessionStorage.getItem('token') != null) {
-      //  this.loggedIn = true;
-      //}
-      if (this.accountService.token) {
-        this.loggedIn = true;
-      }
+  constructor(
+    private formBuilder: FormBuilder,
+    public accountService: AccountService) { }
+
+  ngOnInit(): void {
+
+      this.form = this.formBuilder.group({
+        email: ['', Validators.required],
+        password: ['', Validators.required]
+      });
+
     }
 
+  get f() { return this.form.controls; }
 
-  login() {
+
+  onSubmit() {
+    this.submitted = true;
+    console.log('OnSumbit invoked at: ', new Date().toUTCString());
     debugger;
-
     this.loading = true;
     let credentials = {
-      "email": this.login_mail,
-      "password": this.login_password
+      "email": this.f['email'].value,
+      "password": this.f['password'].value
     }
+
     let token = this.accountService.login(credentials).subscribe((data: any) => {
       debugger;
       let token = data.accessToken;
       let refreshToken = data.refreshToken;
-      console.log('data in login user component: '+data.toString());
+      console.log('data in login user component: ' + data.toString());
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('refreshToken', refreshToken);
-      sessionStorage.setItem('email', this.login_mail);;
+      sessionStorage.setItem('email', credentials.email);;
       alert('Logged in successfully!');
       this.loading = false;
       window.location.reload();
@@ -52,5 +58,6 @@ export class LoginUserComponent implements OnInit{
       this.loading = false;
     }
     );
-  }
+
+  } 
 }

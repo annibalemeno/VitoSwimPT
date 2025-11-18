@@ -2,6 +2,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EserciziComponent } from './components/esercizi/esercizi.component';
@@ -25,7 +26,8 @@ import { AccountService } from './infrastructure/account.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { ButtonModule } from 'primeng/button'; 
+import { InputText } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { ButtonModule } from 'primeng/button';
   imports: [
     BrowserModule, HttpClientModule,
     AppRoutingModule, FormsModule,
-    ButtonModule
+    ReactiveFormsModule,
+    ButtonModule, InputText
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
