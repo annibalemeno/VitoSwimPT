@@ -28,6 +28,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { InputText } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table'
 
 @NgModule({
   declarations: [
@@ -52,7 +53,7 @@ import { ButtonModule } from 'primeng/button';
     BrowserModule, HttpClientModule,
     AppRoutingModule, FormsModule,
     ReactiveFormsModule,
-    ButtonModule, InputText
+    ButtonModule, InputText, TableModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
