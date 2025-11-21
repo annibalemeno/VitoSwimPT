@@ -1,16 +1,41 @@
-<p-table [value]="eserciziList" stripedRows [tableStyle]="{ 'min-width': '50rem' }">
+<p-table #dt [value]="eserciziList" stripedRows [tableStyle]="{ 'min-width': '50rem' }"
+      [globalFilterFields]="['esercizioId', 'ripetizioni', 'distanza', 'recupero', 'stile']">
   <ng-template pTemplate="caption">
     <div class="flex items-center justify-between">
-      <span class="text-xl font-bold">Esercizi</span>
+      <!--<span class="text-xl font-bold">Esercizi</span>-->
+      <span class="fs-4">Esercizi</span>
+    </div>
+    <div class="flex">
+      <p-iconfield iconPosition="left" class="ml-auto">
+        <p-inputicon>
+          <i class="pi pi-search"></i>
+        </p-inputicon>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+      </p-iconfield>
     </div>
   </ng-template>
   <ng-template #header>
     <tr>
-      <th>esercizioId</th>
-      <th>ripetizioni</th>
-      <th>distanza</th>
-      <th>recupero</th>
-      <th>stile</th>
+      <th pSortableColumn="esercizioId">
+        esercizioId
+        <p-sortIcon field="Id" />
+      </th>
+      <th pSortableColumn="ripetizioni">
+        ripetizioni
+        <p-sortIcon field="Reps" />
+      </th>
+      <th pSortableColumn="distanza">
+        distanza
+        <p-sortIcon field="Distanza" />
+      </th>
+      <th pSortableColumn="recupero">
+        recupero
+        <p-sortIcon field="Recupero" />
+      </th>
+      <th pSortableColumn="stile">
+        stile
+        <p-sortIcon field="Stile" />
+      </th>
     </tr>
   </ng-template>
   <ng-template #body let-esercizio>

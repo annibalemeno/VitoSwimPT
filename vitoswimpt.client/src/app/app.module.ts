@@ -29,6 +29,9 @@ import Aura from '@primeng/themes/aura';
 import { InputText } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table'
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { KeyFilterModule } from 'primeng/keyfilter';
 
 @NgModule({
   declarations: [
@@ -53,7 +56,8 @@ import { TableModule } from 'primeng/table'
     BrowserModule, HttpClientModule,
     AppRoutingModule, FormsModule,
     ReactiveFormsModule,
-    ButtonModule, InputText, TableModule
+    ButtonModule, InputText, TableModule,
+    IconFieldModule, InputIconModule, KeyFilterModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
