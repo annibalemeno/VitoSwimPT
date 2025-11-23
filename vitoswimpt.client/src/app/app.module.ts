@@ -32,6 +32,9 @@ import { TableModule } from 'primeng/table'
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { SelectModule } from 'primeng/select';
+import {Tag } from 'primeng/tag';
+
 
 @NgModule({
   declarations: [
@@ -57,7 +60,8 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     AppRoutingModule, FormsModule,
     ReactiveFormsModule,
     ButtonModule, InputText, TableModule,
-    IconFieldModule, InputIconModule, KeyFilterModule
+    IconFieldModule, InputIconModule, KeyFilterModule,
+    SelectModule, Tag
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

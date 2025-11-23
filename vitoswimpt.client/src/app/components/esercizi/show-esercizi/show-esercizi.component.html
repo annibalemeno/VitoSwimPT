@@ -1,4 +1,8 @@
-<p-table #dt [value]="eserciziList" stripedRows [tableStyle]="{ 'min-width': '50rem' }"
+<p-table #dt [value]="eserciziList" stripedRows
+      [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
       [globalFilterFields]="['esercizioId', 'ripetizioni', 'distanza', 'recupero', 'stile']">
   <ng-template pTemplate="caption">
     <div class="flex items-center justify-between">
@@ -17,24 +21,49 @@
   <ng-template #header>
     <tr>
       <th pSortableColumn="esercizioId">
-        esercizioId
+        Id Esercizio
         <p-sortIcon field="Id" />
       </th>
       <th pSortableColumn="ripetizioni">
-        ripetizioni
+        Ripetizioni
         <p-sortIcon field="Reps" />
       </th>
       <th pSortableColumn="distanza">
-        distanza
+        Distanza
         <p-sortIcon field="Distanza" />
       </th>
       <th pSortableColumn="recupero">
-        recupero
+        Recupero
         <p-sortIcon field="Recupero" />
       </th>
       <th pSortableColumn="stile">
-        stile
+        Stile
         <p-sortIcon field="Stile" />
+      </th>
+    </tr>
+    <tr>
+      <th>
+        <p-columnFilter type="text" field="esercizioId" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="ripetizioni" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="distanza" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="recupero" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="stile" matchMode="equals" [showMenu]="false">
+          <ng-template #filter let-value let-filter="filterCallback">
+            <p-select  [options]="stiliList" (onChange)="filter($event.value)" placeholder="Select Style" [showClear]="true" style="min-width: 12rem">
+              <ng-template let-option #item>
+                <p-tag [value]="option.value"/>
+              </ng-template>
+            </p-select>
+          </ng-template>
+        </p-columnFilter>
       </th>
     </tr>
   </ng-template>
