@@ -34,7 +34,7 @@ export class LoginUserComponent implements OnInit{
 
   onSubmit() {
     this.submitted = true;
-    console.log('OnSumbit invoked at: ', new Date().toUTCString());
+    console.log('Login OnSumbit invoked at: ', new Date().toUTCString());
     debugger;
     this.loading = true;
     let credentials = {

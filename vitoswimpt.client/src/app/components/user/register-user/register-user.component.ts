@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '../../../infrastructure/account.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-register-user',
@@ -9,6 +10,8 @@ import { AccountService } from '../../../infrastructure/account.service';
   styleUrl: './register-user.component.css'
 })
 export class RegisterUserComponent implements OnInit {
+  form!: FormGroup;
+
   reg_firstname =  "";
   reg_lastname = "";
   reg_email = "";
@@ -22,20 +25,33 @@ export class RegisterUserComponent implements OnInit {
 
 
   submitted = false;
-  constructor(private authService: AccountService, private router: Router) { }
+  constructor(private authService: AccountService, private formBuilder: FormBuilder, private router: Router) { }
   ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      firstname: [],
+      lastname: [],
+      email: [],
+      password: [],
+      password_confirm: []
+    });
+
     this.validationErrors = { ['firstname']: undefined, ['lastname']: undefined, ['email']: undefined, ['password']: undefined, ['confirmpassword']: undefined };
-    }
+  }
 
+  get f() { return this.form.controls; }
 
-  register() { 
+  onSubmit() {
+    console.log('Register OnSumbit invoked at: ', new Date().toUTCString());
+
     let credentials = {
-      "firstname": this.reg_firstname,
-      "lastname": this.reg_lastname,
-      "email": this.reg_email,
-      "password": this.reg_password,
-      "confirmPassword": this.req_password_confirm
+      "firstname": this.f['firstname'].value,
+      "lastname": this.f['lastname'].value,
+      "email": this.f['email'].value,
+      "password": this.f['password'].value,
+      "confirmPassword": this.f['password_confirm'].value
     };
+
+    console.log('Credentials:', JSON.stringify(credentials));
 
     this.submitted = true;
 

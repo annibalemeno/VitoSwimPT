@@ -57,7 +57,7 @@
       <th>
         <p-columnFilter field="stile" matchMode="equals" [showMenu]="false">
           <ng-template #filter let-value let-filter="filterCallback">
-            <p-select  [options]="stiliList" (onChange)="filter($event.value)" placeholder="Select Style" [showClear]="true" style="min-width: 12rem">
+            <p-select [ngModel]="value"  [options]="stiliList" (onChange)="filter($event.value)" placeholder="Select Style" [showClear]="true" style="min-width: 12rem">
               <ng-template let-option #item>
                 <p-tag [value]="option.value"/>
               </ng-template>
