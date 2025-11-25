@@ -5,7 +5,7 @@
       <div class="mb-3">
         <label class="form-label">First Name</label>
         <!--<input type="text" id="firstname" [(ngModel)]="reg_firstname" name="firstname" required />-->
-        <input type="text" pInputText formControlName="firstname" class="form-control"  />
+        <input type="text" pInputText formControlName="firstname" class="form-control"  [ngClass]="{ 'is-invalid': submitted && this.validationErrors['firstname'] !== 'undefined' }"/>
         <div *ngIf="submitted && this.validationErrors['firstname'] !== 'undefined'" class="invalid-feedback d-block">
           <div *ngFor="let val of this.validationErrors['firstname']">{{val.toString()}} </div>
         </div>
@@ -13,7 +13,7 @@
       <div class="mb-3">
         <label class="form-label">Last Name</label>
         <!--<input type="text" id="lastname" [(ngModel)]="reg_lastname" name="lastname" required />-->
-        <input type="text" pInputText formControlName="lastname" class="form-control" />
+        <input type="text" pInputText formControlName="lastname" class="form-control"  [ngClass]="{ 'is-invalid': submitted && this.validationErrors['lastname'] !== 'undefined' }"/>
         <div *ngIf="submitted && this.validationErrors['lastname'] !== 'undefined'" class="invalid-feedback d-block">
           <div *ngFor="let val of this.validationErrors['lastname']">{{val.toString()}} </div>
         </div>
@@ -21,7 +21,7 @@
       <div class="mb-3">
         <label class="form-label">Email</label>
         <!--<input type="text" id="email" name="email" [(ngModel)]="reg_email" required>-->
-        <input type="text" pInputText formControlName="email" class="form-control" />
+        <input type="text" pInputText formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && this.validationErrors['email'] !== 'undefined'}"/>
         <div *ngIf="submitted && this.validationErrors['email'] !== 'undefined'" class="invalid-feedback d-block">
           <div *ngFor="let val of this.validationErrors['email']">{{val.toString()}} </div>
         </div>
@@ -29,7 +29,7 @@
       <div class="mb-3">
         <label class="form-label">Password</label>
         <!--<input type="password" id="password" name="password" [(ngModel)]="reg_password" required>-->
-        <input type="password" pInputText formControlName="password" class="form-control" />
+        <input type="password" pInputText formControlName="password" class="form-control"  [ngClass]="{ 'is-invalid': submitted && this.validationErrors['password'] !== 'undefined'}"/>
         <div *ngIf="submitted && this.validationErrors['password'] !== 'undefined'" class="invalid-feedback d-block">
           <div *ngFor="let val of this.validationErrors['password']">{{val.toString()}} </div>
         </div>
@@ -37,7 +37,7 @@
       <div class="mb-3">
         <label class="form-label">Confirm Password</label>
         <!--<input type="password" id="password_confirm" name="password_confirm" [(ngModel)]="req_password_confirm" required>-->
-        <input type="password" pInputText formControlName="password_confirm" class="form-control" />
+        <input type="password" pInputText formControlName="password_confirm" class="form-control" [ngClass]="{ 'is-invalid': submitted && this.validationErrors['confirmpassword'] !== 'undefined'}" />
         <div *ngIf="submitted && this.validationErrors['confirmpassword'] !== 'undefined'" class="invalid-feedback d-block">
           <div *ngFor="let val of this.validationErrors['confirmpassword']">{{val.toString()}} </div>
         </div>

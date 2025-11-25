@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '../../../infrastructure/account.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register-user',
@@ -28,11 +28,11 @@ export class RegisterUserComponent implements OnInit {
   constructor(private authService: AccountService, private formBuilder: FormBuilder, private router: Router) { }
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      firstname: [],
-      lastname: [],
-      email: [],
-      password: [],
-      password_confirm: []
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      password_confirm: ['', Validators.required]
     });
 
     this.validationErrors = { ['firstname']: undefined, ['lastname']: undefined, ['email']: undefined, ['password']: undefined, ['confirmpassword']: undefined };
