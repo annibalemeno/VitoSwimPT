@@ -1,9 +1,13 @@
-<p-table #dt [value]="eserciziList" stripedRows
-      [tableStyle]="{ 'min-width': '50rem' }"
-    [paginator]="true"
-    [rows]="10"
-    [rowsPerPageOptions]="[5, 10, 20]"
-      [globalFilterFields]="['esercizioId', 'ripetizioni', 'distanza', 'recupero', 'stile']">
+<p-table #dt [value]="eserciziList"
+         [tableStyle]="{ 'min-width': '50rem' }" stripedRows
+         [paginator]="true"
+         [rows]="10"
+         [first]="first"
+         [showCurrentPageReport]="true"
+         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+         (onPage)="pageChange($event)"
+         [rowsPerPageOptions]="[5, 10, 20]"
+         [globalFilterFields]="['esercizioId', 'ripetizioni', 'distanza', 'recupero', 'stile']">
   <ng-template pTemplate="caption">
     <div class="flex items-center justify-between">
       <!--<span class="text-xl font-bold">Esercizi</span>-->
@@ -57,15 +61,24 @@
       <th>
         <p-columnFilter field="stile" matchMode="equals" [showMenu]="false">
           <ng-template #filter let-value let-filter="filterCallback">
-            <p-select [ngModel]="value"  [options]="stiliList" (onChange)="filter($event.value)" placeholder="Select Style" [showClear]="true" style="min-width: 12rem">
+            <p-select [ngModel]="value" [options]="stiliList" (onChange)="filter($event.value)" placeholder="Select Style" [showClear]="true" style="min-width: 12rem">
               <ng-template let-option #item>
-                <p-tag [value]="option.value"/>
+                <p-tag [value]="option.value" />
               </ng-template>
             </p-select>
           </ng-template>
         </p-columnFilter>
       </th>
     </tr>
+    <!--<tr>
+      <td>
+        <div class="mb-4">
+          <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()" text />
+          <p-button type="button" icon="pi pi-refresh" (click)="reset()" text />
+          <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" text />
+        </div>
+      </td>
+    </tr>-->
   </ng-template>
   <ng-template #body let-esercizio>
     <tr>
@@ -76,5 +89,11 @@
       <td>{{ esercizio.stile }}</td>
     </tr>
   </ng-template>
-  <ng-template pTemplate="footer"> Ci sono in tutto {{ eserciziList ? eserciziList.length : 0 }} esercizi. </ng-template>
+  <ng-template #paginatorleft>
+    <p-button type="button" icon="pi pi-plus" text />
+  </ng-template>
+  <ng-template #paginatorright>
+    <p-button type="button" icon="pi pi-cloud" text />
+  </ng-template>
+  <!--<ng-template pTemplate="footer"> Ci sono in tutto {{ eserciziList ? eserciziList.length : 0 }} esercizi. </ng-template>-->
 </p-table>

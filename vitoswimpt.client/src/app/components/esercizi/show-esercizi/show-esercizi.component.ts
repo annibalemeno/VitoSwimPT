@@ -12,9 +12,14 @@ import { FilterItem } from '../../../interfaces/filter';
 })
 export class ShowEserciziComponent implements OnInit {
 
-  constructor(private service: ApiserviceService, ) { }
   stiliList: FilterItem[] = [];
   public eserciziList: Esercizi[] = [];
+  first = 0;
+  rows = 10;
+
+
+  constructor(private service: ApiserviceService, ) { }
+
 
   ngOnInit(): void {
     this.refreshEserciziList();
@@ -24,9 +29,6 @@ export class ShowEserciziComponent implements OnInit {
           this.stiliList.push({ label: x.nome, value: x.nome });
         });
     });
-
-
-
   }
 
   refreshEserciziList() {
@@ -35,6 +37,32 @@ export class ShowEserciziComponent implements OnInit {
     });
   }
 
+  next() {
+    this.first = this.first + this.rows;
+    console.log('Next');
+  }
 
+  prev() {
+    this.first = this.first - this.rows;
+    console.log('Prev');
+  }
+
+  reset() {
+    this.first = 0;
+    console.log('Reset');
+  }
+
+  pageChange(event:any) {
+    this.first = event.first;
+    this.rows = event.rows;
+  }
+
+  isLastPage(): boolean {
+    return this.eserciziList ? this.first + this.rows >= this.eserciziList.length : true;
+  }
+
+  isFirstPage(): boolean {
+    return this.eserciziList ? this.first === 0 : true;
+  }
 
 }
