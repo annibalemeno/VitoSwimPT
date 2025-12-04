@@ -90,14 +90,12 @@ export class AccountService {
   }
 
   logout() {
-    debugger;
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
     /* let userId = '4914C4FC-9A68-4168-88B0-2DB780D6F4FC';*/
     let email = this.email;
     //remove all refresh token for the current user
     this.http.delete<any>(this.apiUrl + '/users/' + email, { headers }).subscribe(() => {
-      debugger;
       console.log('logout ok');
       sessionStorage.clear();
       this.tokenSubject.next(null);
@@ -115,7 +113,6 @@ export class AccountService {
   }
 
   addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
-    debugger;
     console.log('AddToken' + token);
     return request.clone({
       setHeaders: {

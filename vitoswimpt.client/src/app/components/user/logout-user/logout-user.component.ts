@@ -14,7 +14,6 @@ export class LogoutUserComponent {
   }
 
   logout() {
-    debugger;
     //this.authService.logout().subscribe((data: any) => {
     //  console.log('logout' + data);
     //  sessionStorage.clear();

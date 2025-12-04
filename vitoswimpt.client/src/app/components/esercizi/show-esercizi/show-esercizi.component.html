@@ -1,8 +1,18 @@
+<div class="mb-4">
+  <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()" text />
+  <p-button type="button" icon="pi pi-refresh" (click)="reset()" text />
+  <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" text />
+</div>
 <p-table #dt [value]="eserciziList"
          [tableStyle]="{ 'min-width': '50rem' }" stripedRows
          [paginator]="true"
          [rows]="10"
          [first]="first"
+
+         [totalRecords]="totalRecords"
+         [lazy]="true"
+         (onLazyLoad)="loadEserciziLazy($event)"
+
          [showCurrentPageReport]="true"
          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
          (onPage)="pageChange($event)"

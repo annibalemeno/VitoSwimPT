@@ -2,8 +2,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.Json;
+using System.Web;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
@@ -50,16 +53,61 @@ namespace VitoSwimPT.Server.Controllers
         //    .ToArray();
         //}
 
+        //public class UserParam
+        //{
+        //    public Guid? id { get; set; }
+        //    public string? email { get; set; }
+        //    public string[]? select { get; set; }
+        //    public string[]? include { get; set; }
+        //    public SortingParam[]? sorting { get; set; }
+        //    public PagingParam? paging { get; set; }
+        //}
+
+        public class PagingParam
+        {
+            public string skip { get; set; }
+            public string take { get; set; }
+        }
+
+        public class SortingParam
+        {
+            public string? sortBy { get; set; }
+            public SortDirection? sortDirection { get; set; }
+        }
+
+        public enum SortDirection
+        {
+            ASC,
+            DESC
+        }
+
+        //public class TestModel
+        //{
+        //    public string FundCodes { get; set; }
+        //    public string FromDate { get; set; }
+        //    public string ToDate { get; set; }
+        //}
+
         [HttpGet(Name = "GetEsercizi")]
-        [Authorize]
-        //[AllowAnonymous]
-        public async Task<IActionResult> Get()
+        //[Authorize]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get([FromQuery] string skip, [FromQuery] string take)
         {
             try
             {
                 _logger.Debug("Controller Esercizi Get()");
+                ////var dict = HttpUtility.ParseQueryString("ID=951357852456&FNAME=Jaime&LNAME=Lopez");
+                //var dict = HttpUtility.ParseQueryString(skip);
+                //var jeson = JsonConvert.SerializeObject(dict.AllKeys.ToDictionary(y => y, y => dict[y]));
+                //var userParam = System.Text.Json.JsonSerializer.Deserialize<PagingParam>(jeson);
 
-                var esercizi = await _eserciziRepo.GetEsercizi();
+                //var testmod = new PagingParam { skip = "10", take = "5"};
+                //var uno = JsonConvert.SerializeObject(testmod);
+                //var due = System.Text.Json.JsonSerializer.Serialize<TestModel>(testmod);
+                bool check1 = int.TryParse(skip, out int sk);
+                bool check2 = int.TryParse(take, out int tk);
+
+                var esercizi = await _eserciziRepo.GetEsercizi(sk,tk);
                 //Task<IEnumerable<EserciziVM>>
                 var eserciziList = new List<EserciziVM>();
                 foreach (var item in esercizi)

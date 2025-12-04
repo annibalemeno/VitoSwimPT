@@ -35,7 +35,7 @@ export class LoginUserComponent implements OnInit{
   onSubmit() {
     this.submitted = true;
     console.log('Login OnSumbit invoked at: ', new Date().toUTCString());
-    debugger;
+    //debugger;
     this.loading = true;
     let credentials = {
       "email": this.f['email'].value,
@@ -43,7 +43,7 @@ export class LoginUserComponent implements OnInit{
     }
 
     let token = this.accountService.login(credentials).subscribe((data: any) => {
-      debugger;
+      /*debugger;*/
       let token = data.accessToken;
       let refreshToken = data.refreshToken;
       console.log('data in login user component: ' + data.toString());

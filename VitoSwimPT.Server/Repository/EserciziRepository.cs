@@ -5,7 +5,7 @@ namespace VitoSwimPT.Server.Repository
 {
     public interface IEsercizioRepository
     {
-        Task<IEnumerable<Esercizio>> GetEsercizi();
+        Task<IEnumerable<Esercizio>> GetEsercizi(int skip, int take);
         Task<Esercizio> InsertEsercizio(Esercizio esercizio);
 
         bool DeleteEsercizio(int Id);
@@ -30,9 +30,9 @@ namespace VitoSwimPT.Server.Repository
             _swimDBContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Esercizio>> GetEsercizi()
+        public async Task<IEnumerable<Esercizio>> GetEsercizi(int skip, int take)
         {
-            return await _swimDBContext.Esercizi.ToListAsync();
+            return await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
         }
 
         public async Task<Esercizio> GetEsercizioByID(int ID)
