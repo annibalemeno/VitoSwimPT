@@ -96,21 +96,13 @@ namespace VitoSwimPT.Server.Controllers
             try
             {
                 _logger.Debug("Controller Esercizi Get()");
-                ////var dict = HttpUtility.ParseQueryString("ID=951357852456&FNAME=Jaime&LNAME=Lopez");
-                //var dict = HttpUtility.ParseQueryString(skip);
-                //var jeson = JsonConvert.SerializeObject(dict.AllKeys.ToDictionary(y => y, y => dict[y]));
-                //var userParam = System.Text.Json.JsonSerializer.Deserialize<PagingParam>(jeson);
-
-                //var testmod = new PagingParam { skip = "10", take = "5"};
-                //var uno = JsonConvert.SerializeObject(testmod);
-                //var due = System.Text.Json.JsonSerializer.Serialize<TestModel>(testmod);
                 bool check1 = int.TryParse(skip, out int sk);
                 bool check2 = int.TryParse(take, out int tk);
 
-                var esercizi = await _eserciziRepo.GetEsercizi(sk,tk);
+                var eserciziList = await _eserciziRepo.GetEsercizi(sk,tk);
                 //Task<IEnumerable<EserciziVM>>
-                var eserciziList = new List<EserciziVM>();
-                foreach (var item in esercizi)
+                var eserciziListVM = new List<EserciziVM>();
+                foreach (var item in eserciziList.data)
                 {
                     var stile = await _stiliRepo.GetStileById(item.StileId);
 
@@ -118,9 +110,10 @@ namespace VitoSwimPT.Server.Controllers
 
 
                     esercizio.Stile = stile.Nome;
-                    eserciziList.Add(esercizio);
+                    eserciziListVM.Add(esercizio);
                 }
-                return Ok(eserciziList);
+                var returnValue = new { data = eserciziListVM, totalRecords = eserciziList.totalRecords };
+                return Ok(returnValue);
                 //return Ok(await _eserciziRepo.GetEsercizi());
             }
             catch (Exception ex)

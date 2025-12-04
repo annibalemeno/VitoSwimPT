@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VitoSwimPT.Server.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VitoSwimPT.Server.Repository
 {
     public interface IEsercizioRepository
     {
-        Task<IEnumerable<Esercizio>> GetEsercizi(int skip, int take);
+        Task<PageResponse> GetEsercizi(int skip, int take);
         Task<Esercizio> InsertEsercizio(Esercizio esercizio);
 
         bool DeleteEsercizio(int Id);
@@ -21,6 +22,12 @@ namespace VitoSwimPT.Server.Repository
         // Task<Customer> GetCustomerByName(string Name);
     }
 
+    public class PageResponse
+    {
+        public List<Esercizio> data;
+        public int totalRecords;
+    }
+
     public class EserciziRepository : IEsercizioRepository
     {
         private readonly SwimContext _swimDBContext;
@@ -30,9 +37,22 @@ namespace VitoSwimPT.Server.Repository
             _swimDBContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Esercizio>> GetEsercizi(int skip, int take)
+        
+
+        public async Task<PageResponse> GetEsercizi(int skip, int take)
         {
-            return await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
+            int count = await _swimDBContext.Esercizi.CountAsync();
+            List<Esercizio> listaEsercizi = await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
+
+            PageResponse ritorno = new PageResponse()
+            {
+                data = listaEsercizi,
+                totalRecords = count
+            };
+
+            return ritorno;
+
+            //return await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
         }
 
         public async Task<Esercizio> GetEsercizioByID(int ID)

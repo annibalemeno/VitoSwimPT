@@ -19,9 +19,9 @@ export class ApiserviceService {
 
   // #region Esercizi
 
-  getEserciziList(skip: number, take: number): Observable<Esercizi[]> {
+  getEserciziList(skip: number, take: number): Observable<any> {
     console.log("getEserciziList with skip= " + skip + " and take= " + take);
-    return this.http.get<Esercizi[]>('/esercizi?skip='+skip+'&take='+take);
+    return this.http.get<any>('/esercizi?skip='+skip+'&take='+take);
   }
 
   addEsercizio(esercizio: Esercizi): Observable<any> {

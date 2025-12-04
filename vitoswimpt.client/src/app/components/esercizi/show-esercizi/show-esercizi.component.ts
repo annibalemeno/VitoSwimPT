@@ -63,12 +63,12 @@ export class ShowEserciziComponent implements OnInit {
    /* this.loading = true;*/
     const page = event.first / event.rows;
     const size = event.rows;
-    this.service.getEserciziList(page*size, size).subscribe((data: any) => {
+    this.service.getEserciziList(page*size, size).subscribe((res: any) => {
       //this.products = res.data;
       //this.totalRecords = res.total;
-      this.eserciziList = data;
+      this.eserciziList = res.data;
       /*this.totalRecords = data.length;  */
-      this.totalRecords = 100;  
+      this.totalRecords = res.totalRecords;  
       /*this.loading = false;*/
     });
   }
