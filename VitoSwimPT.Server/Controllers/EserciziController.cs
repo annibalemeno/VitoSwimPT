@@ -143,6 +143,31 @@ namespace VitoSwimPT.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("filtri")]
+        //public IActionResult GetEserciziFiltrati([FromBody] FilterObjects filtri)
+        public async Task<IActionResult> GetEserciziFiltrati([FromBody] FilterObjects filtri)
+        {
+            // Usa "filtri" per applicare i filtri
+            //return Ok(filtri);
+
+            var eserciziList = await _eserciziRepo.GetEserciziFiltrati(filtri);
+            //Task<IEnumerable<EserciziVM>>
+            var eserciziListVM = new List<EserciziVM>();
+            foreach (var item in eserciziList.data)
+            {
+                var stile = await _stiliRepo.GetStileById(item.StileId);
+
+                var esercizio = _mapper.Map<EserciziVM>(item);
+
+
+                esercizio.Stile = stile.Nome;
+                eserciziListVM.Add(esercizio);
+            }
+            var returnValue = new { data = eserciziListVM, totalRecords = eserciziList.totalRecords };
+            return Ok(returnValue);
+        }
+
         [HttpPost(Name = "AddEsercizi")]
         public async Task<IActionResult> Post(EserciziVM es)
         {

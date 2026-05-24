@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using VitoSwimPT.Server.Models;
+using VitoSwimPT.Server.ViewModels;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VitoSwimPT.Server.Repository
@@ -7,6 +9,8 @@ namespace VitoSwimPT.Server.Repository
     public interface IEsercizioRepository
     {
         Task<PageResponse> GetEsercizi(int skip, int take);
+
+        Task<PageResponse> GetEserciziFiltrati(FilterObjects filtri);
         Task<Esercizio> InsertEsercizio(Esercizio esercizio);
 
         bool DeleteEsercizio(int Id);
@@ -37,7 +41,26 @@ namespace VitoSwimPT.Server.Repository
             _swimDBContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        
+        public async Task<PageResponse> GetEserciziFiltrati(FilterObjects filters)
+        {
+            int count = await _swimDBContext.Esercizi.CountAsync();
+            //List<Esercizio> listaEsercizi = await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
+
+            var query = _swimDBContext.Esercizi.AsQueryable();
+            query = ApplyFilters(query, filters);
+            List<Esercizio> listaEsercizi = await query.Skip(filters.skip).Take(filters.take).ToListAsync();
+
+
+            PageResponse ritorno = new PageResponse()
+            {
+                data = listaEsercizi,
+                totalRecords = count
+            };
+
+            return ritorno;
+
+            //return await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
+        }
 
         public async Task<PageResponse> GetEsercizi(int skip, int take)
         {
@@ -90,6 +113,65 @@ namespace VitoSwimPT.Server.Repository
             await _swimDBContext.SaveChangesAsync();
             return esercizio;
         }
+
+public static IQueryable<T> ApplyStringFilter<T>(
+    IQueryable<T> query,
+    Expression<Func<T, string>> selector,
+    FilterField filter)
+{
+    if (string.IsNullOrEmpty(filter?.value))
+        return query;
+
+    var value = filter.value;
+    var mode = filter.matchMode?.ToLower();
+
+    var parameter = selector.Parameters[0]; // es: "e"
+    var member = selector.Body;             // es: e.Stile
+
+    Expression body = mode switch
+    {
+        "startswith" => Expression.Call(member,
+            typeof(string).GetMethod("StartsWith", new[] { typeof(string) }),
+            Expression.Constant(value)),
+
+        "contains" => Expression.Call(member,
+            typeof(string).GetMethod("Contains", new[] { typeof(string) }),
+            Expression.Constant(value)),
+
+        "equals" => Expression.Equal(member, Expression.Constant(value)),
+
+        _ => null
+    };
+
+    if (body == null)
+        return query;
+
+    var lambda = Expression.Lambda<Func<T, bool>>(body, parameter);
+
+    return query.Where(lambda);
+}
+
+
+        public IQueryable<Esercizio> ApplyFilters(IQueryable<Esercizio> query, FilterObjects filters)
+        {
+            if (!string.IsNullOrEmpty(filters.esercizioId?.value))
+                query = ApplyStringFilter(query, e => e.EsercizioId.ToString(), filters.esercizioId);
+
+            if (!string.IsNullOrEmpty(filters.ripetizioni?.value))
+                query = ApplyStringFilter(query, e => e.Ripetizioni.ToString(), filters.ripetizioni);
+
+            if (!string.IsNullOrEmpty(filters.distanza?.value))
+                query = ApplyStringFilter(query, e => e.Distanza.ToString(), filters.distanza);
+
+            if (!string.IsNullOrEmpty(filters.recupero?.value))
+                query = ApplyStringFilter(query, e => e.Recupero.ToString(), filters.recupero);
+
+            //if (!string.IsNullOrEmpty(filters.stile?.value))
+            //    query = ApplyStringFilter(query, e => e.Stile, filters.stile);
+
+            return query;
+        }
+
     }
 }
 

@@ -13,7 +13,7 @@ export class ShowEserciziComponent implements OnInit {
 
   stiliList: FilterItem[] = [];
   public eserciziList: Esercizi[] = [];
-  first = 0;
+  first:number = 0;
   rows = 10;
   totalRecords:number = 0;
 
@@ -56,25 +56,39 @@ export class ShowEserciziComponent implements OnInit {
     debugger;
     this.first = event.first;
     this.rows = event.rows;
+    console.log('page change with first= ' + this.first + ' , rows= ' + this.rows);
   }
 
   loadEserciziLazy(event: any) {
     debugger;
-   /* this.loading = true;*/
+    /* this.loading = true;*/
+    this.first = event.first;
+    this.rows = event.rows;
     const page = event.first / event.rows;
     const size = event.rows;
-    this.service.getEserciziList(page*size, size).subscribe((res: any) => {
+    var filtri = event.filters;
+    filtri.skip = page * size;
+    filtri.take = size;
+    //this.service.getEserciziList(page*size, size, event.filters).subscribe((res: any) => {
+    this.service.getEserciziList(filtri).subscribe(data => {
+      debugger;
+        this.eserciziList = data.data;
+        this.totalRecords = 10;
+      });
+
       //this.products = res.data;
       //this.totalRecords = res.total;
-      this.eserciziList = res.data;
       /*this.totalRecords = data.length;  */
-      this.totalRecords = res.totalRecords;  
       /*this.loading = false;*/
-    });
+
+    //this.eserciziList = res.data;
+    //this.totalRecords = res.totalRecords;
+
+/*    });*/
   }
 
   isLastPage(): boolean {
-    return this.eserciziList ? this.first + this.rows >= this.eserciziList.length : true;
+    return this.eserciziList ? this.first + this.rows >= this.totalRecords : true;
   }
 
   isFirstPage(): boolean {
