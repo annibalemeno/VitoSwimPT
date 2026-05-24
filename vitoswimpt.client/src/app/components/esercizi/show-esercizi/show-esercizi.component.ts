@@ -18,6 +18,7 @@ export class ShowEserciziComponent implements OnInit {
   totalRecords:number = 0;
 
   clonedEsercizi: { [s: number]: Esercizi } = {};
+  lastLazyEvent: any;
 
   constructor(private service: ApiserviceService, ) { }
 
@@ -53,6 +54,14 @@ export class ShowEserciziComponent implements OnInit {
     });
   }
 
+  deleteProduct(esercizio: Esercizi) {
+    this.service.deleteEsercizio(esercizio.esercizioId).subscribe(() => {
+      //this.loadData(this.lastLazyEvent); // ricarica la pagina corrente
+      alert('esercizio con id '+esercizio.esercizioId+ ' cancellato');
+      this.loadEserciziLazy(this.lastLazyEvent)
+    });
+  }
+
   next() {
     this.first = this.first + this.rows;
     console.log('Next');
@@ -78,6 +87,7 @@ export class ShowEserciziComponent implements OnInit {
   loadEserciziLazy(event: any) {
     debugger;
     /* this.loading = true;*/
+    this.lastLazyEvent = event; 
     this.first = event.first;
     this.rows = event.rows;
     const page = event.first / event.rows;
