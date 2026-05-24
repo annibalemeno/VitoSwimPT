@@ -17,6 +17,7 @@ export class ShowEserciziComponent implements OnInit {
   rows = 10;
   totalRecords:number = 0;
 
+  clonedEsercizi: { [s: number]: Esercizi } = {};
 
   constructor(private service: ApiserviceService, ) { }
 
@@ -36,6 +37,21 @@ export class ShowEserciziComponent implements OnInit {
   //    this.eserciziList = data;
   //  });
   //}
+
+  onRowEditInit(esercizio: Esercizi) {
+    this.clonedEsercizi[esercizio.esercizioId] = { ...esercizio };
+  }
+
+  onRowEditCancel(esercizio: Esercizi, index: number) {
+    this.clonedEsercizi[index] = this.clonedEsercizi[esercizio.esercizioId];
+    delete this.clonedEsercizi[esercizio.esercizioId];
+  }
+
+  onRowEditSave(esercizio: Esercizi) {
+    this.service.updateEsercizio(esercizio).subscribe(data => {
+      alert(data.toString());
+    });
+  }
 
   next() {
     this.first = this.first + this.rows;

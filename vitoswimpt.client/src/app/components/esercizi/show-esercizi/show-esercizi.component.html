@@ -4,6 +4,8 @@
   <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" text />
 </div>
 <p-table #dt [value]="eserciziList"
+         dataKey="esercizioId"
+         editMode="row"
          [tableStyle]="{ 'min-width': '50rem' }" stripedRows
          [paginator]="true"
          [rows]="10"
@@ -90,13 +92,74 @@
       </td>
     </tr>-->
   </ng-template>
-  <ng-template #body let-esercizio>
-    <tr>
+  <ng-template #body let-esercizio let-editing="editing" let-ri="rowIndex">
+    <tr [pEditableRow]="esercizio">
       <td>{{ esercizio.esercizioId }}</td>
-      <td>{{ esercizio.ripetizioni }}</td>
-      <td>{{ esercizio.distanza }}</td>
-      <td>{{ esercizio.recupero }}</td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text"
+                   [(ngModel)]="esercizio.ripetizioni" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{esercizio.ripetizioni}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text"
+                   [(ngModel)]="esercizio.distanza" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{esercizio.distanza}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text"
+                   [(ngModel)]="esercizio.recupero" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{esercizio.recupero}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
       <td>{{ esercizio.stile }}</td>
+      <td>
+        <div class="flex items-center justify-center gap-2">
+          <button *ngIf="!editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pInitEditableRow
+                  icon="pi pi-pencil"
+                  (click)="onRowEditInit(esercizio)"
+                  text
+                  rounded></button>
+          <button *ngIf="editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pSaveEditableRow
+                  icon="pi pi-check"
+                  (click)="onRowEditSave(esercizio)"
+                  text
+                  rounded></button>
+          <button *ngIf="editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pCancelEditableRow
+                  icon="pi pi-times"
+                  (click)="onRowEditCancel(esercizio, ri)"
+                  text
+                  rounded></button>
+        </div>
+      </td>
     </tr>
   </ng-template>
   <ng-template #paginatorleft>
