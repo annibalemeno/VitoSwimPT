@@ -72,8 +72,8 @@ export class ShowEserciziComponent implements OnInit {
     //this.service.getEserciziList(page*size, size, event.filters).subscribe((res: any) => {
     this.service.getEserciziList(filtri).subscribe(data => {
       debugger;
-        this.eserciziList = data.data;
-        this.totalRecords = 10;
+      this.eserciziList = data.data;
+      this.totalRecords = data.totalRecords;
       });
 
       //this.products = res.data;

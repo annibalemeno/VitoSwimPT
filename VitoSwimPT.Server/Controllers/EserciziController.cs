@@ -143,7 +143,7 @@ namespace VitoSwimPT.Server.Controllers
             }
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpPost("filtri")]
         //public IActionResult GetEserciziFiltrati([FromBody] FilterObjects filtri)
         public async Task<IActionResult> GetEserciziFiltrati([FromBody] FilterObjects filtri)
