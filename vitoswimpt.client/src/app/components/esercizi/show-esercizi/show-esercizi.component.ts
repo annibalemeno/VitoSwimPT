@@ -69,6 +69,7 @@ export class ShowEserciziComponent implements OnInit {
     var filtri = event.filters;
     filtri.skip = page * size;
     filtri.take = size;
+    filtri.globalfilter = event.globalFilter;
     //this.service.getEserciziList(page*size, size, event.filters).subscribe((res: any) => {
     this.service.getEserciziList(filtri).subscribe(data => {
       debugger;

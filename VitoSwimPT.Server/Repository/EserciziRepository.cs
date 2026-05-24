@@ -43,11 +43,11 @@ namespace VitoSwimPT.Server.Repository
 
         public async Task<PageResponse> GetEserciziFiltrati(FilterObjects filters)
         {
-            int count = await _swimDBContext.Esercizi.CountAsync();
             //List<Esercizio> listaEsercizi = await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
 
             var query = _swimDBContext.Esercizi.AsQueryable();
             query = ApplyFilters(query, filters);
+            int count = await query.CountAsync();
             List<Esercizio> listaEsercizi = await query.Skip(filters.skip).Take(filters.take).ToListAsync();
 
 
@@ -169,6 +169,18 @@ public static IQueryable<T> ApplyStringFilter<T>(
             //if (!string.IsNullOrEmpty(filters.stile?.value))
             //    query = ApplyStringFilter(query, e => e.Stile, filters.stile);
 
+            if (!string.IsNullOrWhiteSpace(filters.globalFilter))
+            {
+                var gf = filters.globalFilter.ToLower();
+
+                query = query.Where(x =>
+                    x.EsercizioId.ToString().Contains(gf) ||
+                    x.Ripetizioni.ToString().Contains(gf) ||
+                    x.Distanza.ToString().Contains(gf) ||
+                    x.Recupero.ToString().Contains(gf) 
+                );
+            }
+            //||x.Stile.ToLower().Contains(gf)
             return query;
         }
 

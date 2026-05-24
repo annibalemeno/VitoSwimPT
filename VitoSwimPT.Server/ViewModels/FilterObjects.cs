@@ -4,6 +4,7 @@
     {
         public int skip { get; set; }
         public int take { get; set; }
+        public string? globalFilter { get; set; }
         public FilterField? esercizioId { get; set; }
         public FilterField? ripetizioni { get; set; }
         public FilterField? distanza { get; set; }
