@@ -18,6 +18,7 @@ export class LoginUserComponent implements OnInit{
 
   constructor(
     private formBuilder: FormBuilder,
+    private router:Router,
     public accountService: AccountService) { }
 
   ngOnInit(): void {
@@ -52,7 +53,8 @@ export class LoginUserComponent implements OnInit{
       sessionStorage.setItem('email', credentials.email);;
       alert('Logged in successfully!');
       this.loading = false;
-      window.location.reload();
+      /*window.location.reload();*/
+      this.router.navigate(['/esercizi']);
     }, error => {
       alert(error.error.title + ' : ' + error.error.detail);
       this.loading = false;
