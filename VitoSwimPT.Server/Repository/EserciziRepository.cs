@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using VitoSwimPT.Server.Infrastructure;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.ViewModels;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -46,10 +47,15 @@ namespace VitoSwimPT.Server.Repository
             //List<Esercizio> listaEsercizi = await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
 
             var query = _swimDBContext.Esercizi.AsQueryable();
+
+            // Sorting
+            query = filters.sortOrder == 1
+                ? query.OrderByDynamic(filters.sortField)
+                : query.OrderByDescendingDynamic(filters.sortField);
+
             query = ApplyFilters(query, filters);
             int count = await query.CountAsync();
             List<Esercizio> listaEsercizi = await query.Skip(filters.skip).Take(filters.take).ToListAsync();
-
 
             PageResponse ritorno = new PageResponse()
             {

@@ -15,7 +15,10 @@ export class ShowEserciziComponent implements OnInit {
   public eserciziList: Esercizi[] = [];
   first:number = 0;
   rows = 10;
-  totalRecords:number = 0;
+  totalRecords: number = 0;
+
+  sortField = 'esercizioId';
+  sortOrder = 1;
 
   clonedEsercizi: { [s: number]: Esercizi } = {};
   lastLazyEvent: any;
@@ -96,22 +99,23 @@ export class ShowEserciziComponent implements OnInit {
     filtri.skip = page * size;
     filtri.take = size;
     filtri.globalfilter = event.globalFilter;
-    //this.service.getEserciziList(page*size, size, event.filters).subscribe((res: any) => {
+
+    const sortField = event.sortField ?? this.sortField;
+    const sortOrder = event.sortOrder ?? this.sortOrder;
+
+    this.sortField = sortField;
+    this.sortOrder = sortOrder;
+
+    filtri.sortField = this.sortField;
+    filtri.sortOrder = this.sortOrder;
+
     this.service.getEserciziList(filtri).subscribe(data => {
       debugger;
       this.eserciziList = data.data;
       this.totalRecords = data.totalRecords;
       });
 
-      //this.products = res.data;
-      //this.totalRecords = res.total;
-      /*this.totalRecords = data.length;  */
-      /*this.loading = false;*/
 
-    //this.eserciziList = res.data;
-    //this.totalRecords = res.totalRecords;
-
-/*    });*/
   }
 
   isLastPage(): boolean {

@@ -8,9 +8,10 @@
          editMode="row"
          [tableStyle]="{ 'min-width': '50rem' }" stripedRows
          [paginator]="true"
+         [sortField]="sortField"
+         [sortOrder]="sortOrder"
          [rows]="10"
          [first]="first"
-
          [totalRecords]="totalRecords"
          [lazy]="true"
          (onLazyLoad)="loadEserciziLazy($event)"
