@@ -33,7 +33,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { SelectModule } from 'primeng/select';
-import {Tag } from 'primeng/tag';
+import { Tag } from 'primeng/tag';
 
 
 @NgModule({

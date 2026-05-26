@@ -172,21 +172,30 @@ public static IQueryable<T> ApplyStringFilter<T>(
             if (!string.IsNullOrEmpty(filters.recupero?.value))
                 query = ApplyStringFilter(query, e => e.Recupero.ToString(), filters.recupero);
 
+            if (!string.IsNullOrEmpty(filters.stile?.value))
+                query = ApplyStringFilter(query, e => e.StileId.ToString(), filters.stile);
+
             //if (!string.IsNullOrEmpty(filters.stile?.value))
             //    query = ApplyStringFilter(query, e => e.Stile, filters.stile);
 
             if (!string.IsNullOrWhiteSpace(filters.globalFilter))
             {
                 var gf = filters.globalFilter.ToLower();
+                var sf = _swimDBContext.Stili.Where(x=>x.Nome.Equals(gf)).FirstOrDefault();
 
-                query = query.Where(x =>
+                if (sf is not null)
+                {
+                    query = query.Where(x => x.StileId == sf.StileId);
+                }
+                else
+                {
+                    query = query.Where(x =>
                     x.EsercizioId.ToString().Contains(gf) ||
                     x.Ripetizioni.ToString().Contains(gf) ||
                     x.Distanza.ToString().Contains(gf) ||
-                    x.Recupero.ToString().Contains(gf) 
-                );
+                    x.Recupero.ToString().Contains(gf));
+                }
             }
-            //||x.Stile.ToLower().Contains(gf)
             return query;
         }
 

@@ -30,8 +30,8 @@ export class ShowEserciziComponent implements OnInit {
     //this.refreshEserciziList();
 
     this.service.getStili().subscribe(data => {
-        data.forEach(x => {
-          this.stiliList.push({ label: x.nome, value: x.nome });
+      data.forEach(x => {
+        this.stiliList.push({ label: x.nome, value: x.stileId.toString() });
         });
     });
   }

@@ -73,12 +73,23 @@
       </th>
       <th>
         <p-columnFilter field="stile" matchMode="equals" [showMenu]="false">
-          <ng-template #filter let-value let-filter="filterCallback">
-            <p-select [ngModel]="value" [options]="stiliList" (onChange)="filter($event.value)" placeholder="Select Style" [showClear]="true" style="min-width: 12rem">
-              <ng-template let-option #item>
-                <p-tag [value]="option.value" />
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+
+            <p-select [ngModel]="value"
+                      [options]="stiliList"
+                      optionLabel="label"
+                      optionValue="value"
+                      (onChange)="filter($event.value)"
+                      placeholder="Select Style"
+                      [showClear]="true"
+                      style="min-width: 12rem">
+
+              <ng-template pTemplate="item" let-option>
+                <p-tag [value]="option.label"></p-tag>
               </ng-template>
+
             </p-select>
+
           </ng-template>
         </p-columnFilter>
       </th>
