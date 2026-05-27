@@ -32,7 +32,8 @@ export class ShowEserciziComponent implements OnInit {
     this.service.getStili().subscribe(data => {
       data.forEach(x => {
         this.stiliList.push({ label: x.nome, value: x.stileId.toString() });
-        });
+      });
+      console.log(JSON.stringify(this.stiliList));
     });
   }
 
@@ -106,7 +107,7 @@ export class ShowEserciziComponent implements OnInit {
     this.sortField = sortField;
     this.sortOrder = sortOrder;
 
-    filtri.sortField = this.sortField;
+    filtri.sortField = this.sortField == 'stile' ? 'StileId' : this.sortField;
     filtri.sortOrder = this.sortOrder;
 
     this.service.getEserciziList(filtri).subscribe(data => {
