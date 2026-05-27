@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Numerics;
 using System.Reflection;
 using System.Text.Json;
 using System.Web;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VitoSwimPT.Server.Controllers
 {
@@ -174,10 +176,15 @@ namespace VitoSwimPT.Server.Controllers
             try
             {
                 _logger.Debug($"Controller Esercizi Post(es) with es = {es} ");
+                if (!int.TryParse(es.Stile, out int stileId))
+                {
+                    stileId = 1; //default value stile libero 
+                }
 
-                //get stile
-                var stile = await _stiliRepo.GetStileByName(es.Stile);
-                int stileId = stile.StileId;                //TODO robustezza eccezioni
+
+                ////get stile
+                //var stile = await _stiliRepo.GetStileByName(es.Stile);
+                //int stileId = stile.StileId;               
 
                 Esercizio esToInsert = new Esercizio()
                 {

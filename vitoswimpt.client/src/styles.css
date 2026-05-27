@@ -14,3 +14,16 @@
 .ngbuttonspace {
   margin-right:1em;
 }
+
+.dialog-fix .p-dialog-content {
+  overflow: visible !important;
+}
+
+/*.dialog-large .p-dialog {
+  width: 50vw;*/ /* 50% della larghezza dello schermo */
+  /*min-height: 40vh;*/ /* 40% dell’altezza dello schermo */
+/*}
+
+.dialog-large .p-dialog-content {
+  overflow: visible !important;*/ /* fondamentale per p-select */
+/*}*/

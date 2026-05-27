@@ -11,6 +11,9 @@ import { FilterItem } from '../../../interfaces/filter';
 })
 export class ShowEserciziComponent implements OnInit {
 
+  displayDialog = false;
+  newItem: any = {};
+
   stiliList: FilterItem[] = [];
   public eserciziList: Esercizi[] = [];
   first:number = 0;
@@ -125,6 +128,24 @@ export class ShowEserciziComponent implements OnInit {
 
   isFirstPage(): boolean {
     return this.eserciziList ? this.first === 0 : true;
+  }
+
+  openNew() {
+    this.newItem = {};
+    this.displayDialog = true;
+  }
+
+  save() {
+    //this.service.create(this.newItem).subscribe(() => {
+    //  this.displayDialog = false;
+    //  this.loadData(this.lastLazyEvent); // ricarica la pagina corrente
+    //});
+    this.newItem.esercizioId = 0;
+    this.service.addEsercizio(this.newItem).subscribe(data => {
+      this.displayDialog = false;
+      this.loadEserciziLazy(this.lastLazyEvent);
+    });
+    console.log('Save called');
   }
 
 }

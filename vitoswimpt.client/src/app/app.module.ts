@@ -34,6 +34,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { SelectModule } from 'primeng/select';
 import { Tag } from 'primeng/tag';
+import { DialogModule } from 'primeng/dialog';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 
 @NgModule({
@@ -61,7 +63,7 @@ import { Tag } from 'primeng/tag';
     ReactiveFormsModule,
     ButtonModule, InputText, TableModule,
     IconFieldModule, InputIconModule, KeyFilterModule,
-    SelectModule, Tag
+    SelectModule, Tag, DialogModule, InputNumberModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

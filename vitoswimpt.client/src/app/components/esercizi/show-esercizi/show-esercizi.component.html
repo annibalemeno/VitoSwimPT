@@ -93,6 +93,9 @@
           </ng-template>
         </p-columnFilter>
       </th>
+      <th>
+        <button pButton label="Add New" icon="pi pi-plus" (click)="openNew()"></button>
+      </th>
     </tr>
     <!--<tr>
       <td>
@@ -186,6 +189,59 @@
   </ng-template>
   <!--<ng-template pTemplate="footer"> Ci sono in tutto {{ eserciziList ? eserciziList.length : 0 }} esercizi. </ng-template>-->
 </p-table>
+        <p-dialog [(visible)]="displayDialog" styleClass="dialog-fix" header="Nuovo esercizio">
+          <div class="grid p-fluid align-items-center">
+
+            <div class="col-4 text-right font-semibold">
+              <label>Ripetizioni</label>
+            </div>
+            <div class="col-8">
+              <p-inputNumber [(ngModel)]="newItem.ripetizioni"
+                             [useGrouping]="false">
+              </p-inputNumber>
+            </div>
+
+            <div class="col-4 text-right font-semibold">
+              <label>Distanza</label>
+            </div>
+            <div class="col-8">
+              <p-inputNumber [(ngModel)]="newItem.distanza"
+                             [useGrouping]="false">
+              </p-inputNumber>
+            </div>
+
+            <div class="col-4 text-right font-semibold">
+              <label>Recupero</label>
+            </div>
+            <div class="col-8">
+              <p-inputNumber [(ngModel)]="newItem.recupero"
+                             [useGrouping]="false">
+              </p-inputNumber>
+            </div>
+
+            <div class="col-4 text-right font-semibold">
+              <label>Stile</label>
+            </div>
+            <div class="col-8">
+              <p-select [(ngModel)]="newItem.stile"
+                        [options]="stiliList"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Seleziona Stile"
+                        [showClear]="true"
+                        appendTo="self">
+
+                <ng-template pTemplate="item" let-option>
+                  <p-tag [value]="option.label"></p-tag>
+                </ng-template>
+
+              </p-select>
+            </div>
+
+          </div>
+
+          <button pButton label="Save" icon="pi pi-check" (click)="save()"></button>
+        </p-dialog>
 <!--<p-paginator [rows]="10"
              [totalRecords]="120"
              (onPageChange)="pageChange($event)">
