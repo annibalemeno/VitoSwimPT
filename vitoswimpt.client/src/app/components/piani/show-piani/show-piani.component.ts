@@ -13,6 +13,9 @@ export class ShowPianiComponent implements OnInit{
 
   constructor(private service: ApiserviceService, private authService: AccountService) { }
 
+  sortField = 'pianoId';
+  sortOrder = 1;
+
   public PianiList: Piani[] = [];
   PianiIdFilter = "";
   NomePianoFilter = "";
@@ -36,6 +39,24 @@ export class ShowPianiComponent implements OnInit{
     }
 
   public refreshPianiList() {
+    if (this.authService.email != null) {
+      let email = this.authService.email;
+      this.service.getPianiByUser(email).subscribe(data => {
+        this.PianiList = data;
+        console.log("PianiList", this.PianiList);
+        this.PianiListWithoutFilter = data;
+      });
+    }
+  }
+
+  loadPianiLazy(event: any) {
+
+    const sortField = event.sortField ?? this.sortField;
+    const sortOrder = event.sortOrder ?? this.sortOrder;
+
+    this.sortField = sortField;
+    this.sortOrder = sortOrder;
+
     if (this.authService.email != null) {
       let email = this.authService.email;
       this.service.getPianiByUser(email).subscribe(data => {
