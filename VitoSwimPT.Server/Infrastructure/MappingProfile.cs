@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using System.ComponentModel.DataAnnotations.Schema;
 using VitoSwimPT.Server.Models;
-using VitoSwimPT.Server.Repository;
-using VitoSwimPT.Server.Users;
 using VitoSwimPT.Server.ViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VitoSwimPT.Server.Infrastructure
 {

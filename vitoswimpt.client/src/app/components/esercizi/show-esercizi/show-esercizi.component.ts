@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Esercizi } from '../../../interfaces/esercizi';
 import { ApiserviceService } from '../../../apiservice.service';
+import { FilterItem } from '../../../interfaces/filter';
 
 @Component({
   selector: 'app-show-esercizi',
@@ -10,115 +11,141 @@ import { ApiserviceService } from '../../../apiservice.service';
 })
 export class ShowEserciziComponent implements OnInit {
 
+  displayDialog = false;
+  newItem: any = {};
+
+  stiliList: FilterItem[] = [];
+  public eserciziList: Esercizi[] = [];
+  first:number = 0;
+  rows = 10;
+  totalRecords: number = 0;
+
+  sortField = 'esercizioId';
+  sortOrder = 1;
+
+  clonedEsercizi: { [s: number]: Esercizi } = {};
+  lastLazyEvent: any;
+
   constructor(private service: ApiserviceService, ) { }
 
-  public EserciziList: Esercizi[] = [];
-  // EserciziList: any = [];
-  ModalTitle = "";
-  ActivateAddEditEsercComp: boolean = false;
-  eserc: Esercizi
-    = {
-      esercizioId: 0,
-      ripetizioni: 0,
-      distanza: 0,
-      recupero: 0,
-      stile: "Libero"
-    };
-
-  EserciziIdFilter = "";
-  EerciziRipetizioniFilter = "";
-  EerciziDistanzaFilter = "";
-  EerciziRecuperoFilter = "";
-  EerciziStileFilter = "";
-  EserciziListWithoutFilter: any = [];
 
   ngOnInit(): void {
-    this.refreshEserciziList();
-    //this.getAllenamenti();
-  }
+    //this.refreshEserciziList();
 
-  addClick() {
-    this.eserc = {
-      esercizioId: 0,
-      ripetizioni: 0,
-      distanza: 0,
-      recupero: 0,
-      stile: "Libero"
-    };
-
-    this.ModalTitle = "Add Esercizio";
-    this.ActivateAddEditEsercComp = true;
-  }
-
-  editClick(item: any) {
-    this.eserc = item;
-
-    //this.eserc = {
-    //  esercizioId: item.esercizioId,
-    //  ripetizioni: item.ripetizioni,
-    //  distanza: item.distanza,
-    //  recupero: item.recupero,
-    //  stile: item.stile
-    //};
-
-    this.ModalTitle = "Edit Esercizio";
-    this.ActivateAddEditEsercComp = true;
-  }
-
-  deleteClick(item: any) {
-    if (confirm('Are you sure??')) {
-
-      this.service.deleteEsercizio(item.esercizioId).subscribe(data => {
-        alert('delete ok');
-        this.refreshEserciziList();
+    this.service.getStili().subscribe(data => {
+      data.forEach(x => {
+        this.stiliList.push({ label: x.nome, value: x.stileId.toString() });
       });
-    }
-  }
-
-  closeClick() {
-    this.ActivateAddEditEsercComp = false;
-    this.refreshEserciziList();
-  }
-
-
-  refreshEserciziList() {
-    this.service.getEserciziList().subscribe(data => {
-      this.EserciziList = data;
-      this.EserciziListWithoutFilter = data;
+      console.log(JSON.stringify(this.stiliList));
     });
   }
 
-  sortResult(prop: any, asc: any) {
-    this.EserciziList = this.EserciziListWithoutFilter.sort(function (a: any, b: any) {
-      if (asc) {
-        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
-      }
-      else {
-        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
-      }
+  //refreshEserciziList() {
+  //  this.service.getEserciziList(1,8).subscribe(data => {
+  //    this.eserciziList = data;
+  //  });
+  //}
+
+  onRowEditInit(esercizio: Esercizi) {
+    this.clonedEsercizi[esercizio.esercizioId] = { ...esercizio };
+  }
+
+  onRowEditCancel(esercizio: Esercizi, index: number) {
+    this.clonedEsercizi[index] = this.clonedEsercizi[esercizio.esercizioId];
+    delete this.clonedEsercizi[esercizio.esercizioId];
+  }
+
+  onRowEditSave(esercizio: Esercizi) {
+    this.service.updateEsercizio(esercizio).subscribe(data => {
+      alert(data.toString());
     });
   }
 
-  FilterFn() {
-    var EserciziIdFilter = this.EserciziIdFilter;
-    var RipetizioniFilter = this.EerciziRipetizioniFilter;
-    var DistanzaFilter = this.EerciziDistanzaFilter;
-    var RecuperoFilter = this.EerciziRecuperoFilter;
-    var StileFilter = this.EerciziStileFilter;
-
-    this.EserciziList = this.EserciziListWithoutFilter.filter(
-      function (el: any) {
-        return el.esercizioId.toString().toLowerCase().includes(
-          EserciziIdFilter.toString().trim().toLowerCase()
-        ) && el.ripetizioni.toString().toLowerCase().includes(
-          RipetizioniFilter.toString().trim().toLowerCase())
-          && el.distanza.toString().toLowerCase().includes(
-            DistanzaFilter.toString().trim().toLowerCase())
-          && el.recupero.toString().toLowerCase().includes(
-            RecuperoFilter.toString().trim().toLowerCase())
-          && el.stile.toString().toLowerCase().includes(
-            StileFilter.toString().trim().toLowerCase())
-      }
-    );
+  deleteProduct(esercizio: Esercizi) {
+    this.service.deleteEsercizio(esercizio.esercizioId).subscribe(() => {
+      //this.loadData(this.lastLazyEvent); // ricarica la pagina corrente
+      alert('esercizio con id '+esercizio.esercizioId+ ' cancellato');
+      this.loadEserciziLazy(this.lastLazyEvent)
+    });
   }
+
+  next() {
+    this.first = this.first + this.rows;
+    console.log('Next');
+  }
+
+  prev() {
+    this.first = this.first - this.rows;
+    console.log('Prev');
+  }
+
+  reset() {
+    this.first = 0;
+    console.log('Reset');
+  }
+
+  pageChange(event: any) {
+    debugger;
+    this.first = event.first;
+    this.rows = event.rows;
+    console.log('page change with first= ' + this.first + ' , rows= ' + this.rows);
+  }
+
+  loadEserciziLazy(event: any) {
+    debugger;
+    /* this.loading = true;*/
+    this.lastLazyEvent = event; 
+    this.first = event.first;
+    this.rows = event.rows;
+    const page = event.first / event.rows;
+    const size = event.rows;
+    var filtri = event.filters;
+    filtri.skip = page * size;
+    filtri.take = size;
+    filtri.globalfilter = event.globalFilter;
+
+    const sortField = event.sortField ?? this.sortField;
+    const sortOrder = event.sortOrder ?? this.sortOrder;
+
+    this.sortField = sortField;
+    this.sortOrder = sortOrder;
+
+    filtri.sortField = this.sortField == 'stile' ? 'StileId' : this.sortField;
+    filtri.sortOrder = this.sortOrder;
+
+    this.service.getEserciziList(filtri).subscribe(data => {
+      debugger;
+      this.eserciziList = data.data;
+      this.totalRecords = data.totalRecords;
+      });
+
+
+  }
+
+  isLastPage(): boolean {
+    return this.eserciziList ? this.first + this.rows >= this.totalRecords : true;
+  }
+
+  isFirstPage(): boolean {
+    return this.eserciziList ? this.first === 0 : true;
+  }
+
+  openNew() {
+    this.newItem = {};
+    this.displayDialog = true;
+  }
+
+  save() {
+    //this.service.create(this.newItem).subscribe(() => {
+    //  this.displayDialog = false;
+    //  this.loadData(this.lastLazyEvent); // ricarica la pagina corrente
+    //});
+    this.newItem.esercizioId = 0;
+    this.service.addEsercizio(this.newItem).subscribe(data => {
+      this.displayDialog = false;
+      this.loadEserciziLazy(this.lastLazyEvent);
+    });
+    console.log('Save called');
+  }
+
 }

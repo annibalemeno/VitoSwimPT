@@ -2,45 +2,31 @@
 <div class="card" *ngIf="!accountService.token">
   <h4 class="card-header">Login</h4>
   <div class="card-body">
-    <form>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="mb-3">
         <label class="form-label">Email</label>
-        <input type="text" id="email" [(ngModel)]="login_mail" name="email" required>
-        <!--<input type="text" formControlName="email" class="form-control" [(ngModel)]="login_mail" required />-->
+        <input type="text" pInputText formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['email'].errors  }" />
+        <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+          <div *ngIf="f['email'].errors['required']">Username is required</div>
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label">Password</label>
-        <input type="password" id="password" [(ngModel)]="login_password" name="password" required>
-        <!--<input type="password" formControlName="password" class="form-control" [(ngModel)]="login_password" required />-->
+        <input type="password" pInputText formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors['required']">Password is required</div>
+        </div>
       </div>
-      <div>
-        <button [disabled]="loading" class="btn btn-primary" (click)="login()">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-          Login
-        </button>
-        <a routerLink="/register" class="btn btn-link">Register</a>
-      </div>
+    <div class="d-flex justify-content-center" >
+      <button pButton [disabled]="loading || f['email'].value=='' || f['password'].value=='' " class="ngbuttonspace">
+        <span pButtonLabel>Login</span>  
+      </button>
+      <a routerLink="/register" class="p-button">
+        Register
+      </a>
+    </div>
     </form>
   </div>
 </div>
 
 
-<!--<div class="card" *ngIf="!loggedIn">-->
-  <!--<h2>Login</h2>
-  <form>
-    <div>
-      <label for="email">Email:</label>
-      <input type="text" id="email" [(ngModel)]="login_mail" name="email" required>
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" id="password" [(ngModel)]="login_password" name="password" required>
-    </div>
-
-    <div style="margin-top:20px">
-      <button type="button" class="btn btn-primary m-2 float-end"
-              (click)="login()">
-        Login
-      </button>
-    </div>
-  </form>-->

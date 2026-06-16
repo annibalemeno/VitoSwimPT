@@ -1,5 +1,5 @@
 export interface Stili {
   stileId: number;
-  nome: number;
+  nome: string;
   sigla: number;
 }

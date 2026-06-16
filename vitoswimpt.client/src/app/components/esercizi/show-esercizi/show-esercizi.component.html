@@ -1,160 +1,248 @@
-<!--<h1 id="tableLabel">Esercizi Nuoto</h1>
-
-<p>Elenco Esercizi Registrati</p>
-
-<p *ngIf="!EserciziList"><em>In caricamento... Ricarica la pagina dopo che il backend ASP.NET  è partito. Vedere <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> per ulteriori dettagli.</em></p>
-  >-->
-<!--<button class="btn btn-primary" (click)="loginWithUserToken()">LoginWithRefreshToken</button>
-  <button type="button" class="btn btn-primary m-2 float-end" data-bs-toggle="modal" data-bs-target="#eserciziModal"
-          (click)="addClick()">
-    Add Esercizio
-  </button>-->
-<div class="card flex justify-center">
-  <p-button label="Check" />
+<div class="mb-4">
+  <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()" text />
+  <p-button type="button" icon="pi pi-refresh" (click)="reset()" text />
+  <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" text />
 </div>
+<p-table #dt [value]="eserciziList"
+         dataKey="esercizioId"
+         editMode="row"
+         [tableStyle]="{ 'min-width': '50rem' }" stripedRows
+         [paginator]="true"
+         [sortField]="sortField"
+         [sortOrder]="sortOrder"
+         [rows]="10"
+         [first]="first"
+         [totalRecords]="totalRecords"
+         [lazy]="true"
+         (onLazyLoad)="loadEserciziLazy($event)"
 
-  <div class="modal fade" id="eserciziModal" tabindex="-1" role="dialog" aria-labelledby="eserciziModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="eserciziModalLabel">{{ModalTitle}}</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" (click)="closeClick()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <app-add-edit-esercizi [eserc]="eserc" *ngIf="ActivateAddEditEsercComp">
-          </app-add-edit-esercizi>
-        </div>
-      </div>
+         [showCurrentPageReport]="true"
+         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+         (onPage)="pageChange($event)"
+         [rowsPerPageOptions]="[5, 10, 20]"
+         [globalFilterFields]="['esercizioId', 'ripetizioni', 'distanza', 'recupero', 'stile']">
+  <ng-template pTemplate="caption">
+    <div class="flex items-center justify-between">
+      <!--<span class="text-xl font-bold">Esercizi</span>-->
+      <span class="fs-4">Esercizi</span>
     </div>
-  </div>
+    <div class="flex">
+      <p-iconfield iconPosition="left" class="ml-auto">
+        <p-inputicon>
+          <i class="pi pi-search"></i>
+        </p-inputicon>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+      </p-iconfield>
+    </div>
+  </ng-template>
+  <ng-template #header>
+    <tr>
+      <th pSortableColumn="esercizioId">
+        Id Esercizio
+        <p-sortIcon field="Id" />
+      </th>
+      <th pSortableColumn="ripetizioni">
+        Ripetizioni
+        <p-sortIcon field="Reps" />
+      </th>
+      <th pSortableColumn="distanza">
+        Distanza
+        <p-sortIcon field="Distanza" />
+      </th>
+      <th pSortableColumn="recupero">
+        Recupero
+        <p-sortIcon field="Recupero" />
+      </th>
+      <th pSortableColumn="stile">
+        Stile
+        <p-sortIcon field="Stile" />
+      </th>
+    </tr>
+    <tr>
+      <th>
+        <p-columnFilter type="text" field="esercizioId" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="ripetizioni" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="distanza" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="recupero" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="stile" matchMode="equals" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
 
-  <table class="table table-striped">
+            <p-select [ngModel]="value"
+                      [options]="stiliList"
+                      optionLabel="label"
+                      optionValue="value"
+                      (onChange)="filter($event.value)"
+                      placeholder="Select Style"
+                      [showClear]="true"
+                      style="min-width: 12rem">
 
-    <thead>
-      <tr>
-        <th>
-          <div class="d-flex flex-row">
-            <input class="form-control m-2" [(ngModel)]="EserciziIdFilter" (keyup)="FilterFn()" placeholder="Filter">
-            <button type="button" class="btn btn-light" (click)="sortResult('esercizioId',true)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">
-                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
-              </svg>
-            </button>
-            <button type="button" class="btn btn-light" (click)="sortResult('esercizioId',false)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
-                <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
-              </svg>
-            </button>
-          </div>
-          Esercizio Id
-        </th>
-        <th>
-          <div class="d-flex flex-row">
-            <input class="form-control m-2" [(ngModel)]="EerciziRipetizioniFilter" (keyup)="FilterFn()" placeholder="Filter">
-            <button type="button" class="btn btn-light" (click)="sortResult('ripetizioni',true)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">
-                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
-              </svg>
-            </button>
-            <button type="button" class="btn btn-light" (click)="sortResult('ripetizioni',false)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
-                <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
-              </svg>
-            </button>
-          </div>
-          Ripetizioni
-        </th>
-        <th>
-          <div class="d-flex flex-row">
-            <input class="form-control m-2" [(ngModel)]="EerciziDistanzaFilter" (keyup)="FilterFn()" placeholder="Filter">
-            <button type="button" class="btn btn-light" (click)="sortResult('distanza',true)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">
-                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
-              </svg>
-            </button>
-            <button type="button" class="btn btn-light" (click)="sortResult('distanza',false)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
-                <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
-              </svg>
-            </button>
-          </div>
-          Distanza
-        </th>
-        <th>
-          <div class="d-flex flex-row">
-            <input class="form-control m-2" [(ngModel)]="EerciziRecuperoFilter" (keyup)="FilterFn()" placeholder="Filter">
-            <button type="button" class="btn btn-light" (click)="sortResult('recupero',true)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">
-                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
-              </svg>
-            </button>
-            <button type="button" class="btn btn-light" (click)="sortResult('recupero',false)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
-                <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
-              </svg>
-            </button>
-          </div>
-          Recupero
-        </th>
-        <th>
-          <div class="d-flex flex-row">
-            <input class="form-control m-2" [(ngModel)]="EerciziStileFilter" (keyup)="FilterFn()" placeholder="Filter">
-            <button type="button" class="btn btn-light" (click)="sortResult('stile',true)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">
-                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
-              </svg>
-            </button>
-            <button type="button" class="btn btn-light" (click)="sortResult('stile',false)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
-                <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
-              </svg>
-            </button>
-          </div>
-          Stile
-        </th>
-        <th>
-          Options
-        </th>
-      </tr>
-    </thead>
+              <ng-template pTemplate="item" let-option>
+                <p-tag [value]="option.label"></p-tag>
+              </ng-template>
 
-    <tbody>
-      <tr *ngFor="let esercizio of EserciziList">
-        <td>{{ esercizio.esercizioId }}</td>
-        <td>{{ esercizio.ripetizioni }}x</td>
-        <td>{{ esercizio.distanza }}</td>
-        <td>{{ esercizio.recupero }}</td>
-        <td>{{ esercizio.stile }}</td>
-        <td>
-          <button type="button" class="btn btn-light mr-1" data-bs-toggle="modal" data-bs-target="#eserciziModal"
-                  (click)="editClick(esercizio)" data-backdrop="static" data-keyboard="false">
-            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-              <path fill-rule="evenodd"
-                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-            </svg>
+            </p-select>
+
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <button pButton label="Add New" icon="pi pi-plus" (click)="openNew()"></button>
+      </th>
+    </tr>
+    <!--<tr>
+      <td>
+        <div class="mb-4">
+          <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()" text />
+          <p-button type="button" icon="pi pi-refresh" (click)="reset()" text />
+          <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" text />
+        </div>
+      </td>
+    </tr>-->
+  </ng-template>
+  <ng-template #body let-esercizio let-editing="editing" let-ri="rowIndex">
+    <tr [pEditableRow]="esercizio">
+      <td>{{ esercizio.esercizioId }}</td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text"
+                   [(ngModel)]="esercizio.ripetizioni" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{esercizio.ripetizioni}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text"
+                   [(ngModel)]="esercizio.distanza" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{esercizio.distanza}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text"
+                   [(ngModel)]="esercizio.recupero" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{esercizio.recupero}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>{{ esercizio.stile }}</td>
+      <td>
+        <div class="flex items-center justify-center gap-2">
+          <button *ngIf="!editing"
+                  pButton icon="pi pi-trash"
+                  (click)="deleteProduct(esercizio)">
           </button>
-          <button type="button" class="btn btn-light mr-1" (click)="deleteClick(esercizio)">
-            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
-            </svg>
-          </button>
-        </td>
-    </tbody>
-  </table>
+          <button *ngIf="!editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pInitEditableRow
+                  icon="pi pi-pencil"
+                  (click)="onRowEditInit(esercizio)"
+                  text
+                  rounded></button>
+          <button *ngIf="editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pSaveEditableRow
+                  icon="pi pi-check"
+                  (click)="onRowEditSave(esercizio)"
+                  text
+                  rounded></button>
+          <button *ngIf="editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pCancelEditableRow
+                  icon="pi pi-times"
+                  (click)="onRowEditCancel(esercizio, ri)"
+                  text
+                  rounded></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #paginatorleft>
+    <p-button type="button" icon="pi pi-plus" text />
+  </ng-template>
+  <ng-template #paginatorright>
+    <p-button type="button" icon="pi pi-cloud" text />
+  </ng-template>
+  <!--<ng-template pTemplate="footer"> Ci sono in tutto {{ eserciziList ? eserciziList.length : 0 }} esercizi. </ng-template>-->
+</p-table>
+        <p-dialog [(visible)]="displayDialog" styleClass="dialog-fix" header="Nuovo esercizio">
+          <div class="grid p-fluid align-items-center">
+
+            <div class="col-4 text-right font-semibold">
+              <label>Ripetizioni</label>
+            </div>
+            <div class="col-8">
+              <p-inputNumber [(ngModel)]="newItem.ripetizioni"
+                             [useGrouping]="false">
+              </p-inputNumber>
+            </div>
+
+            <div class="col-4 text-right font-semibold">
+              <label>Distanza</label>
+            </div>
+            <div class="col-8">
+              <p-inputNumber [(ngModel)]="newItem.distanza"
+                             [useGrouping]="false">
+              </p-inputNumber>
+            </div>
+
+            <div class="col-4 text-right font-semibold">
+              <label>Recupero</label>
+            </div>
+            <div class="col-8">
+              <p-inputNumber [(ngModel)]="newItem.recupero"
+                             [useGrouping]="false">
+              </p-inputNumber>
+            </div>
+
+            <div class="col-4 text-right font-semibold">
+              <label>Stile</label>
+            </div>
+            <div class="col-8">
+              <p-select [(ngModel)]="newItem.stile"
+                        [options]="stiliList"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Seleziona Stile"
+                        [showClear]="true"
+                        appendTo="self">
+
+                <ng-template pTemplate="item" let-option>
+                  <p-tag [value]="option.label"></p-tag>
+                </ng-template>
+
+              </p-select>
+            </div>
+
+          </div>
+
+          <button pButton label="Save" icon="pi pi-check" (click)="save()"></button>
+        </p-dialog>
+<!--<p-paginator [rows]="10"
+             [totalRecords]="120"
+             (onPageChange)="pageChange($event)">
+</p-paginator>-->

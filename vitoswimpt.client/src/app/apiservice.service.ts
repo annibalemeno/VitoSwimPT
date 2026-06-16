@@ -19,9 +19,21 @@ export class ApiserviceService {
 
   // #region Esercizi
 
-  getEserciziList(): Observable<Esercizi[]> {
-    return this.http.get<Esercizi[]>('/esercizi');
+  //getEserciziList(skip: number, take: number, filters:any): Observable<any> {
+  //  console.log("getEserciziList with skip= " + skip + " and take= " + take);
+  //  return this.http.get<any>('/esercizi?skip='+skip+'&take='+take);
+  //}
+
+  getEserciziList(filters: any): Observable<any> {
+    //console.log("getEserciziList with skip= " + skip + " and take= " + take);
+    //return this.http.get<any>('/esercizi?skip=' + skip + '&take=' + take);
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    var body = JSON.stringify(filters);
+    return this.http.post<any>('/esercizi/filtri', body, { headers });
   }
+
+
 
   addEsercizio(esercizio: Esercizi): Observable<any> {
     let headers = new HttpHeaders();

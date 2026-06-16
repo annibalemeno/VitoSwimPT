@@ -1,5 +1,4 @@
-﻿using FluentEmail.Core;
-using FluentValidation;
+﻿using FluentValidation;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.Users;
 

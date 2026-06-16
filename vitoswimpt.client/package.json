@@ -22,6 +22,7 @@
     "@angular/router": "^20.3.12",
     "@primeng/themes": "^20.3.0",
     "jest-editor-support": "^32.0.0-beta.1",
+    "primeicons": "^7.0.0",
     "primeng": "^20.3.0",
     "run-script-os": "^1.1.6",
     "rxjs": "~7.8.2",

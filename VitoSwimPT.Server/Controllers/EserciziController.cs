@@ -2,11 +2,16 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Numerics;
 using System.Reflection;
+using System.Text.Json;
+using System.Web;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Repository;
 using VitoSwimPT.Server.ViewModels;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VitoSwimPT.Server.Controllers
 {
@@ -50,19 +55,56 @@ namespace VitoSwimPT.Server.Controllers
         //    .ToArray();
         //}
 
+        //public class UserParam
+        //{
+        //    public Guid? id { get; set; }
+        //    public string? email { get; set; }
+        //    public string[]? select { get; set; }
+        //    public string[]? include { get; set; }
+        //    public SortingParam[]? sorting { get; set; }
+        //    public PagingParam? paging { get; set; }
+        //}
+
+        public class PagingParam
+        {
+            public string skip { get; set; }
+            public string take { get; set; }
+        }
+
+        public class SortingParam
+        {
+            public string? sortBy { get; set; }
+            public SortDirection? sortDirection { get; set; }
+        }
+
+        public enum SortDirection
+        {
+            ASC,
+            DESC
+        }
+
+        //public class TestModel
+        //{
+        //    public string FundCodes { get; set; }
+        //    public string FromDate { get; set; }
+        //    public string ToDate { get; set; }
+        //}
+
         [HttpGet(Name = "GetEsercizi")]
-        [Authorize]
-        //[AllowAnonymous]
-        public async Task<IActionResult> Get()
+        //[Authorize]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get([FromQuery] string skip, [FromQuery] string take)
         {
             try
             {
                 _logger.Debug("Controller Esercizi Get()");
+                bool check1 = int.TryParse(skip, out int sk);
+                bool check2 = int.TryParse(take, out int tk);
 
-                var esercizi = await _eserciziRepo.GetEsercizi();
+                var eserciziList = await _eserciziRepo.GetEsercizi(sk,tk);
                 //Task<IEnumerable<EserciziVM>>
-                var eserciziList = new List<EserciziVM>();
-                foreach (var item in esercizi)
+                var eserciziListVM = new List<EserciziVM>();
+                foreach (var item in eserciziList.data)
                 {
                     var stile = await _stiliRepo.GetStileById(item.StileId);
 
@@ -70,9 +112,10 @@ namespace VitoSwimPT.Server.Controllers
 
 
                     esercizio.Stile = stile.Nome;
-                    eserciziList.Add(esercizio);
+                    eserciziListVM.Add(esercizio);
                 }
-                return Ok(eserciziList);
+                var returnValue = new { data = eserciziListVM, totalRecords = eserciziList.totalRecords };
+                return Ok(returnValue);
                 //return Ok(await _eserciziRepo.GetEsercizi());
             }
             catch (Exception ex)
@@ -102,16 +145,46 @@ namespace VitoSwimPT.Server.Controllers
             }
         }
 
+        //[AllowAnonymous]
+        [HttpPost("filtri")]
+        //public IActionResult GetEserciziFiltrati([FromBody] FilterObjects filtri)
+        public async Task<IActionResult> GetEserciziFiltrati([FromBody] FilterObjects filtri)
+        {
+            // Usa "filtri" per applicare i filtri
+            //return Ok(filtri);
+
+            var eserciziList = await _eserciziRepo.GetEserciziFiltrati(filtri);
+            //Task<IEnumerable<EserciziVM>>
+            var eserciziListVM = new List<EserciziVM>();
+            foreach (var item in eserciziList.data)
+            {
+                var stile = await _stiliRepo.GetStileById(item.StileId);
+
+                var esercizio = _mapper.Map<EserciziVM>(item);
+
+
+                esercizio.Stile = stile.Nome;
+                eserciziListVM.Add(esercizio);
+            }
+            var returnValue = new { data = eserciziListVM, totalRecords = eserciziList.totalRecords };
+            return Ok(returnValue);
+        }
+
         [HttpPost(Name = "AddEsercizi")]
         public async Task<IActionResult> Post(EserciziVM es)
         {
             try
             {
                 _logger.Debug($"Controller Esercizi Post(es) with es = {es} ");
+                if (!int.TryParse(es.Stile, out int stileId))
+                {
+                    stileId = 1; //default value stile libero 
+                }
 
-                //get stile
-                var stile = await _stiliRepo.GetStileByName(es.Stile);
-                int stileId = stile.StileId;                //TODO robustezza eccezioni
+
+                ////get stile
+                //var stile = await _stiliRepo.GetStileByName(es.Stile);
+                //int stileId = stile.StileId;               
 
                 Esercizio esToInsert = new Esercizio()
                 {

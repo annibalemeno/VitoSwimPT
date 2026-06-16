@@ -12,7 +12,6 @@ import { AccountService } from './account.service';
 export class authInterceptor implements HttpInterceptor { 
   constructor(private accountService: AccountService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    debugger;
     console.log('Interceptor in action on ' + new Date().toLocaleTimeString());
     let token = this.accountService.token;
     if (token) {
@@ -37,11 +36,9 @@ export class authInterceptor implements HttpInterceptor {
 //    req: HttpRequest<any>,
 //    next: HttpHandler
 //  ): Observable<any> {
-//    debugger;
 ///*    return this.refreshToken().pipe(*/
 //    return this.accountService.loginWithRefreshToken().pipe(
 //      switchMap((newToken: any) => {
-//        debugger;
 //        if (newToken) {
 //          console.log("New Access Token generated: ", newToken.accessToken.toString())
 //          // Retry the original request with the new token
@@ -65,7 +62,6 @@ export class authInterceptor implements HttpInterceptor {
   logout() {
     //sessionStorage.clear();
     console.log('logout from authInterceptor');
-    debugger;
     return this.accountService.logout();
   }
 
