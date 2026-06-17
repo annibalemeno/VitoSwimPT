@@ -57,12 +57,20 @@ export class ShowPianiComponent implements OnInit{
     this.sortField = sortField;
     this.sortOrder = sortOrder;
 
+    var filtri = event.filters;
+    filtri.skip = 0;
+    filtri.take = 20;
+    filtri.globalfilter = "";
+    filtri.sortField = event.sortField ?? this.sortField;
+    filtri.sortOrder = event.sortOrder ?? this.sortOrder;
+
     if (this.authService.email != null) {
-      let email = this.authService.email;
-      this.service.getPianiByUser(email).subscribe(data => {
-        this.PianiList = data;
+      filtri.usermail = this.authService.email;
+      this.service.getPianiByUser(filtri).subscribe(data => {
+        this.PianiList = data.data;
+/*        this.totalRecords = data.totalRecords;*/
         console.log("PianiList", this.PianiList);
-        this.PianiListWithoutFilter = data;
+        this.PianiListWithoutFilter = data.data;
       });
     }
   }

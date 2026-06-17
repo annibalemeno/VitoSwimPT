@@ -19,11 +19,6 @@ export class ApiserviceService {
 
   // #region Esercizi
 
-  //getEserciziList(skip: number, take: number, filters:any): Observable<any> {
-  //  console.log("getEserciziList with skip= " + skip + " and take= " + take);
-  //  return this.http.get<any>('/esercizi?skip='+skip+'&take='+take);
-  //}
-
   getEserciziList(filters: any): Observable<any> {
     //console.log("getEserciziList with skip= " + skip + " and take= " + take);
     //return this.http.get<any>('/esercizi?skip=' + skip + '&take=' + take);
@@ -132,10 +127,14 @@ export class ApiserviceService {
     return this.http.get<Piani[]>(this.apiUrl + '/piani', { headers });
   }
 
-  getPianiByUser(email: string): Observable<Piani[]> {
+  //getPianiByUser(email: string): Observable<Piani[]>
+  /* return this.http.get<Piani[]>(this.apiUrl + '/piani/getPianiByUser?email=' + email, { headers });*/
+
+  getPianiByUser(filters: any): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-    return this.http.get<Piani[]>(this.apiUrl + '/piani/getPianiByUser?email=' + email, { headers });
+    var body = JSON.stringify(filters);
+    return this.http.post<any>(this.apiUrl + '/piani/getPianiByUser', body, { headers });
   }
   //
 

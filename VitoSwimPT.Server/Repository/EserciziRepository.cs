@@ -11,7 +11,7 @@ namespace VitoSwimPT.Server.Repository
     {
         Task<PageResponse> GetEsercizi(int skip, int take);
 
-        Task<PageResponse> GetEserciziFiltrati(FilterObjects filtri);
+        Task<PageResponse> GetEserciziFiltrati(FilterEsercizi filtri);
         Task<Esercizio> InsertEsercizio(Esercizio esercizio);
 
         bool DeleteEsercizio(int Id);
@@ -27,10 +27,10 @@ namespace VitoSwimPT.Server.Repository
         // Task<Customer> GetCustomerByName(string Name);
     }
 
-    public class PageResponse
+    public class PageResponse:PagedResult<Esercizio>
     {
-        public List<Esercizio> data;
-        public int totalRecords;
+        //public List<Esercizio> data;
+        //public int totalRecords;
     }
 
     public class EserciziRepository : IEsercizioRepository
@@ -42,7 +42,7 @@ namespace VitoSwimPT.Server.Repository
             _swimDBContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<PageResponse> GetEserciziFiltrati(FilterObjects filters)
+        public async Task<PageResponse> GetEserciziFiltrati(FilterEsercizi filters)
         {
             //List<Esercizio> listaEsercizi = await _swimDBContext.Esercizi.Skip(skip).Take(take).ToListAsync();
 
@@ -158,7 +158,7 @@ public static IQueryable<T> ApplyStringFilter<T>(
 }
 
 
-        public IQueryable<Esercizio> ApplyFilters(IQueryable<Esercizio> query, FilterObjects filters)
+        public IQueryable<Esercizio> ApplyFilters(IQueryable<Esercizio> query, FilterEsercizi filters)
         {
             if (!string.IsNullOrEmpty(filters.esercizioId?.value))
                 query = ApplyStringFilter(query, e => e.EsercizioId.ToString(), filters.esercizioId);
@@ -201,9 +201,3 @@ public static IQueryable<T> ApplyStringFilter<T>(
 
     }
 }
-
-
-//var eserc2 = new Esercizio() { Ripetizioni = 4, Distanza = 100, Recupero = 20, Stile = "Libero" };
-
-//context.Set<Esercizio>().AddRange(eserc1, eserc2);
-//context.SaveChanges();
