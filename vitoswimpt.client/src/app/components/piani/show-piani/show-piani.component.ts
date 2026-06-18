@@ -17,41 +17,15 @@ export class ShowPianiComponent implements OnInit{
   sortOrder = 1;
 
   public PianiList: Piani[] = [];
-  PianiIdFilter = "";
-  NomePianoFilter = "";
-  DescrizioneFilter = "";
-  NoteFilter = "";
+  totalRecords: number = 0;
 
   displayDialog = false;
   newItem: any = {};
   lastLazyEvent: any;
 
-  PianiListWithoutFilter: any = [];
-
-  ModalTitle = "";
-  ActivateAddEditPianiComp: boolean = false;
-  plan: Piani = {
-    pianoId: 0,
-    nomePiano: "",
-    descrizione: "",
-    note: "",
-    username: ""
-  };
-
-    ngOnInit(): void {
-      this.refreshPianiList();
+  ngOnInit(): void {
     }
 
-  public refreshPianiList() {
-    if (this.authService.email != null) {
-      let email = this.authService.email;
-      this.service.getPianiByUser(email).subscribe(data => {
-        this.PianiList = data;
-        console.log("PianiList", this.PianiList);
-        this.PianiListWithoutFilter = data;
-      });
-    }
-  }
 
   loadPianiLazy(event: any) {
     this.lastLazyEvent = event; 
@@ -72,24 +46,10 @@ export class ShowPianiComponent implements OnInit{
       filtri.usermail = this.authService.email;
       this.service.getPianiByUser(filtri).subscribe(data => {
         this.PianiList = data.data;
-/*        this.totalRecords = data.totalRecords;*/
-        console.log("PianiList", this.PianiList);
-        this.PianiListWithoutFilter = data.data;
+        this.totalRecords = data.totalRecords;
       });
     }
   }
-
-  sortResult(prop: any, asc: any) {
-    this.PianiList = this.PianiListWithoutFilter.sort(function (a: any, b: any) {
-      if (asc) {
-        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
-      }
-      else {
-        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
-      }
-    });
-  }
-
 
   openNew() {
     this.newItem = {};
@@ -103,49 +63,6 @@ export class ShowPianiComponent implements OnInit{
       this.displayDialog = false;
       this.loadPianiLazy(this.lastLazyEvent);
     });
-  }
-
-  addClick() {
-    this.plan = {
-      pianoId: 0,
-      nomePiano: "",
-      descrizione: "",
-      note: "",
-      username: this.authService.email!
-    };
-
-    this.ModalTitle = "Add Piano";
-    this.ActivateAddEditPianiComp = true;
-  }
-
-  closeClick() {
-    this.ActivateAddEditPianiComp = false;
-    this.refreshPianiList();
-  }
-
-  editClick(item: any) {
-    this.plan = {
-      pianoId: item.pianoId,
-      nomePiano: item.nomePiano,
-      descrizione: item.descrizione,
-      note: item.note,
-      username: this.authService.email!
-    };
-
-/*    this.plan = item;*/
-
-    this.ModalTitle = "Edit Piano";
-    this.ActivateAddEditPianiComp = true;
-  }
-
-  deleteClick(item: any) {
-    if (confirm('Are you sure??')) {
-
-      this.service.deletePiano(item.pianoId).subscribe(data => {
-        alert('delete ok');
-        this.refreshPianiList();
-      });
-    }
   }
 
 }
