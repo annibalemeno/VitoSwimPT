@@ -22,6 +22,10 @@ export class ShowPianiComponent implements OnInit{
   DescrizioneFilter = "";
   NoteFilter = "";
 
+  displayDialog = false;
+  newItem: any = {};
+  lastLazyEvent: any;
+
   PianiListWithoutFilter: any = [];
 
   ModalTitle = "";
@@ -50,7 +54,7 @@ export class ShowPianiComponent implements OnInit{
   }
 
   loadPianiLazy(event: any) {
-
+    this.lastLazyEvent = event; 
     const sortField = event.sortField ?? this.sortField;
     const sortOrder = event.sortOrder ?? this.sortOrder;
 
@@ -86,24 +90,19 @@ export class ShowPianiComponent implements OnInit{
     });
   }
 
-  FilterFn() {
-    var PianiIdFilter = this.PianiIdFilter;
-    var NomePianoFilter = this.NomePianoFilter;
-    var DescrizioneFilter = this.DescrizioneFilter;
-    var NoteFilter = this.NoteFilter;
 
-    this.PianiList = this.PianiListWithoutFilter.filter(
-      function (el: any) {
-        return el.pianoId.toString().toLowerCase().includes(
-          PianiIdFilter.toString().trim().toLowerCase()
-        ) && el.nomePiano.toString().toLowerCase().includes(
-          NomePianoFilter.toString().trim().toLowerCase()
-        ) && el.descrizione.toString().toLowerCase().includes(
-          DescrizioneFilter.toString().trim().toLowerCase())
-          && el.note.toString().toLowerCase().includes(
-            NoteFilter.toString().trim().toLowerCase())
-      }
-    );
+  openNew() {
+    this.newItem = {};
+    this.displayDialog = true;
+  }
+
+  save() {
+    this.newItem.pianoId = 0;
+    this.newItem.username = this.authService.email!;
+    this.service.addPiano(this.newItem).subscribe(data => {
+      this.displayDialog = false;
+      this.loadPianiLazy(this.lastLazyEvent);
+    });
   }
 
   addClick() {
