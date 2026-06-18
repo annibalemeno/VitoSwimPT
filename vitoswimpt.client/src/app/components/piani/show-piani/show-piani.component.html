@@ -1,5 +1,6 @@
 <p-table [value]="PianiList"
          dataKey="pianoId"
+         editMode="row"
          [tableStyle]="{ 'min-width': '50rem' }" stripedRows
          [sortField]="sortField"
          [sortOrder]="sortOrder"
@@ -42,12 +43,76 @@
       </th>
     </tr>
   </ng-template>
-  <ng-template #body let-piano>
-    <tr>
+  <ng-template #body let-piano let-editing="editing" let-ri="rowIndex">
+    <tr [pEditableRow]="piano">
       <td>{{ piano.pianoId }}</td>
-      <td>{{ piano.nomePiano }}</td>
-      <td>{{ piano.descrizione }}</td>
-      <td>{{ piano.note }}</td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text"
+                   [(ngModel)]="piano.nomePiano" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{piano.nomePiano}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input PInputText type="text"
+                   [(ngModel)]="piano.descrizione" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{ piano.descrizione }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input PInputText type="text"
+                   [(ngModel)]="piano.note" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{ piano.note }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <div class="flex items-center justify-center gap-2"></div>
+        <button *ngIf="!editing"
+                pButton icon="pi pi-trash"
+                (click)="deletePiano(piano)">
+        </button>
+        <button *ngIf="!editing"
+                pButton
+                pRipple
+                type="button"
+                pInitEditableRow
+                icon="pi pi-pencil"
+                (click)="onRowEditInit(piano)"
+                text
+                rounded></button>
+        <button *ngIf="editing"
+                pButton
+                pRipple
+                type="button"
+                pSaveEditableRow
+                icon="pi pi-check"
+                (click)="onRowEditSave(piano)"
+                text
+                rounded></button>
+        <button *ngIf="editing"
+                pButton
+                pRipple
+                type="button"
+                pCancelEditableRow
+                icon="pi pi-times"
+                (click)="onRowEditCancel(piano, ri)"
+                text
+                rounded></button>
+      </td>
     </tr>
   </ng-template>
 </p-table>

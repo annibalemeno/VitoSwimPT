@@ -19,6 +19,8 @@ export class ShowPianiComponent implements OnInit{
   public PianiList: Piani[] = [];
   totalRecords: number = 0;
 
+  clonedPiano: { [s: number]: Piani } = {};
+
   displayDialog = false;
   newItem: any = {};
   lastLazyEvent: any;
@@ -65,5 +67,31 @@ export class ShowPianiComponent implements OnInit{
     });
   }
 
+  deletePiano(piano: Piani) {
+    this.service.deletePiano(piano.pianoId).subscribe(() => {
+      this.loadPianiLazy(this.lastLazyEvent);
+    });
+  } 
+
+  onRowEditInit(piano: Piani) {
+    console.log('onRowEditInit');
+    this.clonedPiano[piano.pianoId] = { ...piano };
+  }
+
+  onRowEditSave(piano: Piani) {
+    console.log('onRowEditSave');
+    piano.username = this.authService.email!;
+    this.service.updatePiano(piano).subscribe({
+      next: (data) => { console.log('updatePiano next'); },
+      error: (err) => { console.log('updatePiano error'); },
+      complete: () => { console.log('updatePiano complete'); }
+    });
+  }
+
+  onRowEditCancel(piano: Piani, index: number) {
+    console.log('onRowEditCancel');
+    this.clonedPiano[index] = this.clonedPiano[piano.pianoId];
+    delete this.clonedPiano[piano.pianoId];
+  }
 }
 
