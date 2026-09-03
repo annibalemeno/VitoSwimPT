@@ -148,7 +148,7 @@ namespace VitoSwimPT.Server.Controllers
         //[AllowAnonymous]
         [HttpPost("filtri")]
         //public IActionResult GetEserciziFiltrati([FromBody] FilterObjects filtri)
-        public async Task<IActionResult> GetEserciziFiltrati([FromBody] FilterObjects filtri)
+        public async Task<IActionResult> GetEserciziFiltrati([FromBody] FilterEsercizi filtri)
         {
             // Usa "filtri" per applicare i filtri
             //return Ok(filtri);

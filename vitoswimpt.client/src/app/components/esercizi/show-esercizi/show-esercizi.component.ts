@@ -61,7 +61,7 @@ export class ShowEserciziComponent implements OnInit {
     });
   }
 
-  deleteProduct(esercizio: Esercizi) {
+  deleteEsercizio(esercizio: Esercizi) {
     this.service.deleteEsercizio(esercizio.esercizioId).subscribe(() => {
       //this.loadData(this.lastLazyEvent); // ricarica la pagina corrente
       alert('esercizio con id '+esercizio.esercizioId+ ' cancellato');

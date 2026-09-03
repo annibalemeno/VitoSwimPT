@@ -1,7 +1,10 @@
 ﻿using FluentEmail.Core;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using VitoSwimPT.Server.Infrastructure;
 using VitoSwimPT.Server.Models;
 using VitoSwimPT.Server.Users;
+using VitoSwimPT.Server.ViewModels;
 
 namespace VitoSwimPT.Server.Repository
 {
@@ -9,7 +12,7 @@ namespace VitoSwimPT.Server.Repository
     {
         Task<IEnumerable<Piano>> GetAllPiani();
 
-        Task<IEnumerable<Piano>> GetPianiByUser(string email);
+        Task<PagedPiani> GetPianiByUser(FilterPiani filters);
 
         Task<Piano> GetPianoById(int pianoId);
 
@@ -19,9 +22,9 @@ namespace VitoSwimPT.Server.Repository
 
         Task<Piano> InsertPiano(Piano plan, string username);
     }
-    
 
-        public class PianiRepository:IPianiRepository
+
+    public class PianiRepository : IPianiRepository
     {
         private readonly SwimContext _swimDBContext;
 
@@ -66,7 +69,7 @@ namespace VitoSwimPT.Server.Repository
                 _swimDBContext.Entry(plan).State = EntityState.Modified;
                 await _swimDBContext.SaveChangesAsync();
                 return plan;
-            }   
+            }
         }
 
         public async Task<Piano> InsertPiano(Piano plan, string username)
@@ -93,10 +96,11 @@ namespace VitoSwimPT.Server.Repository
             return await _swimDBContext.Piani.FindAsync(pianoId);
         }
 
-        public async Task<IEnumerable<Piano>> GetPianiByUser(string email)
+        //pianiList = await _swimDBContext.Piani.Where(p => p.Createdby == userId).ToListAsync();
+        public async Task<PagedPiani> GetPianiByUser(FilterPiani filters)
         {
             var pianiList = new List<Piano>();
-            User? user = await _swimDBContext.Utenti.GetByEmail(email);
+            User? user = await _swimDBContext.Utenti.GetByEmail(filters.usermail);
 
             if (user is null || !user.EmailVerified)
             {
@@ -105,9 +109,92 @@ namespace VitoSwimPT.Server.Repository
             else
             {
                 var userId = user.Id;
-                pianiList = await _swimDBContext.Piani.Where(p => p.Createdby == userId).ToListAsync();
+                var query = _swimDBContext.Piani.Where(p => p.Createdby == userId).AsQueryable();
+
+                // Sorting
+                query = filters.sortOrder == 1
+                    ? query.OrderByDynamic(filters.sortField)
+                    : query.OrderByDescendingDynamic(filters.sortField);
+
+                query = ApplyFilters(query, filters);
+                int count = await query.CountAsync();
+
+                pianiList = await query.Skip(filters.skip).Take(filters.take).ToListAsync();
             }
-            return pianiList;
+
+
+
+            return new PagedPiani()
+            {
+                totalRecords = pianiList.Count,
+                data = pianiList
+            };
+        }
+
+        public static IQueryable<T> ApplyStringFilter<T>(
+    IQueryable<T> query,
+    Expression<Func<T, string>> selector,
+    FilterField filter)
+        {
+            if (string.IsNullOrEmpty(filter?.value))
+                return query;
+
+            var value = filter.value;
+            var mode = filter.matchMode?.ToLower();
+
+            var parameter = selector.Parameters[0]; // es: "e"
+            var member = selector.Body;             // es: e.Stile
+
+            Expression body = mode switch
+            {
+                "startswith" => Expression.Call(member,
+                    typeof(string).GetMethod("StartsWith", new[] { typeof(string) }),
+                    Expression.Constant(value)),
+
+                "contains" => Expression.Call(member,
+                    typeof(string).GetMethod("Contains", new[] { typeof(string) }),
+                    Expression.Constant(value)),
+
+                "equals" => Expression.Equal(member, Expression.Constant(value)),
+
+                _ => null
+            };
+
+            if (body == null)
+                return query;
+
+            var lambda = Expression.Lambda<Func<T, bool>>(body, parameter);
+
+            return query.Where(lambda);
+        }
+
+        public IQueryable<Piano> ApplyFilters(IQueryable<Piano> query, FilterPiani filters)
+        {
+
+            if (!string.IsNullOrEmpty(filters.pianoId?.value))
+                query = ApplyStringFilter(query, e => e.PianoId.ToString(), filters.pianoId);
+            if (!string.IsNullOrEmpty(filters.nomePiano?.value))
+                query = ApplyStringFilter(query, e => e.NomePiano.ToString(), filters.nomePiano);
+            if (!string.IsNullOrEmpty(filters.descrizione?.value))
+                query = ApplyStringFilter(query, e => e.Descrizione.ToString(), filters.descrizione);
+            if (!string.IsNullOrEmpty(filters.note?.value))
+                query = ApplyStringFilter(query, e => e.Note.ToString(), filters.note);
+
+            //global filters
+            if (!string.IsNullOrWhiteSpace(filters.globalFilter))
+            {
+                var gf = filters.globalFilter.ToLower();
+
+                query = query.Where(x =>
+                x.PianoId.ToString().Contains(gf) 
+                ||  (x.NomePiano != null && x.NomePiano.Contains(gf)) 
+                ||  (x.Descrizione != null && x.Descrizione.Contains(gf))
+                ||  (x.Note != null && x.Note.Contains(gf))
+                );
+            }
+
+
+           return query;
         }
     }
 }

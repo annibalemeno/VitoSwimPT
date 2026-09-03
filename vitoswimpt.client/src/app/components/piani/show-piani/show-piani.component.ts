@@ -13,112 +13,85 @@ export class ShowPianiComponent implements OnInit{
 
   constructor(private service: ApiserviceService, private authService: AccountService) { }
 
+  sortField = 'pianoId';
+  sortOrder = 1;
+
   public PianiList: Piani[] = [];
-  PianiIdFilter = "";
-  NomePianoFilter = "";
-  DescrizioneFilter = "";
-  NoteFilter = "";
+  totalRecords: number = 0;
 
-  PianiListWithoutFilter: any = [];
+  clonedPiano: { [s: number]: Piani } = {};
 
-  ModalTitle = "";
-  ActivateAddEditPianiComp: boolean = false;
-  plan: Piani = {
-    pianoId: 0,
-    nomePiano: "",
-    descrizione: "",
-    note: "",
-    username: ""
-  };
+  displayDialog = false;
+  newItem: any = {};
+  lastLazyEvent: any;
 
-    ngOnInit(): void {
-      this.refreshPianiList();
+  ngOnInit(): void {
     }
 
-  public refreshPianiList() {
+
+  loadPianiLazy(event: any) {
+    this.lastLazyEvent = event; 
+    const sortField = event.sortField ?? this.sortField;
+    const sortOrder = event.sortOrder ?? this.sortOrder;
+
+    this.sortField = sortField;
+    this.sortOrder = sortOrder;
+
+    var filtri = event.filters;
+    filtri.skip = 0;
+    filtri.take = 20;
+    filtri.globalfilter = "";
+    filtri.sortField = event.sortField ?? this.sortField;
+    filtri.sortOrder = event.sortOrder ?? this.sortOrder;
+
     if (this.authService.email != null) {
-      let email = this.authService.email;
-      this.service.getPianiByUser(email).subscribe(data => {
-        this.PianiList = data;
-        console.log("PianiList", this.PianiList);
-        this.PianiListWithoutFilter = data;
+      filtri.usermail = this.authService.email;
+      this.service.getPianiByUser(filtri).subscribe(data => {
+        this.PianiList = data.data;
+        this.totalRecords = data.totalRecords;
       });
     }
   }
 
-  sortResult(prop: any, asc: any) {
-    this.PianiList = this.PianiListWithoutFilter.sort(function (a: any, b: any) {
-      if (asc) {
-        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
-      }
-      else {
-        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
-      }
+  openNew() {
+    this.newItem = {};
+    this.displayDialog = true;
+  }
+
+  save() {
+    this.newItem.pianoId = 0;
+    this.newItem.username = this.authService.email!;
+    this.service.addPiano(this.newItem).subscribe(data => {
+      this.displayDialog = false;
+      this.loadPianiLazy(this.lastLazyEvent);
     });
   }
 
-  FilterFn() {
-    var PianiIdFilter = this.PianiIdFilter;
-    var NomePianoFilter = this.NomePianoFilter;
-    var DescrizioneFilter = this.DescrizioneFilter;
-    var NoteFilter = this.NoteFilter;
+  deletePiano(piano: Piani) {
+    this.service.deletePiano(piano.pianoId).subscribe(() => {
+      this.loadPianiLazy(this.lastLazyEvent);
+    });
+  } 
 
-    this.PianiList = this.PianiListWithoutFilter.filter(
-      function (el: any) {
-        return el.pianoId.toString().toLowerCase().includes(
-          PianiIdFilter.toString().trim().toLowerCase()
-        ) && el.nomePiano.toString().toLowerCase().includes(
-          NomePianoFilter.toString().trim().toLowerCase()
-        ) && el.descrizione.toString().toLowerCase().includes(
-          DescrizioneFilter.toString().trim().toLowerCase())
-          && el.note.toString().toLowerCase().includes(
-            NoteFilter.toString().trim().toLowerCase())
-      }
-    );
+  onRowEditInit(piano: Piani) {
+    console.log('onRowEditInit');
+    this.clonedPiano[piano.pianoId] = { ...piano };
   }
 
-  addClick() {
-    this.plan = {
-      pianoId: 0,
-      nomePiano: "",
-      descrizione: "",
-      note: "",
-      username: this.authService.email!
-    };
-
-    this.ModalTitle = "Add Piano";
-    this.ActivateAddEditPianiComp = true;
+  onRowEditSave(piano: Piani) {
+    console.log('onRowEditSave');
+    piano.username = this.authService.email!;
+    this.service.updatePiano(piano).subscribe({
+      next: (data) => { console.log('updatePiano next'); },
+      error: (err) => { console.log('updatePiano error'); },
+      complete: () => { console.log('updatePiano complete'); }
+    });
   }
 
-  closeClick() {
-    this.ActivateAddEditPianiComp = false;
-    this.refreshPianiList();
+  onRowEditCancel(piano: Piani, index: number) {
+    console.log('onRowEditCancel');
+    this.clonedPiano[index] = this.clonedPiano[piano.pianoId];
+    delete this.clonedPiano[piano.pianoId];
   }
-
-  editClick(item: any) {
-    this.plan = {
-      pianoId: item.pianoId,
-      nomePiano: item.nomePiano,
-      descrizione: item.descrizione,
-      note: item.note,
-      username: this.authService.email!
-    };
-
-/*    this.plan = item;*/
-
-    this.ModalTitle = "Edit Piano";
-    this.ActivateAddEditPianiComp = true;
-  }
-
-  deleteClick(item: any) {
-    if (confirm('Are you sure??')) {
-
-      this.service.deletePiano(item.pianoId).subscribe(data => {
-        alert('delete ok');
-        this.refreshPianiList();
-      });
-    }
-  }
-
 }
 
